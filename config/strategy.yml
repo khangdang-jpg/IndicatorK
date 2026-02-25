@@ -1,0 +1,18 @@
+# Strategy configuration
+# Change 'active' to switch strategies without code edits.
+# Available: trend_momentum_atr | rebalance_50_50
+
+active: trend_momentum_atr
+
+trend_momentum_atr:
+  ma_short: 10          # 10-week moving average
+  ma_long: 30           # 30-week moving average
+  rsi_period: 14        # RSI lookback
+  atr_period: 14        # ATR lookback
+  atr_stop_mult: 1.5    # Stop loss = buy_zone_low - 1.5 * ATR
+  atr_target_mult: 2.0  # Take profit = close + 2.0 * ATR
+
+rebalance_50_50:
+  stock_target: 0.50
+  bond_fund_target: 0.50
+  drift_threshold: 0.05  # Rebalance when drift exceeds 5%

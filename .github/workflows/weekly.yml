@@ -1,0 +1,40 @@
+name: Weekly Plan
+
+on:
+  schedule:
+    # Sunday 03:00 UTC = 10:00 ICT
+    - cron: '0 3 * * 0'
+  workflow_dispatch: {}
+
+concurrency:
+  group: weekly
+  cancel-in-progress: false
+
+jobs:
+  weekly:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - run: pip install -r requirements.txt && pip install vnstock
+
+      - name: Generate weekly plan
+        run: python scripts/run_weekly.py
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
+
+      # Commit plan, guardrails, snapshot, and cache (weekly = the one time we persist cache)
+      - name: Commit outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/weekly_plan.json data/guardrails_report.json data/portfolio_weekly.csv data/prices_cache.json
+          git diff --staged --quiet && echo "No changes to commit" && exit 0
+          git commit -m "chore: update weekly plan and portfolio snapshot"
+          git push

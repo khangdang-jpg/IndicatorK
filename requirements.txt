@@ -1,0 +1,13 @@
+# Core dependencies
+requests>=2.28.0
+PyYAML>=6.0
+pytz>=2023.3
+
+# Testing
+pytest>=7.0.0
+
+# Vietnamese stock data (optional locally, required on GitHub Actions)
+# Install separately: pip install vnstock
+# The vnstock_provider handles ImportError gracefully with instructions.
+# On GitHub Actions with Python 3.11: uncomment the line below
+# vnstock>=3.0.0

@@ -1,0 +1,16 @@
+# Data source configuration
+# Change primary/secondary to switch providers without code edits.
+# Available: vnstock | http | cache
+
+primary: vnstock       # vnstock is purpose-built for VN stocks (guest mode, no key)
+secondary: http        # Simplize API as fallback
+cache_path: data/prices_cache.json
+
+vnstock:
+  source: VCI          # VCI data source (free, no auth)
+  timeout: 30
+
+http:
+  base_url: "https://api.simplize.vn/api/company/get-chart"
+  timeout: 15
+  retries: 3

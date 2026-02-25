@@ -1,0 +1,38 @@
+========================================
+TELEGRAM BOT SETUP - STEP BY STEP
+========================================
+
+STEP 1: Open Telegram and create a bot
+--------------------------------------
+1. Open Telegram app or visit t.me
+2. Search for and message: @BotFather
+3. Send the message: /newbot
+4. BotFather will ask for:
+   - Bot name (e.g., "IndicatorK Bot")
+   - Bot username (e.g., "indicatork_bot" - MUST be unique and end with "_bot")
+5. BotFather will give you a TOKEN like:
+   123456789:ABCdefGHIjklmnopQRStuvwxyz
+
+   SAVE THIS TOKEN! You'll need it.
+
+STEP 2: Get your Chat ID
+------------------------
+1. Find your new bot at: t.me/indicatork_bot (or whatever username you chose)
+2. Send it any message (e.g., /start)
+3. Open this URL in your browser (replace TOKEN with your token from Step 1):
+   https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates
+4. You'll see a JSON response. Look for:
+   "id": 987654321
+   This is your CHAT ID. SAVE THIS!
+
+STEP 3: Save credentials as environment variables
+--------------------------------------------------
+In your terminal, run:
+
+export TELEGRAM_BOT_TOKEN="123456789:ABCdefGHIjklmnopQRStuvwxyz"
+export TELEGRAM_ADMIN_CHAT_ID="987654321"
+
+Replace with YOUR actual token and chat ID from steps 1-2.
+
+That's it! Your bot is ready for local testing.
+========================================

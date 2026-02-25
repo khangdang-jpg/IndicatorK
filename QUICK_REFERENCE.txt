@@ -1,0 +1,272 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                    IndicatorK - Quick Reference                          ║
+║                  Vietnamese Trading Bot on GitHub Actions                 ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+📋 TABLE OF CONTENTS
+════════════════════════════════════════════════════════════════════════════
+
+START HERE              → START_HERE.md              (5-step quick start)
+Detailed Deployment     → DEPLOY.md                  (complete guide)
+Setup Instructions      → SETUP.md                   (technical details)
+Telegram Bot Help       → TELEGRAM_SETUP.txt         (bot creation)
+Deployment Checklist    → CHECKLIST.txt              (printable form)
+Project Overview        → PROJECT_SUMMARY.md         (what was built)
+Architecture Details    → README.md & PLAN.md        (how it works)
+
+
+🚀 QUICK START (30 minutes)
+════════════════════════════════════════════════════════════════════════════
+
+1. Create Telegram Bot (5 min)
+   • Open Telegram → message @BotFather
+   • Send /newbot
+   • Save BOT TOKEN and CHAT ID
+
+2. Test Locally (10 min)
+   export TELEGRAM_BOT_TOKEN="your-token"
+   export TELEGRAM_ADMIN_CHAT_ID="your-chat-id"
+   cd /Users/khangdang/IndicatorK
+   make test                    # Should show: 101 passed ✓
+   make run_weekly_once         # Should receive Telegram message
+
+3. Deploy to GitHub (10 min)
+   git init && git add . && git commit -m "Initial commit"
+   git remote add origin https://github.com/YOUR_USERNAME/IndicatorK.git
+   git push -u origin main
+
+4. Add GitHub Secrets (5 min)
+   Settings → Secrets and variables → Actions
+   • TELEGRAM_BOT_TOKEN
+   • TELEGRAM_ADMIN_CHAT_ID
+
+5. Verify (5 min)
+   Actions tab → Weekly Plan → Run workflow
+   Check Telegram for message ✓
+
+
+📁 PROJECT STRUCTURE
+════════════════════════════════════════════════════════════════════════════
+
+src/                    Core application logic
+├── models.py           Data models (OHLCV, Position, Plan, etc.)
+├── providers/          Data source layer (vnstock, HTTP, cache)
+├── strategies/         Strategy layer (trend_momentum_atr, rebalance_50_50)
+├── telegram/           Telegram bot (commands, alerts, formatting)
+├── portfolio/          Portfolio engine (trades → positions → PnL)
+├── guardrails/         Health monitoring (data quality + performance)
+└── utils/              Utilities (config, trading hours, CSV safety)
+
+config/                 User-editable configuration
+├── providers.yml       Data source selection (primary/secondary/cache)
+├── strategy.yml        Strategy selection + parameters
+└── risk.yml            Risk thresholds for guardrails
+
+data/                   Portfolio and state data
+├── trades.csv          Trade log (user entries)
+├── watchlist.txt       Symbol universe (edit this!)
+├── weekly_plan.json    Current trading plan
+├── guardrails_report.json   Health report
+├── portfolio_weekly.csv     Value history
+├── alerts_state.json        Alert dedup state
+├── bot_state.json          Bot polling state
+└── prices_cache.json       Price cache (fallback)
+
+.github/workflows/      GitHub Actions automation
+├── alerts.yml          Every 5 min (trading hours)
+├── weekly.yml          Every Sunday 10 ICT
+└── bot.yml             Every 5 min (24/7)
+
+tests/                  Unit tests (101 total, all passing)
+├── test_alert_dedup.py
+├── test_commands.py
+├── test_csv_safety.py
+├── test_portfolio.py
+├── test_providers.py
+├── test_strategies.py
+└── test_trading_hours.py
+
+
+💬 TELEGRAM COMMANDS
+════════════════════════════════════════════════════════════════════════════
+
+/buy SYMBOL QTY PRICE [asset=stock|bond|fund] [fee=N] [note=TEXT]
+    Record a buy trade
+    Example: /buy HPG 100 25000 fee=100 note=dividend
+
+/sell SYMBOL QTY PRICE [asset=stock|bond|fund] [fee=N] [note=TEXT]
+    Record a sell trade
+    Example: /sell HPG 50 28000
+
+/setcash AMOUNT
+    Set cash balance
+    Example: /setcash 10000000
+
+/status
+    View portfolio positions, allocation, PnL
+
+/plan
+    View current weekly plan
+
+/help
+    Show all commands
+
+
+⚙️ CUSTOMIZE (No Code Changes!)
+════════════════════════════════════════════════════════════════════════════
+
+Change Data Source
+    Edit: config/providers.yml
+    primary: vnstock  →  http or cache
+
+Change Strategy
+    Edit: config/strategy.yml
+    active: trend_momentum_atr  →  rebalance_50_50
+
+Add Stock Symbols
+    Edit: data/watchlist.txt
+    Add one symbol per line
+
+Adjust Risk Parameters
+    Edit: config/risk.yml
+    max_drawdown, benchmark_cagr_annual, etc.
+
+
+🔄 AUTOMATED WORKFLOWS
+════════════════════════════════════════════════════════════════════════════
+
+Price Alerts
+    Schedule: Every 5 min, Mon-Fri 09:00-15:00 (Vietnam time)
+    What it does:
+    • Checks current prices vs buy zones
+    • Triggers stop loss / take profit alerts
+    • Sends Telegram notifications
+    • Early exits if outside trading hours (no network calls)
+
+Weekly Plan
+    Schedule: Every Sunday 10:00 AM (Vietnam time)
+    What it does:
+    • Fetches 52 weeks of price history
+    • Generates new trading plan
+    • Runs guardrails health check
+    • Records portfolio snapshot
+    • Sends weekly digest via Telegram
+
+Bot Polling
+    Schedule: Every 5 min, 24/7
+    What it does:
+    • Checks Telegram for /buy, /sell, /setcash commands
+    • Appends to trades.csv
+    • Prevents double-processing (idempotent)
+
+
+📊 KEY FEATURES
+════════════════════════════════════════════════════════════════════════════
+
+Zero Cost              GitHub Actions free tier + free APIs
+Zero LLM              No ChatGPT calls, all logic rules-based
+Config-Driven         Change strategies/providers via YAML
+Modular              Clean separation of concerns
+Monitored            Guardrails track data quality + performance
+Tested               101 unit tests, all passing
+Safe                 CSV injection prevention, symbol validation
+Automatic            GitHub Actions, 0 manual intervention
+
+
+⚠️ TRADING HOURS
+════════════════════════════════════════════════════════════════════════════
+
+Vietnam Stock Market (Ho Chi Minh Exchange)
+• Monday - Friday: 09:00 - 11:30 and 13:00 - 15:00
+• Timezone: Asia/Ho_Chi_Minh (UTC+7)
+• No public holidays calendar (but workflows will handle gracefully)
+
+Price alerts only run during these hours (early exit gate).
+Other workflows (bot polling, weekly plan) run on schedule.
+
+
+🛠️ MAKEFILE COMMANDS
+════════════════════════════════════════════════════════════════════════════
+
+make setup              Install dependencies
+make test              Run all 101 unit tests
+make run_alerts_once    Execute alerts check once (debug)
+make run_weekly_once    Execute weekly plan once (debug)
+make run_bot_once       Execute bot poll once (debug)
+
+
+📖 DOCUMENTATION
+════════════════════════════════════════════════════════════════════════════
+
+For...                              Read...
+─────────────────────────────────   ────────────────────────
+Quick deployment (5 steps)          START_HERE.md
+Complete deployment guide           DEPLOY.md
+Telegram bot creation               TELEGRAM_SETUP.txt
+Technical setup details             SETUP.md
+Printable checklist                 CHECKLIST.txt
+What was built                      PROJECT_SUMMARY.md
+Architecture & features             README.md
+Implementation details              PLAN.md
+
+
+🔧 TROUBLESHOOTING
+════════════════════════════════════════════════════════════════════════════
+
+Tests fail?
+    → pip3 install -r requirements.txt
+    → make test
+
+Bot doesn't respond?
+    → Check GitHub Secrets are correct
+    → Try sending /help
+
+Alerts not working?
+    → Check it's Vietnam trading hours (9-15 Mon-Fri)
+    → Check Actions tab for error logs
+
+Workflow failed?
+    → Check Actions tab
+    → Common: API timeout (normal, will retry)
+
+Local run fails?
+    → Ensure env vars are set:
+      export TELEGRAM_BOT_TOKEN="..."
+      export TELEGRAM_ADMIN_CHAT_ID="..."
+
+
+📊 MONITORING
+════════════════════════════════════════════════════════════════════════════
+
+GitHub Actions (Automated)
+    • Visit Actions tab → see workflow runs
+    • Check for green ✓ or red ✗ status
+    • Workflows auto-retry on failure
+
+Telegram (Weekly)
+    • Every Sunday 10 AM: receive trading plan
+    • Check guardrails warnings (if any)
+    • Review recommendations
+
+Repository (Weekly)
+    • data/weekly_plan.json — current plan
+    • data/guardrails_report.json — health metrics
+    • data/portfolio_weekly.csv — value history
+    • data/trades.csv — all your trades
+
+
+📞 SUPPORT
+════════════════════════════════════════════════════════════════════════════
+
+1. Read the relevant .md file above
+2. Check CHECKLIST.txt if something fails
+3. Review TROUBLESHOOTING section above
+4. All code in src/ has clear module separation
+5. 101 unit tests show expected behavior
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Ready to deploy? Start with START_HERE.md
+
+Good luck! 🚀

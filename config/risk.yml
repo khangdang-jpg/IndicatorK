@@ -1,0 +1,15 @@
+# Risk parameters and guardrail thresholds
+
+max_drawdown: 0.15              # 15% max drawdown before DE_RISK
+benchmark_cagr_annual: 0.09     # 9%/year benchmark
+rolling_weeks: 12               # Rolling window for performance metrics
+max_turnover_weekly: 0.20       # 20% max weekly turnover
+
+guardrails:
+  provider_error_rate_threshold: 0.30    # 30% error rate -> SWITCH_PROVIDER
+  provider_missing_rate_threshold: 0.50  # 50% missing rate -> SWITCH_PROVIDER
+  min_cagr_vs_benchmark_ratio: 0.5      # Underperform by 50% -> SWITCH_STRATEGY
+
+position:
+  max_single_position_pct: 0.15   # Max 15% in any single position
+  max_stock_allocation: 0.60      # Max 60% in stocks total

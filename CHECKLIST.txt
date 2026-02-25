@@ -1,0 +1,141 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║              IndicatorK Deployment Checklist                               ║
+║                                                                            ║
+║  Follow this checklist to deploy your bot from start to finish            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+PART A: TELEGRAM BOT SETUP (5 minutes)
+═══════════════════════════════════════
+
+□ 1. Open Telegram and message @BotFather
+□ 2. Send: /newbot
+□ 3. Enter bot name: IndicatorK Bot
+□ 4. Enter bot username: indicatork_bot (must be unique)
+□ 5. Save BOT TOKEN: ___________________________________
+□ 6. Message your new bot at t.me/indicatork_bot
+□ 7. Visit: https://api.telegram.org/bot<TOKEN>/getUpdates
+□ 8. Copy CHAT ID from JSON response (from.id): ___________________________________
+
+
+PART B: LOCAL TESTING (10 minutes)
+═══════════════════════════════════
+
+□ 1. Set environment variables:
+     export TELEGRAM_BOT_TOKEN="YOUR_TOKEN"
+     export TELEGRAM_ADMIN_CHAT_ID="YOUR_CHAT_ID"
+
+□ 2. Run tests:
+     cd /Users/khangdang/IndicatorK
+     make test
+     ✓ Should show: 101 passed
+
+□ 3. Generate weekly plan:
+     make run_weekly_once
+     ✓ Should receive Telegram message
+
+□ 4. Test bot commands (via Telegram):
+     /help
+     /setcash 10000000
+     /buy HPG 100 25000
+     /status
+     ✓ Should see responses
+
+□ 5. (Optional) Test alerts if during trading hours:
+     make run_alerts_once
+     ✓ Should see price check logs
+
+
+PART C: GITHUB SETUP (15 minutes)
+═════════════════════════════════
+
+□ 1. Create new repo at https://github.com/new
+     - Name: IndicatorK
+     - Make PUBLIC
+     - Do NOT initialize with README
+     ✓ Copy the git remote URL
+
+□ 2. Configure git locally:
+     git config --global user.email "your-email@example.com"
+     git config --global user.name "Your Name"
+
+□ 3. Initialize local repo:
+     cd /Users/khangdang/IndicatorK
+     git init
+     git add .
+     git commit -m "Initial commit: Vietnamese personal finance assistant MVP"
+     git branch -M main
+
+□ 4. Push to GitHub:
+     git remote add origin https://github.com/YOUR_USERNAME/IndicatorK.git
+     git push -u origin main
+     ✓ Should see files on GitHub
+
+□ 5. Add GitHub Secrets:
+     - Go: Settings → Secrets and variables → Actions
+     - New secret: TELEGRAM_BOT_TOKEN = (your token)
+     - New secret: TELEGRAM_ADMIN_CHAT_ID = (your chat ID)
+
+□ 6. Test workflow on GitHub:
+     - Go: Actions tab
+     - Click: Weekly Plan
+     - Click: Run workflow
+     ✓ Should complete with green checkmark
+     ✓ Should receive Telegram message
+
+
+PART D: VERIFY DEPLOYMENT (5 minutes)
+═════════════════════════════════════
+
+□ 1. Check Actions tab - see 3 workflows:
+     ✓ Price Alerts (every 5 min, trading hours)
+     ✓ Weekly Plan (Sunday 10 ICT)
+     ✓ Telegram Bot (every 5 min, 24/7)
+
+□ 2. Check repo data files updated:
+     ✓ data/weekly_plan.json (has today's date)
+     ✓ data/guardrails_report.json
+     ✓ data/portfolio_weekly.csv
+
+□ 3. Test Telegram bot:
+     /status
+     ✓ Should respond with portfolio info
+
+
+PART E: CUSTOMIZATION (Optional)
+════════════════════════════════
+
+□ 1. Add more symbols to watchlist:
+     Edit: data/watchlist.txt
+     Add: VGC, CTG, TCH, etc.
+
+□ 2. Switch strategies (no code changes):
+     Edit: config/strategy.yml
+     Set: active: rebalance_50_50
+
+□ 3. Switch data provider (no code changes):
+     Edit: config/providers.yml
+     Set: primary: http
+
+
+DEPLOYMENT COMPLETE! 🎉
+═══════════════════════════════════════════════════════════════════════════════
+
+Your bot is now:
+✓ Running on GitHub Actions (completely free)
+✓ Checking prices every 5 minutes
+✓ Generating weekly plans
+✓ Accepting your commands 24/7
+✓ Sending Telegram alerts
+
+Next steps:
+- Send /status to your bot to check portfolio
+- Add trades with /buy and /sell commands
+- Wait for Sunday 10 ICT for first weekly plan
+- Check guardrails for performance warnings
+
+Questions? See:
+- DEPLOY.md - Step-by-step guide
+- README.md - Architecture overview
+- PLAN.md - Implementation details
+
+═══════════════════════════════════════════════════════════════════════════════

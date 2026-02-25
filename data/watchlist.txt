@@ -1,0 +1,13 @@
+# Vietnamese stock watchlist — one symbol per line
+# Add/remove symbols as needed. No code changes required.
+# Symbols must be uppercase alphanumeric (e.g., HPG, VNM)
+HPG
+VNM
+FPT
+MWG
+VCB
+TCB
+MBB
+VHM
+VIC
+SSI
