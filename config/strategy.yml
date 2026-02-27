@@ -9,8 +9,8 @@ trend_momentum_atr:
   ma_long: 30              # 30-week moving average
   rsi_period: 14           # RSI lookback
   atr_period: 14           # ATR lookback
-  atr_stop_mult: 2.2       # stop_loss   = entry_price - 2.2 * ATR
-  atr_target_mult: 2.0     # take_profit = entry_price + 2.0 * ATR
+  atr_stop_mult: 1.5       # stop_loss   = entry_price - 1.5 * ATR
+  atr_target_mult: 2.5     # take_profit = entry_price + 2.5 * ATR
   rsi_breakout_min: 50     # RSI >= this to use breakout path (default 50)
   entry_buffer_pct: 0.001  # entry_price = breakout_level * (1 + buffer)
   price_tick: 10           # VN price step (VND); all output prices rounded to this

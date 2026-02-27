@@ -5,9 +5,10 @@ Steps:
   2. Compute portfolio state
   3. Generate weekly plan via active strategy
   4. Run guardrails
-  5. Append portfolio snapshot
-  6. Send weekly digest via Telegram
-  7. Persist cache to disk (once per week)
+  5. (Optional) AI analysis via Gemini
+  6. Append portfolio snapshot
+  7. Send weekly digest via Telegram
+  8. Persist cache to disk (once per week)
 """
 
 import json
@@ -92,6 +93,25 @@ def main() -> None:
     )
     save_guardrails_report(guardrails_report)
 
+    # AI analysis (optional — runs only if GEMINI_API_KEY is set)
+    from src.ai.gemini_analyzer import analyze_weekly_plan, is_available as ai_available
+    ai_analysis = None
+    if ai_available():
+        logger.info("Running Gemini AI analysis...")
+        portfolio_summary = (
+            f"Total: {portfolio_state.total_value:,.0f} VND | "
+            f"Cash: {portfolio_state.cash:,.0f} | "
+            f"Positions: {len(portfolio_state.positions)} | "
+            f"Unrealized PnL: {portfolio_state.unrealized_pnl:+,.0f}"
+        )
+        ai_analysis = analyze_weekly_plan(plan.to_dict(), portfolio_summary)
+        if ai_analysis.generated:
+            logger.info("AI analysis complete: %d scores", len(ai_analysis.scores))
+        else:
+            logger.warning("AI analysis returned empty — continuing without it")
+    else:
+        logger.info("Gemini API not configured — skipping AI analysis")
+
     # Append portfolio snapshot (weekly tracking)
     append_portfolio_snapshot(portfolio_state)
     logger.info("Portfolio snapshot appended")
@@ -102,7 +122,7 @@ def main() -> None:
 
     # Send weekly digest via Telegram
     bot = TelegramBot()
-    digest = format_weekly_digest(plan, portfolio_state, guardrails_report)
+    digest = format_weekly_digest(plan, portfolio_state, guardrails_report, ai_analysis)
     bot.send_admin(digest)
     logger.info("Weekly digest sent")
 

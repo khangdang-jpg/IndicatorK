@@ -1,11 +1,15 @@
-"""Message templates — weekly digest, alerts, status (no LLM)."""
+"""Message templates — weekly digest, alerts, status (optional LLM scoring)."""
 
 from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from src.models import Alert, GuardrailsReport, PortfolioState, WeeklyPlan
+
+if TYPE_CHECKING:
+    from src.ai.gemini_analyzer import AIAnalysis
 
 _ENTRY_ICON = {"breakout": "⬆", "pullback": "⬇"}
 _ACTION_ICON = {"BUY": "🟢", "HOLD": "🔵", "REDUCE": "🟡", "SELL": "🔴"}
@@ -33,6 +37,16 @@ def _load_cached_prices(symbols: list[str]) -> dict[str, float]:
         return {}
 
 
+def _ai_score_tag(ai_analysis: AIAnalysis | None, symbol: str) -> str:
+    """Return compact AI score tag like '  AI 8/10' or empty string."""
+    if not ai_analysis or not ai_analysis.generated:
+        return ""
+    ai = ai_analysis.scores.get(symbol)
+    if not ai:
+        return ""
+    return f"  AI {ai.score}/10"
+
+
 def _zone_label(price: float, low: float, high: float) -> str:
     """Return a compact zone-distance label for a given price."""
     if low <= price <= high:
@@ -48,6 +62,7 @@ def format_weekly_digest(
     plan: WeeklyPlan,
     portfolio_state: PortfolioState,
     guardrails: GuardrailsReport | None,
+    ai_analysis: AIAnalysis | None = None,
 ) -> str:
     """Format the weekly digest Telegram message."""
     total = portfolio_state.total_value
@@ -64,7 +79,8 @@ def format_weekly_digest(
             icon = _ENTRY_ICON.get(r.entry_type, "·")
             vnd = _alloc_vnd(r.position_target_pct, total) if r.position_target_pct and total else 0
             alloc_str = f"  Alloc {vnd:,.0f} ₫" if vnd else ""
-            lines.append(f"`{r.symbol}` {icon} {r.entry_type.capitalize()}{alloc_str}")
+            ai_tag = _ai_score_tag(ai_analysis, r.symbol)
+            lines.append(f"`{r.symbol}` {icon} {r.entry_type.capitalize()}{alloc_str}{ai_tag}")
             lines.append(f"  Entry {r.entry_price:,.0f}  Zone {r.buy_zone_low:,.0f}–{r.buy_zone_high:,.0f}")
             lines.append(f"  SL {r.stop_loss:,.0f}  TP {r.take_profit:,.0f}")
         lines.append("")
@@ -74,7 +90,8 @@ def format_weekly_digest(
         lines.append("*📋 Positions*")
         for r in holds:
             icon = _ACTION_ICON.get(r.action, "·")
-            lines.append(f"  {icon} `{r.symbol}` {r.action}  SL {r.stop_loss:,.0f}")
+            ai_tag = _ai_score_tag(ai_analysis, r.symbol)
+            lines.append(f"  {icon} `{r.symbol}` {r.action}  SL {r.stop_loss:,.0f}{ai_tag}")
         lines.append("")
 
     alloc = portfolio_state.allocation
@@ -95,6 +112,16 @@ def format_weekly_digest(
         lines.append("*⚠️ Guardrails*")
         for rec in guardrails.recommendations:
             lines.append(f"  {rec}")
+
+    # AI Analysis section
+    if ai_analysis and ai_analysis.generated:
+        from src.ai.gemini_analyzer import format_ai_section
+        ai_section = format_ai_section(
+            ai_analysis,
+            [r.to_dict() for r in plan.recommendations],
+        )
+        if ai_section:
+            lines.append(ai_section)
 
     return "\n".join(lines)
 
