@@ -2,87 +2,99 @@
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 from src.models import Alert, GuardrailsReport, PortfolioState, WeeklyPlan
+
+_ENTRY_ICON = {"breakout": "⬆", "pullback": "⬇"}
+_ACTION_ICON = {"BUY": "🟢", "HOLD": "🔵", "REDUCE": "🟡", "SELL": "🔴"}
+_CACHE_PATH = "data/prices_cache.json"
+
+
+def _alloc_vnd(pct: float, total: float) -> int:
+    """Round position allocation to nearest 100k VND."""
+    return round(pct * total / 100_000) * 100_000
+
+
+def _load_cached_prices(symbols: list[str]) -> dict[str, float]:
+    """Read last known prices from prices_cache.json."""
+    p = Path(_CACHE_PATH)
+    if not p.exists():
+        return {}
+    try:
+        data = json.loads(p.read_text())
+        return {
+            sym: float(data[sym]["last_price"])
+            for sym in symbols
+            if sym in data and "last_price" in data[sym]
+        }
+    except Exception:
+        return {}
+
+
+def _zone_label(price: float, low: float, high: float) -> str:
+    """Return a compact zone-distance label for a given price."""
+    if low <= price <= high:
+        return "✅ in zone"
+    if price > high:
+        pct = (price - high) / high * 100
+        return f"⬆ {pct:.1f}% above zone"
+    pct = (low - price) / low * 100
+    return f"⬇ {pct:.1f}% below zone"
 
 
 def format_weekly_digest(
     plan: WeeklyPlan,
     portfolio_state: PortfolioState,
     guardrails: GuardrailsReport | None,
-    risk_config: dict | None = None,
 ) -> str:
     """Format the weekly digest Telegram message."""
+    total = portfolio_state.total_value
     lines = [
-        f"*Weekly Plan — {plan.strategy_id} v{plan.strategy_version}*",
-        f"Generated: {plan.generated_at[:16]}",
+        f"📊 *Weekly Plan — S1 v{plan.strategy_version}*",
+        f"📅 {plan.generated_at[:10]}  💰 {total:,.0f} ₫",
         "",
     ]
 
-    # Top BUY candidates
     buys = [r for r in plan.recommendations if r.action == "BUY"][:10]
     if buys:
-        lines.append("*Top BUY Candidates*")
+        lines.append(f"*🟢 BUY ({len(buys)})*")
         for r in buys:
-            alloc_str = f" | Alloc {r.position_target_pct:.0%}" if r.position_target_pct else ""
-            lines.append(
-                f"  {r.symbol}: zone {r.buy_zone_low:,.0f}-{r.buy_zone_high:,.0f} "
-                f"| SL {r.stop_loss:,.0f} | TP {r.take_profit:,.0f}{alloc_str}"
-            )
+            icon = _ENTRY_ICON.get(r.entry_type, "·")
+            vnd = _alloc_vnd(r.position_target_pct, total) if r.position_target_pct and total else 0
+            alloc_str = f"  Alloc {vnd:,.0f} ₫" if vnd else ""
+            lines.append(f"`{r.symbol}` {icon} {r.entry_type.capitalize()}{alloc_str}")
+            lines.append(f"  Entry {r.entry_price:,.0f}  Zone {r.buy_zone_low:,.0f}–{r.buy_zone_high:,.0f}")
+            lines.append(f"  SL {r.stop_loss:,.0f}  TP {r.take_profit:,.0f}")
         lines.append("")
 
-    # Existing positions
     holds = [r for r in plan.recommendations if r.action in ("HOLD", "REDUCE", "SELL")]
     if holds:
-        lines.append("*Positions*")
+        lines.append("*📋 Positions*")
         for r in holds:
-            lines.append(f"  {r.symbol}: {r.action} | SL {r.stop_loss:,.0f}")
-            for bullet in r.rationale_bullets[:2]:
-                lines.append(f"    - {bullet}")
+            icon = _ACTION_ICON.get(r.action, "·")
+            lines.append(f"  {icon} `{r.symbol}` {r.action}  SL {r.stop_loss:,.0f}")
         lines.append("")
 
-    # Allocation config (shown only when risk_config is provided)
-    if risk_config:
-        alloc_cfg = risk_config.get("allocation", {})
-        mode = alloc_cfg.get("alloc_mode", "fixed_pct")
-        if mode == "risk_based":
-            mode_detail = f"risk {alloc_cfg.get('risk_per_trade_pct', 0.01):.1%}/trade"
-        else:
-            mode_detail = f"fixed {alloc_cfg.get('fixed_alloc_pct_per_trade', 0.10):.0%}/trade"
-        lines.append("*Allocation Config*")
-        lines.append(
-            f"  Mode: {mode} | {mode_detail} "
-            f"| Range {alloc_cfg.get('min_alloc_pct', 0.03):.0%}–{alloc_cfg.get('max_alloc_pct', 0.15):.0%}"
-        )
-        lines.append("")
-
-    # Allocation
     alloc = portfolio_state.allocation
-    lines.append("*Allocation*")
-    lines.append(
-        f"  Stock: {alloc.get('stock_pct', 0):.1%} | "
-        f"Bond+Fund: {alloc.get('bond_fund_pct', 0):.1%} | "
-        f"Cash: {alloc.get('cash_pct', 0):.1%}"
-    )
     targets = plan.allocation_targets
+    lines.append("*💼 Portfolio*")
     lines.append(
-        f"  Target: Stock {targets.get('stock', 0):.0%} | "
-        f"Bond+Fund {targets.get('bond_fund', 0):.0%}"
+        f"  Stock {alloc.get('stock_pct', 0):.0%}  "
+        f"Bond {alloc.get('bond_fund_pct', 0):.0%}  "
+        f"Cash {alloc.get('cash_pct', 0):.0%}"
     )
-    lines.append(f"  Total value: {portfolio_state.total_value:,.0f}")
-    lines.append("")
+    lines.append(
+        f"  Target → Stock {targets.get('stock', 0):.0%}  "
+        f"Bond {targets.get('bond_fund', 0):.0%}"
+    )
 
-    # Guardrails
     if guardrails and guardrails.recommendations:
-        lines.append("*Guardrails Warnings*")
+        lines.append("")
+        lines.append("*⚠️ Guardrails*")
         for rec in guardrails.recommendations:
             lines.append(f"  {rec}")
-        lines.append("")
-
-    # Notes
-    if plan.notes:
-        lines.append("*Notes*")
-        for note in plan.notes:
-            lines.append(f"  {note}")
 
     return "\n".join(lines)
 
@@ -91,83 +103,106 @@ def format_alert(alert: Alert) -> str:
     """Format a single price alert message."""
     if alert.alert_type == "STOP_LOSS_HIT":
         return (
-            f"*STOP LOSS HIT* {alert.symbol}: "
-            f"price={alert.current_price:,.0f} <= SL={alert.threshold:,.0f}"
+            f"🔴 *STOP LOSS* `{alert.symbol}`\n"
+            f"Price {alert.current_price:,.0f} ≤ SL {alert.threshold:,.0f}"
         )
     if alert.alert_type == "TAKE_PROFIT_HIT":
         return (
-            f"*TAKE PROFIT HIT* {alert.symbol}: "
-            f"price={alert.current_price:,.0f} >= TP={alert.threshold:,.0f}"
+            f"🟢 *TAKE PROFIT* `{alert.symbol}`\n"
+            f"Price {alert.current_price:,.0f} ≥ TP {alert.threshold:,.0f}"
         )
     if alert.alert_type == "ENTERED_BUY_ZONE":
         return (
-            f"*BUY ZONE* {alert.symbol}: "
-            f"price={alert.current_price:,.0f} (zone low={alert.threshold:,.0f})"
+            f"🔵 *BUY ZONE* `{alert.symbol}`\n"
+            f"Price {alert.current_price:,.0f}  (zone ≥ {alert.threshold:,.0f})"
         )
-    return f"*{alert.alert_type}* {alert.symbol}: price={alert.current_price:,.0f}"
+    return f"*{alert.alert_type}* `{alert.symbol}`: {alert.current_price:,.0f}"
 
 
 def format_status(state: PortfolioState) -> str:
     """Format portfolio status for /status command."""
-    lines = ["*Portfolio Status*", ""]
+    lines = ["*💼 Portfolio Status*", ""]
 
     if not state.positions:
         lines.append("No open positions.")
     else:
         lines.append("*Positions*")
         for sym, pos in sorted(state.positions.items()):
-            pnl_str = f"{pos.unrealized_pnl:+,.0f}" if pos.unrealized_pnl else "0"
+            pnl = pos.unrealized_pnl or 0
             lines.append(
-                f"  {sym} ({pos.asset_class}): "
-                f"{pos.qty:,.0f} @ {pos.avg_cost:,.0f} "
-                f"| Now {pos.current_price:,.0f} "
-                f"| PnL {pnl_str}"
+                f"  `{sym}`: {pos.qty:,.0f} @ {pos.avg_cost:,.0f}"
+                f" → {pos.current_price:,.0f}  PnL {pnl:+,.0f}"
             )
 
     lines.append("")
-    lines.append("*Summary*")
-    lines.append(f"  Cash: {state.cash:,.0f}")
-    lines.append(f"  Total: {state.total_value:,.0f}")
-    lines.append(f"  Unrealized PnL: {state.unrealized_pnl:+,.0f}")
-    lines.append(f"  Realized PnL: {state.realized_pnl:+,.0f}")
-    lines.append("")
-
-    alloc = state.allocation
-    lines.append("*Allocation*")
+    lines.append(f"Total {state.total_value:,.0f} ₫  Cash {state.cash:,.0f}")
     lines.append(
-        f"  Stock: {alloc.get('stock_pct', 0):.1%} | "
-        f"Bond+Fund: {alloc.get('bond_fund_pct', 0):.1%} | "
-        f"Cash: {alloc.get('cash_pct', 0):.1%}"
+        f"PnL  Unrealized {state.unrealized_pnl:+,.0f}  "
+        f"Realized {state.realized_pnl:+,.0f}"
     )
-
+    lines.append("")
+    alloc = state.allocation
+    lines.append(
+        f"Stock {alloc.get('stock_pct', 0):.0%}  "
+        f"Bond {alloc.get('bond_fund_pct', 0):.0%}  "
+        f"Cash {alloc.get('cash_pct', 0):.0%}"
+    )
     return "\n".join(lines)
 
 
-def format_plan_summary(plan_data: dict) -> str:
-    """Format weekly plan JSON for /plan command."""
+def format_plan_summary(plan_data: dict, total_value: float = 0.0) -> str:
+    """Format weekly plan for /plan command with cached current prices."""
+    date_str = plan_data.get("generated_at", "?")[:10]
+    balance_str = f"  💰 {total_value:,.0f} ₫" if total_value else ""
     lines = [
-        f"*Weekly Plan — {plan_data.get('strategy_id', '?')}*",
-        f"Generated: {plan_data.get('generated_at', '?')[:16]}",
+        f"📊 *{plan_data.get('strategy_id', '?')} v{plan_data.get('strategy_version', '?')}*",
+        f"📅 {date_str}{balance_str}",
         "",
     ]
 
     recs = plan_data.get("recommendations", [])
     if not recs:
         lines.append("No recommendations.")
-    else:
-        for r in recs[:10]:
-            pct = r.get("position_target_pct", 0)
-            alloc_str = f" | Alloc {pct:.0%}" if pct else ""
-            lines.append(
-                f"  {r['symbol']}: {r['action']} "
-                f"| Zone {r.get('buy_zone_low', 0):,.0f}-{r.get('buy_zone_high', 0):,.0f} "
-                f"| SL {r.get('stop_loss', 0):,.0f}{alloc_str}"
-            )
+        return "\n".join(lines)
 
-    notes = plan_data.get("notes", [])
-    if notes:
+    cached = _load_cached_prices([r["symbol"] for r in recs])
+
+    buys = [r for r in recs if r.get("action") == "BUY"]
+    others = [r for r in recs if r.get("action") != "BUY"]
+
+    if buys:
+        lines.append(f"*🟢 BUY ({len(buys)})*")
+        for r in buys:
+            sym = r["symbol"]
+            icon = _ENTRY_ICON.get(r.get("entry_type", ""), "·")
+            entry = r.get("entry_price", 0)
+            pct = r.get("position_target_pct", 0)
+            vnd = _alloc_vnd(pct, total_value) if pct and total_value else 0
+            alloc_str = f"  {vnd:,.0f} ₫" if vnd else (f"  {pct:.0%}" if pct else "")
+
+            lines.append(f"`{sym}` {icon} {r.get('entry_type','').capitalize()}{alloc_str}")
+
+            now = cached.get(sym)
+            if now:
+                label = _zone_label(now, r.get("buy_zone_low", 0), r.get("buy_zone_high", 0))
+                lines.append(f"  Now {now:,.0f}  {label}")
+
+            lines.append(
+                f"  Entry {entry:,.0f}  "
+                f"Zone {r.get('buy_zone_low', 0):,.0f}–{r.get('buy_zone_high', 0):,.0f}"
+            )
+            lines.append(f"  SL {r.get('stop_loss', 0):,.0f}  TP {r.get('take_profit', 0):,.0f}")
+
+    if others:
         lines.append("")
-        for n in notes:
-            lines.append(f"  {n}")
+        lines.append("*📋 Positions*")
+        for r in others:
+            icon = _ACTION_ICON.get(r.get("action", ""), "·")
+            sym = r["symbol"]
+            now = cached.get(sym)
+            now_str = f"  now {now:,.0f}" if now else ""
+            lines.append(
+                f"  {icon} `{sym}` {r.get('action')}{now_str}  SL {r.get('stop_loss', 0):,.0f}"
+            )
 
     return "\n".join(lines)

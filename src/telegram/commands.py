@@ -4,12 +4,11 @@ from __future__ import annotations
 
 import json
 import logging
-import re
 from datetime import datetime
 from pathlib import Path
 
 from src.models import TradeRecord
-from src.portfolio.engine import append_trade, get_portfolio_state, load_trades
+from src.portfolio.engine import append_trade, get_portfolio_state
 from src.telegram.formatter import format_plan_summary, format_status
 from src.utils.csv_safety import parse_number, validate_symbol
 
@@ -147,14 +146,15 @@ def _handle_status() -> str:
 
 
 def _handle_plan() -> str:
-    """Return current weekly plan summary."""
+    """Return current weekly plan summary with current balance and cached prices."""
     plan_path = Path("data/weekly_plan.json")
     if not plan_path.exists():
         return "No weekly plan generated yet. Run the weekly workflow first."
     try:
         with open(plan_path) as f:
             plan_data = json.load(f)
-        return format_plan_summary(plan_data)
+        total_value = get_portfolio_state().total_value
+        return format_plan_summary(plan_data, total_value=total_value)
     except Exception as e:
         return f"Error loading plan: {e}"
 
