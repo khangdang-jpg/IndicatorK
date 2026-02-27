@@ -15,7 +15,7 @@ position:
   max_stock_allocation: 0.60      # Max 60% in stocks total
 
 allocation:
-  alloc_mode: "fixed_pct"          # "fixed_pct" | "risk_based"
+  alloc_mode: "risk_based"          # "fixed_pct" | "risk_based"
   fixed_alloc_pct_per_trade: 0.10  # 10% of current equity per new trade (fixed_pct mode)
   risk_per_trade_pct: 0.01         # 1% equity risked per trade (risk_based mode only)
   min_alloc_pct: 0.03              # Floor: never allocate less than 3% per trade

@@ -28,8 +28,8 @@ def main() -> None:
         logger.error("TELEGRAM_BOT_TOKEN not set — exiting")
         return
 
-    # Run continuously instead of just once
-    bot.run_continuous(poll_interval=5)
+    # Run once for GitHub Actions cron execution (not continuously)
+    bot.run_once()
 
 
 if __name__ == "__main__":

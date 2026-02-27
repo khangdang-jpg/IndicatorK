@@ -1,0 +1,11 @@
+{
+  "side": "BUY",
+  "symbol": "HPG",
+  "qty": 100.0,
+  "price": 25000.0,
+  "asset_class": "stock",
+  "fee": 0.0,
+  "note": "",
+  "total": 2500000.0,
+  "created_at": "2026-02-27T12:51:16.565104"
+}

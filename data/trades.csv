@@ -1,1 +1,2 @@
 timestamp_iso,asset_class,symbol,side,qty,price,fee,note
+2026-02-27T09:09:17.028074,fund,CASH,CASH,1,10000000.0,0,setcash

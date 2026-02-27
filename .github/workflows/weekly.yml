@@ -37,4 +37,5 @@ jobs:
           git add data/weekly_plan.json data/guardrails_report.json data/portfolio_weekly.csv data/prices_cache.json
           git diff --staged --quiet && echo "No changes to commit" && exit 0
           git commit -m "chore: update weekly plan and portfolio snapshot"
+          git pull --rebase
           git push

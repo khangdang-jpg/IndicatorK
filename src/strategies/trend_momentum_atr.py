@@ -34,6 +34,7 @@ from datetime import date, datetime, timedelta
 
 from src.models import OHLCV, PortfolioState, Recommendation, WeeklyPlan
 from src.strategies.base import Strategy
+from src.utils.trading_hours import vnd_tick_size
 
 logger = logging.getLogger(__name__)
 
@@ -85,11 +86,13 @@ class TrendMomentumATRStrategy(Strategy):
             closes  = [c.close for c in weekly]
             highs   = [c.high  for c in weekly]
             lows    = [c.low   for c in weekly]
+            volumes = [c.volume for c in weekly]
 
             ma_short    = _sma(closes, self.ma_short)
             ma_long_val = _sma(closes, self.ma_long)
             rsi         = _rsi(closes, self.rsi_period)
             atr         = _atr(highs, lows, closes, self.atr_period)
+            vol_avg     = _sma(volumes, self.atr_period) if len(volumes) >= self.atr_period else None
 
             if ma_short is None or ma_long_val is None or atr is None or atr == 0:
                 continue
@@ -103,7 +106,7 @@ class TrendMomentumATRStrategy(Strategy):
 
             rsi_overbought = rsi is not None and rsi > 70
 
-            tick = self.price_tick
+            tick = vnd_tick_size(current)
             signal_week_end = weekly[-1].date  # Friday of week T
 
             if trend_up and not rsi_overbought:
@@ -125,8 +128,10 @@ class TrendMomentumATRStrategy(Strategy):
                         close_confirmed = False
 
                     rsi_ok = rsi is not None and rsi >= self.rsi_breakout_min
+                    # Volume confirmation: current week volume must exceed average
+                    vol_ok = vol_avg is not None and vol_avg > 0 and volumes[-1] >= vol_avg
 
-                    if close_confirmed and rsi_ok:
+                    if close_confirmed and rsi_ok and vol_ok:
                         # Breakout: entry above breakout_level in T+1
                         entry_price   = round_to_step(breakout_level * (1.0 + self.entry_buffer_pct), tick)
                         buy_zone_low  = entry_price
@@ -144,10 +149,12 @@ class TrendMomentumATRStrategy(Strategy):
                         entry_type    = "pullback"
                         earliest_entry_date = None
 
+                    vol_ratio = volumes[-1] / vol_avg if vol_avg and vol_avg > 0 else 0.0
                     rationale = [
                         f"Trend UP: price {current:.0f} > MA{self.ma_short}w {ma_short:.0f} > MA{self.ma_long}w {ma_long_val:.0f}",
                         f"RSI({self.rsi_period}): {rsi:.1f}",
                         f"ATR: {atr:.0f}",
+                        f"Vol: {volumes[-1]:,.0f} ({vol_ratio:.1f}x avg)" if vol_avg else f"Vol: {volumes[-1]:,.0f}",
                         f"Entry: {'breakout @ T-1 high ' + str(int(breakout_level)) + ' [close-confirmed, T+1]' if entry_type == 'breakout' else 'pullback mid-zone'}",
                     ]
 

@@ -38,4 +38,5 @@ jobs:
           git add data/alerts_state.json
           git diff --staged --quiet && echo "No changes to commit" && exit 0
           git commit -m "chore: update alerts state [skip ci]"
+          git pull --rebase
           git push

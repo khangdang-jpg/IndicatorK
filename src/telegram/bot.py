@@ -23,9 +23,9 @@ class TelegramBot:
         token: str | None = None,
         admin_chat_id: str | None = None,
     ):
-        self.token = token or os.environ.get("TELEGRAM_BOT_TOKEN", "")
+        self.token = token or os.environ.get("TELEGRAM_BOT_TOKEN", "8620394249:AAEe209BkfQ_VaCBkhq6Xq0X34AWFxSX4LQ")
         self.admin_chat_id = str(
-            admin_chat_id or os.environ.get("TELEGRAM_ADMIN_CHAT_ID", "")
+            admin_chat_id or os.environ.get("TELEGRAM_ADMIN_CHAT_ID", "6226624607")
         )
         self.base_url = f"https://api.telegram.org/bot{self.token}"
         self._session = requests.Session()
