@@ -27,9 +27,11 @@ class HttpProvider(PriceProvider):
         base_url: str = "https://api.simplize.vn/api/company/get-chart",
         timeout: int = 15,
         retries: int = 3,
+        extra_params: dict | None = None,
     ):
         self.base_url = base_url
         self.timeout = timeout
+        self.extra_params: dict = extra_params or {}
         self.session = requests.Session()
         retry = Retry(
             total=retries,
@@ -48,6 +50,7 @@ class HttpProvider(PriceProvider):
                 "ticker": symbol,
                 "from": self._to_timestamp(start),
                 "to": self._to_timestamp(end),
+                **self.extra_params,
             }
             resp = self.session.get(
                 self.base_url,

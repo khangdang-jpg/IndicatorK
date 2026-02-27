@@ -1,0 +1,13 @@
+{
+  "from_date": "2024-09-01",
+  "to_date": "2024-11-30",
+  "initial_cash": 10000000,
+  "final_value": 9832480.18,
+  "cagr": -0.0662,
+  "max_drawdown": 0.0356,
+  "win_rate": 0.0,
+  "avg_hold_days": 54.0,
+  "num_trades": 2,
+  "profit_factor": 0.0,
+  "tie_breaker": "worst"
+}

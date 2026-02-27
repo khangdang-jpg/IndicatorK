@@ -51,6 +51,16 @@ class Recommendation:
     take_profit: float
     position_target_pct: float
     rationale_bullets: list[str] = field(default_factory=list)
+    # entry_type: "breakout" → high >= entry_price; "pullback" → low <= entry <= high
+    entry_type: str = "pullback"
+    # breakout_level: week T-1's weekly high used as the breakout reference (highs[-2])
+    breakout_level: float = 0.0
+    # entry_price: explicit fill price (breakout_level*(1+buffer) or zone midpoint)
+    entry_price: float = 0.0
+    # signal_week_end: date of weekly[-1] when the plan was generated (week T)
+    signal_week_end: Optional[date] = None
+    # earliest_entry_date: first allowed fill date (Monday of T+1 for breakout)
+    earliest_entry_date: Optional[date] = None
 
     def to_dict(self) -> dict:
         return {
@@ -63,6 +73,11 @@ class Recommendation:
             "take_profit": round(self.take_profit, 2),
             "position_target_pct": round(self.position_target_pct, 4),
             "rationale_bullets": self.rationale_bullets,
+            "entry_type": self.entry_type,
+            "breakout_level": round(self.breakout_level, 2),
+            "entry_price": round(self.entry_price, 2),
+            "signal_week_end": self.signal_week_end.isoformat() if self.signal_week_end else None,
+            "earliest_entry_date": self.earliest_entry_date.isoformat() if self.earliest_entry_date else None,
         }
 
 
@@ -87,9 +102,15 @@ class WeeklyPlan:
 
     @classmethod
     def from_dict(cls, d: dict) -> WeeklyPlan:
-        recs = [
-            Recommendation(**r) for r in d.get("recommendations", [])
-        ]
+        _rec_fields = {f.name for f in Recommendation.__dataclass_fields__.values()}
+        _date_fields = {"signal_week_end", "earliest_entry_date"}
+        recs = []
+        for r in d.get("recommendations", []):
+            kwargs = {k: v for k, v in r.items() if k in _rec_fields}
+            for f in _date_fields:
+                if f in kwargs and isinstance(kwargs[f], str):
+                    kwargs[f] = date.fromisoformat(kwargs[f])
+            recs.append(Recommendation(**kwargs))
         return cls(
             generated_at=d["generated_at"],
             strategy_id=d["strategy_id"],

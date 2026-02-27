@@ -1,0 +1,40 @@
+{
+  "worst": {
+    "from_date": "2025-02-01",
+    "to_date": "2026-02-25",
+    "initial_cash": 20000000,
+    "final_value": 26574316.5,
+    "cagr": 0.3056,
+    "max_drawdown": 0.0828,
+    "win_rate": 0.8049,
+    "avg_hold_days": 24.29,
+    "num_trades": 41,
+    "profit_factor": 4.873,
+    "avg_invested_pct": 0.3525,
+    "tie_breaker": "worst"
+  },
+  "best": {
+    "from_date": "2025-02-01",
+    "to_date": "2026-02-25",
+    "initial_cash": 20000000,
+    "final_value": 26574316.5,
+    "cagr": 0.3056,
+    "max_drawdown": 0.0828,
+    "win_rate": 0.8049,
+    "avg_hold_days": 24.29,
+    "num_trades": 41,
+    "profit_factor": 4.873,
+    "avg_invested_pct": 0.3525,
+    "tie_breaker": "best"
+  },
+  "best_minus_worst": {
+    "final_value": 0.0,
+    "cagr": 0.0,
+    "max_drawdown": 0.0,
+    "win_rate": 0.0,
+    "avg_hold_days": 0.0,
+    "num_trades": 0,
+    "profit_factor": 0.0,
+    "avg_invested_pct": 0.0
+  }
+}

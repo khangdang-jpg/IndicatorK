@@ -127,6 +127,40 @@ class TestStopLossAlert:
         sl_alerts = [a for a in alerts if a.alert_type == "STOP_LOSS_HIT"]
         assert len(sl_alerts) == 0
 
+    def test_stop_loss_not_hit_at_observed_price_29000(self):
+        """Regression: price=29000 with SL=22000 must NOT trigger (was firing spuriously)."""
+        plan = _make_plan([_make_rec(stop_loss=22000)])
+        prices = {"HPG": 29000}
+        alerts, _, _ = check_alerts(plan, prices, {})
+        sl_alerts = [a for a in alerts if a.alert_type == "STOP_LOSS_HIT"]
+        assert len(sl_alerts) == 0
+
+    def test_stop_loss_not_hit_fpt_at_observed_price_90000(self):
+        """Regression: FPT price=90000 with SL=80000 must NOT trigger."""
+        plan = _make_plan([_make_rec(symbol="FPT", stop_loss=80000)])
+        prices = {"FPT": 90000}
+        alerts, _, _ = check_alerts(plan, prices, {})
+        sl_alerts = [a for a in alerts if a.alert_type == "STOP_LOSS_HIT"]
+        assert len(sl_alerts) == 0
+
+    def test_stop_loss_hit_one_below_threshold(self):
+        """Boundary: price=21999 with SL=22000 MUST trigger."""
+        plan = _make_plan([_make_rec(stop_loss=22000)])
+        prices = {"HPG": 21999}
+        alerts, _, _ = check_alerts(plan, prices, {})
+        sl_alerts = [a for a in alerts if a.alert_type == "STOP_LOSS_HIT"]
+        assert len(sl_alerts) == 1
+        assert sl_alerts[0].current_price == 21999
+        assert sl_alerts[0].threshold == 22000
+
+    def test_stop_loss_hit_at_exact_threshold(self):
+        """Boundary: price == SL threshold must trigger (price <= SL)."""
+        plan = _make_plan([_make_rec(stop_loss=22000)])
+        prices = {"HPG": 22000}
+        alerts, _, _ = check_alerts(plan, prices, {})
+        sl_alerts = [a for a in alerts if a.alert_type == "STOP_LOSS_HIT"]
+        assert len(sl_alerts) == 1
+
 
 class TestTakeProfitAlert:
     def test_take_profit_hit(self):

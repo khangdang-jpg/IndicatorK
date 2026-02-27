@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import logging
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -173,8 +172,13 @@ def _check_threshold_below(
     key = f"{symbol}_{alert_type}"
     entry = state.get(key, {"inside_zone": False, "last_alerted_at": None})
     was_inside = entry.get("inside_zone", False)
-    triggered = price <= threshold
+    triggered = price <= threshold  # stop loss: fire only when price drops BELOW threshold
     changed = False
+
+    logger.debug(
+        "%s %s: price=%.0f threshold=%.0f triggered=%s",
+        alert_type, symbol, price, threshold, triggered,
+    )
 
     if triggered:
         should_alert = False
@@ -193,7 +197,7 @@ def _check_threshold_below(
                 should_alert = True
 
         state[key] = {"inside_zone": True, "last_alerted_at": now.isoformat() if should_alert else entry.get("last_alerted_at")}
-        changed = was_inside != True or should_alert
+        changed = not was_inside or should_alert
         if should_alert:
             return Alert(
                 symbol=symbol, alert_type=alert_type,
@@ -239,7 +243,7 @@ def _check_threshold_above(
                 should_alert = True
 
         state[key] = {"inside_zone": True, "last_alerted_at": now.isoformat() if should_alert else entry.get("last_alerted_at")}
-        changed = was_inside != True or should_alert
+        changed = not was_inside or should_alert
         if should_alert:
             return Alert(
                 symbol=symbol, alert_type=alert_type,

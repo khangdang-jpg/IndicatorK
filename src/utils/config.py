@@ -13,6 +13,25 @@ logger = logging.getLogger(__name__)
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
 
+def _load_env_file() -> None:
+    """Load .env file from project root if it exists."""
+    env_path = _PROJECT_ROOT / ".env"
+    if env_path.exists():
+        try:
+            with open(env_path) as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        key, value = line.split("=", 1)
+                        if key not in os.environ:
+                            os.environ[key] = value.strip('"\'')
+        except Exception as e:
+            logger.warning("Failed to load .env file: %s", e)
+
+
+_load_env_file()
+
+
 def _resolve(path: str) -> Path:
     """Resolve a path relative to project root."""
     p = Path(path)

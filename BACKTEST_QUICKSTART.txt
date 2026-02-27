@@ -1,0 +1,174 @@
+================================================================================
+BACKTEST QUICK START (2025-05-01 to 2026-02-25)
+================================================================================
+
+SPEC:
+  Initial capital: 10,000,000 VND
+  Position size: 1,000,000 VND per trade
+  Trades per week: 4 (configurable)
+  Universe: HPG, VNM, FPT, MWG, VCB, TCB, MBB, VHM, VIC, SSI
+  Entry: mid-zone = (buy_zone_low + buy_zone_high) / 2
+  Exit: touch SL or TP (first wins)
+  Tie-breaker: worst (SL first) or best (TP first)
+
+================================================================================
+RUN BACKTEST (3 WAYS)
+================================================================================
+
+1. CLI (Single Run - Worst Case)
+   ───────────────────────────
+   python scripts/backtest.py --from 2025-05-01 --to 2026-02-25
+
+2. CLI (Range - Both Worst + Best)
+   ─────────────────────────────
+   python scripts/backtest.py --from 2025-05-01 --to 2026-02-25 --run-range
+
+3. Makefile (Spec-Matched Defaults)
+   ────────────────────────────────
+   make backtest FROM=2025-05-01 TO=2026-02-25 RUN_RANGE=1
+
+================================================================================
+OUTPUT
+================================================================================
+
+Single run:
+  reports/<TIMESTAMP>/
+  ├── summary.json
+  ├── equity_curve.csv
+  └── trades.csv
+
+Range run (--run-range):
+  reports/<TIMESTAMP>/
+  ├── summary_worst.json
+  ├── summary_best.json
+  ├── equity_curve_worst.csv
+  ├── equity_curve_best.csv
+  ├── trades_worst.csv
+  ├── trades_best.csv
+  └── range_summary.json
+
+================================================================================
+KEY METRICS
+================================================================================
+
+summary.json contains:
+  - from_date, to_date
+  - initial_cash, final_value
+  - cagr (compound annual growth rate)
+  - max_drawdown (peak-to-trough decline)
+  - win_rate (% of winning trades)
+  - avg_hold_days (average holding period)
+  - num_trades (total closed trades)
+  - profit_factor (gross profit / gross loss)
+
+================================================================================
+ENTRY / EXIT LOGIC
+================================================================================
+
+Entry Trigger:
+  When daily OHLC touches entry price: low <= entry_price <= high
+  Entry price = (buy_zone_low + buy_zone_high) / 2
+
+Exit Trigger:
+  When daily OHLC touches EITHER:
+    - Stop loss: low <= stop_loss
+    - Take profit: high >= take_profit
+
+Same-Day Both (--tie-breaker):
+  worst:  assume stop loss triggered first
+  best:   assume take profit triggered first
+
+No Same-Day Entry+Exit:
+  Positions opened on day D cannot close on day D (minimum 1-day hold)
+
+================================================================================
+OPTIONAL PARAMETERS
+================================================================================
+
+--initial-cash INTEGER          Starting cash (default: 10000000)
+--order-size INTEGER            Per-trade VND (default: 1000000)
+--trades-per-week INTEGER       Max new positions/week (default: 4)
+--universe PATH                 Watchlist file (default: data/watchlist.txt)
+--mode CHOICE                   'generate' or 'plan' (default: generate)
+  generate: regenerate recommendations weekly using active strategy
+  plan:     reuse data/weekly_plan.json for all weeks (offline testing)
+--tie-breaker CHOICE            'worst' or 'best' (default: worst)
+--run-range                     Run both worst+best (ignores --tie-breaker)
+
+================================================================================
+MAKEFILE EXAMPLES
+================================================================================
+
+# Spec defaults (10M, 1M/trade, 4/week) with range
+make backtest FROM=2025-05-01 TO=2026-02-25 RUN_RANGE=1
+
+# Custom order size
+make backtest FROM=2025-05-01 TO=2026-02-25 ORDER_SIZE=500000
+
+# Custom trades per week
+make backtest FROM=2025-05-01 TO=2026-02-25 TRADES_PER_WEEK=2
+
+# Offline testing (use saved plan)
+make backtest FROM=2025-05-01 TO=2026-02-25 MODE=plan RUN_RANGE=1
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+Q: ImportError: No module named 'pandas'
+A: Install with: pip install pandas vnstock
+
+Q: 404 errors from Simplize API
+A: API may be down or require auth. Check internet & curl test.
+
+Q: No market data before <date> (all weeks skipped)
+A: Reduce date range or check if symbols exist in provider.
+
+Q: Empty results (0 trades)
+A: Check watchlist file exists (data/watchlist.txt) with valid symbols.
+
+Q: Very slow run
+A: Use --mode plan for offline testing, or reduce date range.
+
+================================================================================
+DOCUMENTATION
+================================================================================
+
+Full guide: docs/10_BACKTEST_GUIDE.md
+  - Entry/exit rules (detailed)
+  - Mode explanations
+  - Output format specification
+  - Interpretation guidelines
+  - Integration with live trading
+
+Implementation: BACKTEST_IMPLEMENTATION.md
+  - Architecture decisions
+  - Test coverage (33 tests)
+  - File structure
+  - Compliance checklist
+
+================================================================================
+TEST
+================================================================================
+
+Run unit tests:
+  pytest tests/test_backtest.py -v
+
+Expected: 33/33 pass
+  - 7 entry touch tests
+  - 6 SL/TP touch tests
+  - 3 tie-breaker tests
+  - 13 accounting tests
+  - 5 week helper tests
+
+================================================================================
+INTEGRATION
+================================================================================
+
+The backtest is INDEPENDENT of live trading:
+  - Does NOT modify trades.csv or portfolio.csv
+  - Does NOT affect live bot, alerts, or weekly workflows
+  - Simulates recommendations on historical data only
+  - Use results to validate strategy before deploying live
+
+================================================================================

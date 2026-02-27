@@ -10,8 +10,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from src.utils.config import _load_env_file
 from src.telegram.bot import TelegramBot
 from src.utils.logging_setup import setup_logging
+
+_load_env_file()
 
 logger = logging.getLogger(__name__)
 
@@ -25,12 +28,8 @@ def main() -> None:
         logger.error("TELEGRAM_BOT_TOKEN not set — exiting")
         return
 
-    state_changed = bot.run_once()
-
-    if state_changed:
-        logger.info("Bot state changed — files updated for commit")
-    else:
-        logger.info("No updates to process")
+    # Run continuously instead of just once
+    bot.run_continuous(poll_interval=5)
 
 
 if __name__ == "__main__":

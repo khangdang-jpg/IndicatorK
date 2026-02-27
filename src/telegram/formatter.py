@@ -9,6 +9,7 @@ def format_weekly_digest(
     plan: WeeklyPlan,
     portfolio_state: PortfolioState,
     guardrails: GuardrailsReport | None,
+    risk_config: dict | None = None,
 ) -> str:
     """Format the weekly digest Telegram message."""
     lines = [
@@ -22,9 +23,10 @@ def format_weekly_digest(
     if buys:
         lines.append("*Top BUY Candidates*")
         for r in buys:
+            alloc_str = f" | Alloc {r.position_target_pct:.0%}" if r.position_target_pct else ""
             lines.append(
                 f"  {r.symbol}: zone {r.buy_zone_low:,.0f}-{r.buy_zone_high:,.0f} "
-                f"| SL {r.stop_loss:,.0f} | TP {r.take_profit:,.0f}"
+                f"| SL {r.stop_loss:,.0f} | TP {r.take_profit:,.0f}{alloc_str}"
             )
         lines.append("")
 
@@ -36,6 +38,21 @@ def format_weekly_digest(
             lines.append(f"  {r.symbol}: {r.action} | SL {r.stop_loss:,.0f}")
             for bullet in r.rationale_bullets[:2]:
                 lines.append(f"    - {bullet}")
+        lines.append("")
+
+    # Allocation config (shown only when risk_config is provided)
+    if risk_config:
+        alloc_cfg = risk_config.get("allocation", {})
+        mode = alloc_cfg.get("alloc_mode", "fixed_pct")
+        if mode == "risk_based":
+            mode_detail = f"risk {alloc_cfg.get('risk_per_trade_pct', 0.01):.1%}/trade"
+        else:
+            mode_detail = f"fixed {alloc_cfg.get('fixed_alloc_pct_per_trade', 0.10):.0%}/trade"
+        lines.append("*Allocation Config*")
+        lines.append(
+            f"  Mode: {mode} | {mode_detail} "
+            f"| Range {alloc_cfg.get('min_alloc_pct', 0.03):.0%}–{alloc_cfg.get('max_alloc_pct', 0.15):.0%}"
+        )
         lines.append("")
 
     # Allocation
@@ -72,13 +89,22 @@ def format_weekly_digest(
 
 def format_alert(alert: Alert) -> str:
     """Format a single price alert message."""
-    emoji_map = {
-        "ENTERED_BUY_ZONE": "BUY ZONE",
-        "STOP_LOSS_HIT": "STOP LOSS",
-        "TAKE_PROFIT_HIT": "TAKE PROFIT",
-    }
-    label = emoji_map.get(alert.alert_type, alert.alert_type)
-    return f"*{label}* {alert.symbol}: {alert.current_price:,.0f}"
+    if alert.alert_type == "STOP_LOSS_HIT":
+        return (
+            f"*STOP LOSS HIT* {alert.symbol}: "
+            f"price={alert.current_price:,.0f} <= SL={alert.threshold:,.0f}"
+        )
+    if alert.alert_type == "TAKE_PROFIT_HIT":
+        return (
+            f"*TAKE PROFIT HIT* {alert.symbol}: "
+            f"price={alert.current_price:,.0f} >= TP={alert.threshold:,.0f}"
+        )
+    if alert.alert_type == "ENTERED_BUY_ZONE":
+        return (
+            f"*BUY ZONE* {alert.symbol}: "
+            f"price={alert.current_price:,.0f} (zone low={alert.threshold:,.0f})"
+        )
+    return f"*{alert.alert_type}* {alert.symbol}: price={alert.current_price:,.0f}"
 
 
 def format_status(state: PortfolioState) -> str:
@@ -130,10 +156,12 @@ def format_plan_summary(plan_data: dict) -> str:
         lines.append("No recommendations.")
     else:
         for r in recs[:10]:
+            pct = r.get("position_target_pct", 0)
+            alloc_str = f" | Alloc {pct:.0%}" if pct else ""
             lines.append(
                 f"  {r['symbol']}: {r['action']} "
                 f"| Zone {r.get('buy_zone_low', 0):,.0f}-{r.get('buy_zone_high', 0):,.0f} "
-                f"| SL {r.get('stop_loss', 0):,.0f}"
+                f"| SL {r.get('stop_loss', 0):,.0f}{alloc_str}"
             )
 
     notes = plan_data.get("notes", [])

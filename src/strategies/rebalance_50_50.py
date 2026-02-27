@@ -2,13 +2,10 @@
 
 from __future__ import annotations
 
-import logging
 from datetime import datetime
 
 from src.models import OHLCV, PortfolioState, Recommendation, WeeklyPlan
 from src.strategies.base import Strategy
-
-logger = logging.getLogger(__name__)
 
 
 class Rebalance5050Strategy(Strategy):

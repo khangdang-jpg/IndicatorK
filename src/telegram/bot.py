@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import time
 from pathlib import Path
 
 import requests
@@ -112,7 +113,12 @@ class TelegramBot:
             text = message.get("text", "")
 
             if chat_id != self.admin_chat_id:
-                logger.info("Ignoring message from non-admin chat: %s", chat_id)
+                logger.warning(
+                    "Ignoring message from non-admin chat: %s (expected: %s, message: %s)",
+                    chat_id,
+                    self.admin_chat_id,
+                    text[:50],
+                )
                 state["last_update_id"] = update_id
                 state_changed = True
                 continue
@@ -128,6 +134,19 @@ class TelegramBot:
             _save_bot_state(state)
 
         return state_changed
+
+    def run_continuous(self, poll_interval: int = 5) -> None:
+        """Continuously poll for updates and process commands.
+
+        This runs indefinitely until interrupted.
+        """
+        logger.info("Starting continuous bot polling (interval: %ds)", poll_interval)
+        try:
+            while True:
+                self.run_once()
+                time.sleep(poll_interval)
+        except KeyboardInterrupt:
+            logger.info("Bot polling stopped")
 
 
 def _load_bot_state() -> dict:

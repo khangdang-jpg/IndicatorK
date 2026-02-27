@@ -22,18 +22,33 @@ class VnstockProvider(PriceProvider):
         self.source = source
         self.timeout = timeout
         self._vnstock = None
+        self._api_style: str = "legacy"
         self._init_library()
 
     def _init_library(self):
+        # Try new class-based API first (vnstock3 / vnstock >= 3.x)
         try:
-            from vnstock import Vnstock
+            from vnstock import Vnstock  # noqa: F401
+            self._api_style = "new"
             self._vnstock = Vnstock
+            return
         except ImportError:
-            raise ImportError(
-                "vnstock is not installed. Install it with:\n"
-                "  pip install vnstock\n"
-                "See https://pypi.org/project/vnstock/ for details."
-            )
+            pass
+
+        # Fall back to legacy function API (vnstock 0.2.x)
+        try:
+            from vnstock import stock_historical_data  # noqa: F401
+            self._api_style = "legacy"
+            self._vnstock = None
+            return
+        except ImportError:
+            pass
+
+        raise ImportError(
+            "vnstock is not installed. Install it with:\n"
+            "  pip install vnstock\n"
+            "See https://pypi.org/project/vnstock/ for details."
+        )
 
     def get_daily_history(
         self, symbol: str, start: date, end: date
@@ -42,11 +57,7 @@ class VnstockProvider(PriceProvider):
         max_retries = 3
         for attempt in range(max_retries):
             try:
-                stock = self._vnstock().stock(symbol=symbol, source=self.source)
-                df = stock.quote.history(
-                    start=start.strftime("%Y-%m-%d"),
-                    end=end.strftime("%Y-%m-%d"),
-                )
+                df = self._fetch(symbol, start, end)
                 if df is None or df.empty:
                     logger.warning("vnstock: no data for %s", symbol)
                     return []
@@ -59,6 +70,28 @@ class VnstockProvider(PriceProvider):
                 if attempt < max_retries - 1:
                     _time.sleep(2 ** attempt)
         return []
+
+    def _fetch(self, symbol: str, start: date, end: date):
+        """Dispatch to the available vnstock API."""
+        start_s = start.strftime("%Y-%m-%d")
+        end_s = end.strftime("%Y-%m-%d")
+
+        if self._api_style == "new":
+            stock = self._vnstock().stock(symbol=symbol, source=self.source)
+            return stock.quote.history(start=start_s, end=end_s)
+
+        # Legacy API: stock_historical_data
+        from vnstock import stock_historical_data
+        # Legacy VCI/TCBS sources are unreliable; DNSE is the working source
+        source = self.source if self.source not in ("VCI", "TCBS") else "DNSE"
+        return stock_historical_data(
+            symbol,
+            start_date=start_s,
+            end_date=end_s,
+            resolution="1D",
+            type="stock",
+            source=source,
+        )
 
     def get_last_prices(self, symbols: list[str]) -> dict[str, float]:
         """Fetch latest prices in chunks with rate limiting."""

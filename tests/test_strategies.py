@@ -56,7 +56,7 @@ class TestTrendMomentumATR:
 
         strategy = TrendMomentumATRStrategy()
         assert strategy.id == "trend_momentum_atr"
-        assert strategy.version == "1.0.0"
+        assert strategy.version == "2.0.0"
 
         portfolio = _make_portfolio()
         market_data = _make_market_data()
