@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-03-01T10:00:00Z",
+  "week_of": "2026-03-01",
+  "market_outlook": "Bullish trend with selective stock picking opportunities",
+  "recommendations": [
+    {
+      "symbol": "VNM",
+      "action": "BUY",
+      "buy_zone_low": 68000,
+      "buy_zone_high": 72000,
+      "target_price": 78000,
+      "stop_loss": 65000,
+      "rationale": "Strong fundamentals, good dividend yield"
+    },
+    {
+      "symbol": "VIC",
+      "action": "HOLD",
+      "current_price": 85000,
+      "target_price": 95000,
+      "rationale": "Real estate recovery expected"
+    },
+    {
+      "symbol": "HPG",
+      "action": "BUY",
+      "buy_zone_low": 25000,
+      "buy_zone_high": 27000,
+      "target_price": 32000,
+      "stop_loss": 23000,
+      "rationale": "Steel demand increasing, infrastructure projects"
+    },
+    {
+      "symbol": "FPT",
+      "action": "REDUCE",
+      "current_price": 78000,
+      "reduce_at": 80000,
+      "rationale": "Take partial profits after strong run"
+    },
+    {
+      "symbol": "VCB",
+      "action": "WATCH",
+      "watch_level": 68000,
+      "target_price": 75000,
+      "rationale": "Banking sector consolidation, wait for better entry"
+    }
+  ],
+  "risk_management": {
+    "max_position_size": "20%",
+    "stop_loss_level": "7%",
+    "portfolio_cash_target": "15-25%"
+  }
+}
