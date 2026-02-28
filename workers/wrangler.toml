@@ -6,7 +6,7 @@ compatibility_date = "2024-01-01"
 name = "indicatork-bot"
 
 [env.production.vars]
-GITHUB_REPO = "your-username/IndicatorK"
+GITHUB_REPO = "khangdang-jpg/IndicatorK"
 
 # Secrets (set via: wrangler secret put SECRET_NAME)
 # TELEGRAM_BOT_TOKEN

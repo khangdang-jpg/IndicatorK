@@ -149,15 +149,27 @@ async function handlePlan(env) {
 }
 
 function handleHelp() {
-  return `*Available Commands*\\n\\n` +
-         `\`/buy SYMBOL QTY PRICE\` — Record a buy trade\\n` +
-         `  Options: \`fee=N\` \`note=TEXT\`\\n\\n` +
-         `\`/sell SYMBOL QTY PRICE\` — Record a sell trade\\n` +
-         `  Options: \`fee=N\` \`note=TEXT\`\\n\\n` +
-         `\`/setcash AMOUNT\` — Set cash balance\\n\\n` +
-         `\`/status\` — View portfolio positions & allocation\\n\\n` +
-         `\`/plan\` — View current weekly plan\\n\\n` +
-         `\`/help\` — Show this message`;
+  return `🤖 *IndicatorK Trading Bot* 📈\\n\\n` +
+         `━━━━━━━━━━━━━━━━━━━━━━━\\n\\n` +
+         `💰 *TRADING COMMANDS*\\n` +
+         `🔹 \`/buy SYMBOL QTY PRICE\`\\n` +
+         `   📝 Record a buy trade\\n` +
+         `   ⚙️ Options: \`fee=N\` \`note=TEXT\`\\n\\n` +
+         `🔸 \`/sell SYMBOL QTY PRICE\`\\n` +
+         `   📝 Record a sell trade\\n` +
+         `   ⚙️ Options: \`fee=N\` \`note=TEXT\`\\n\\n` +
+         `💵 \`/setcash AMOUNT\`\\n` +
+         `   📝 Set your cash balance\\n\\n` +
+         `━━━━━━━━━━━━━━━━━━━━━━━\\n\\n` +
+         `📊 *PORTFOLIO COMMANDS*\\n` +
+         `📈 \`/status\`\\n` +
+         `   📝 View positions & allocation\\n\\n` +
+         `📅 \`/plan\`\\n` +
+         `   📝 View weekly trading plan\\n\\n` +
+         `❓ \`/help\`\\n` +
+         `   📝 Show this help message\\n\\n` +
+         `━━━━━━━━━━━━━━━━━━━━━━━\\n` +
+         `⚡ *Powered by Cloudflare Workers* ⚡`;
 }
 
 // Utility functions
