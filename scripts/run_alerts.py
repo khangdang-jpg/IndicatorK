@@ -14,6 +14,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from src.models import WeeklyPlan
+from src.portfolio.engine import get_portfolio_state
 from src.telegram.alerts import check_alerts, load_alerts_state, save_alerts_state
 from src.telegram.bot import TelegramBot
 from src.telegram.formatter import format_alert
@@ -58,10 +59,15 @@ def main() -> None:
 
     logger.info("Fetched prices for %d/%d symbols", len(current_prices), len(symbols))
 
-    # Check alerts with dedup
+    # Get current portfolio state for position-aware alerting
+    portfolio_state = get_portfolio_state()
+    held_positions = portfolio_state.positions
+    logger.info("Portfolio has %d held positions: %s", len(held_positions), list(held_positions.keys()))
+
+    # Check alerts with position awareness and one-time logic
     alerts_state = load_alerts_state()
     alerts, updated_state, state_changed = check_alerts(
-        plan, current_prices, alerts_state
+        plan, current_prices, alerts_state, held_positions
     )
 
     # Send alerts via Telegram
