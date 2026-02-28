@@ -149,27 +149,19 @@ async function handlePlan(env) {
 }
 
 function handleHelp() {
-  return `🤖 *IndicatorK Trading Bot* 📈\\n\\n` +
-         `━━━━━━━━━━━━━━━━━━━━━━━\\n\\n` +
-         `💰 *TRADING COMMANDS*\\n` +
-         `🔹 \`/buy SYMBOL QTY PRICE\`\\n` +
-         `   📝 Record a buy trade\\n` +
-         `   ⚙️ Options: \`fee=N\` \`note=TEXT\`\\n\\n` +
-         `🔸 \`/sell SYMBOL QTY PRICE\`\\n` +
-         `   📝 Record a sell trade\\n` +
-         `   ⚙️ Options: \`fee=N\` \`note=TEXT\`\\n\\n` +
-         `💵 \`/setcash AMOUNT\`\\n` +
-         `   📝 Set your cash balance\\n\\n` +
-         `━━━━━━━━━━━━━━━━━━━━━━━\\n\\n` +
-         `📊 *PORTFOLIO COMMANDS*\\n` +
-         `📈 \`/status\`\\n` +
-         `   📝 View positions & allocation\\n\\n` +
-         `📅 \`/plan\`\\n` +
-         `   📝 View weekly trading plan\\n\\n` +
-         `❓ \`/help\`\\n` +
-         `   📝 Show this help message\\n\\n` +
-         `━━━━━━━━━━━━━━━━━━━━━━━\\n` +
-         `⚡ *Powered by Cloudflare Workers* ⚡`;
+  return `🤖 IndicatorK Trading Bot 📈
+
+💰 TRADING COMMANDS
+• /buy SYMBOL QTY PRICE - Record buy trade
+• /sell SYMBOL QTY PRICE - Record sell trade
+• /setcash AMOUNT - Set cash balance
+
+📊 PORTFOLIO COMMANDS
+• /status - View portfolio & positions
+• /plan - View weekly trading plan
+• /help - Show this message
+
+⚡ Instant responses via Cloudflare Workers`;
 }
 
 // Utility functions
@@ -212,9 +204,7 @@ function parseTradeArgs(args) {
 async function getTrades(env) {
   try {
     const url = `https://raw.githubusercontent.com/${env.GITHUB_REPO}/main/data/trades.csv`;
-    const response = await fetch(url, {
-      headers: { 'Authorization': `token ${env.GITHUB_TOKEN}` }
-    });
+    const response = await fetch(url);
     const csvText = await response.text();
     return parseTradesCsv(csvText);
   } catch (error) {
@@ -225,9 +215,7 @@ async function getTrades(env) {
 
 async function getWeeklyPlan(env) {
   const url = `https://raw.githubusercontent.com/${env.GITHUB_REPO}/main/data/weekly_plan.json`;
-  const response = await fetch(url, {
-    headers: { 'Authorization': `token ${env.GITHUB_TOKEN}` }
-  });
+  const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`Failed to load weekly plan: ${response.status}`);
   }
