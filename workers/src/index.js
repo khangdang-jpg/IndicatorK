@@ -214,10 +214,14 @@ async function getTrades(env) {
 }
 
 async function getWeeklyPlan(env) {
+  if (!env.GITHUB_REPO) {
+    throw new Error('GITHUB_REPO environment variable not set');
+  }
   const url = `https://raw.githubusercontent.com/${env.GITHUB_REPO}/main/data/weekly_plan.json`;
+  console.log('Fetching weekly plan from:', url);
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(`Failed to load weekly plan: ${response.status}`);
+    throw new Error(`Failed to load weekly plan: ${response.status} from ${url}`);
   }
   return await response.json();
 }
