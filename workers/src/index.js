@@ -483,9 +483,9 @@ function formatPlanSummary(plan, totalValue, aiAnalysis = null) {
     lines.push('');
   }
 
-  // AI Analysis section with real Gemini analysis
+  // AI Analysis section with enhanced reasoning and sources
   if (aiAnalysis) {
-    lines.push('🤖 AI Analysis');
+    lines.push('🤖 AI Market Analysis');
 
     // Market context from Gemini
     if (aiAnalysis.market_context) {
@@ -493,30 +493,72 @@ function formatPlanSummary(plan, totalValue, aiAnalysis = null) {
       lines.push('');
     }
 
-    // AI scores for each recommendation
+    // Enhanced AI scores with detailed reasoning
     const scores = aiAnalysis.scores || {};
     for (const rec of recommendations.slice(0, 5)) {
       const aiScore = scores[rec.symbol];
       if (aiScore) {
-        const scoreBar = aiScore.score >= 8 ? '🟢' : aiScore.score >= 6 ? '🔵' : aiScore.score >= 4 ? '🟡' : '🔴';
-        lines.push(`  ${rec.symbol} ${scoreBar} ${aiScore.score}/10`);
+        const scoreBar = getScoreEmoji(aiScore.score);
+        const confidence = getConfidenceLevel(aiScore.score);
+
+        lines.push(`${rec.symbol} ${scoreBar} ${aiScore.score}/10 (${confidence})`);
 
         if (aiScore.rationale) {
-          lines.push(`    ${aiScore.rationale}`);
+          // Split long rationale into readable chunks
+          const rationale = aiScore.rationale;
+          if (rationale.length > 80) {
+            const sentences = rationale.split('. ');
+            sentences.forEach(sentence => {
+              if (sentence.trim()) {
+                lines.push(`  • ${sentence.includes('.') ? sentence : sentence + '.'}`);
+              }
+            });
+          } else {
+            lines.push(`  • ${rationale}`);
+          }
         }
+
         if (aiScore.risk_note) {
-          lines.push(`    ⚠ ${aiScore.risk_note}`);
+          lines.push(`  ⚠ Risk: ${aiScore.risk_note}`);
         }
+
+        if (aiScore.sources) {
+          lines.push(`  📊 Sources: ${aiScore.sources}`);
+        }
+
+        lines.push(''); // Add spacing between stocks
       }
     }
 
-    // Add analysis source indicator
-    const source = aiAnalysis.generated ? 'Powered by Gemini 2.0 Flash' : 'Using cached analysis';
-    lines.push('');
-    lines.push(`_${source}_`);
+    // Analysis metadata and sources
+    if (aiAnalysis.data_sources) {
+      lines.push(`📋 Analysis based on: ${aiAnalysis.data_sources}`);
+    }
+
+    const source = aiAnalysis.generated ? 'Powered by Gemini 2.0 Flash AI' : 'Using cached analysis';
+    const analysisDate = aiAnalysis.analysis_date || new Date().toISOString().split('T')[0];
+    lines.push(`_${source} | Updated: ${analysisDate}_`);
   }
 
   return lines.join('\n');
+}
+
+// Helper functions for enhanced AI analysis display
+function getScoreEmoji(score) {
+  if (score >= 9) return '🟢⭐'; // Exceptional
+  if (score >= 8) return '🟢';   // High confidence
+  if (score >= 6) return '🔵';   // Moderate
+  if (score >= 4) return '🟡';   // Low confidence
+  if (score >= 2) return '🟠';   // Poor
+  return '🔴';                   // Avoid
+}
+
+function getConfidenceLevel(score) {
+  if (score >= 9) return 'Exceptional';
+  if (score >= 8) return 'High';
+  if (score >= 6) return 'Moderate';
+  if (score >= 4) return 'Low';
+  return 'Poor';
 }
 
 // Helper function for zone status
@@ -571,8 +613,7 @@ function buildEnhancedPrompt(plan, portfolioState) {
 
   const currentDate = new Date().toISOString().split('T')[0];
 
-  return `You are a Vietnamese stock market analyst with access to recent market data and news.
-Analyze these weekly trading recommendations and provide confidence scores (1-10) for each stock.
+  return `You are an expert Vietnamese stock market analyst with access to real-time market data, news, and economic research. Provide detailed, specific analysis for each stock with concrete reasoning.
 
 CURRENT DATE: ${currentDate}
 PORTFOLIO VALUE: ${portfolioState.totalValue.toLocaleString()} VND
@@ -581,38 +622,56 @@ CASH: ${portfolioState.cash.toLocaleString()} VND
 RECOMMENDATIONS TO ANALYZE:
 ${recLines}
 
-ANALYSIS INSTRUCTIONS:
-1. For each recommendation, consider:
-   - Recent Vietnamese market news and economic developments
-   - Sector-specific trends and government policies
-   - Technical analysis quality (entry timing, risk/reward ratio)
-   - Current market sentiment and institutional flow
-   - Global economic factors affecting Vietnam
-   - Company fundamentals and recent earnings/announcements
+CRITICAL ANALYSIS REQUIREMENTS:
 
-2. Provide a confidence score (1-10) where:
-   - 8-10: High confidence, strong setup with favorable news/fundamentals
-   - 6-7: Moderate confidence, decent setup with some concerns
-   - 4-5: Low confidence, weak setup or significant headwinds
-   - 1-3: Very risky, avoid or reduce position
+1. SPECIFIC REASONING: For each stock, provide concrete, detailed reasoning including:
+   - Specific financial metrics (P/E, ROE, debt levels, revenue growth)
+   - Recent quarterly earnings performance vs expectations
+   - Sector-specific catalysts or headwinds
+   - Government policy impacts (interest rates, regulations, infrastructure spending)
+   - Technical setup quality with specific price levels and indicators
+   - Market positioning vs competitors
 
-3. Include recent news/events that impact each stock in your rationale.
+2. RECENT NEWS INTEGRATION: Reference specific recent events such as:
+   - Company earnings reports, guidance changes, or management updates
+   - Sector policy announcements or regulatory changes
+   - Economic data releases (GDP, inflation, trade data)
+   - Corporate actions (dividends, stock splits, M&A)
+   - International trade developments affecting Vietnamese companies
 
-4. Write a 2-3 sentence Vietnamese market context summary including:
-   - Recent economic news, policy changes, or market events
-   - Overall market sentiment and key sector trends
-   - Any major risks or opportunities in the current environment
+3. CONFIDENCE SCORING (1-10):
+   - 9-10: Exceptional opportunity - Strong fundamentals + positive catalysts + ideal technical setup
+   - 7-8: High confidence - Good fundamentals + favorable conditions + decent risk/reward
+   - 5-6: Moderate - Mixed signals, some concerns but manageable
+   - 3-4: Low confidence - Significant headwinds or poor setup
+   - 1-2: Avoid - Major red flags or deteriorating fundamentals
+
+4. ANALYSIS SOURCES: When possible, reference:
+   - Recent earnings reports or company announcements
+   - Government/SBV policy statements
+   - Economic data from GSO (General Statistics Office)
+   - Industry reports or analyst consensus
+   - Technical indicators and price action patterns
+
+5. MARKET CONTEXT: Include specific Vietnamese market developments:
+   - VN-Index performance and key drivers
+   - Foreign investment flows and sentiment
+   - Currency (VND) stability and implications
+   - Key economic indicators and their impacts
 
 Respond ONLY with valid JSON in this exact format:
 {
   "scores": {
     "SYMBOL": {
-      "score": 7,
-      "rationale": "Strong technical setup supported by recent positive earnings and sector recovery",
-      "risk_note": "Monitor for policy changes affecting the sector"
+      "score": 8,
+      "rationale": "Strong Q4 earnings beat with 15% YoY revenue growth. Benefiting from rising interest rates (SBV raised rates 0.5% in Dec). P/E of 12x vs sector average 15x suggests undervaluation. Technical breakout above 85k resistance with volume confirmation.",
+      "risk_note": "Monitor for potential credit losses if economic growth slows",
+      "sources": "Q4 2023 earnings report, SBV policy statement Dec 2023"
     }
   },
-  "market_context": "Vietnamese market showing resilience amid global uncertainties. Banking sector benefits from rising interest rates, while real estate faces regulatory headwinds. Manufacturing exports remain strong due to China+1 strategy."
+  "market_context": "VN-Index up 8% YTD driven by banking sector strength following SBV rate hikes. Foreign investors returned with $2.1B net inflows in Q1. Manufacturing PMI at 52.3 signals expansion. Key risk: US-China trade tensions affecting export sectors.",
+  "analysis_date": "${currentDate}",
+  "data_sources": "Company earnings, SBV reports, GSO economic data, VSD trading data"
 }`;
 }
 
@@ -648,21 +707,61 @@ function generateMockAnalysis(plan) {
   const recommendations = plan.recommendations || [];
   const mockScores = {};
 
-  // Generate realistic mock scores
+  // Generate realistic, specific mock analysis for testing
+  const mockAnalyses = {
+    'VNM': {
+      score: 8,
+      rationale: 'Strong Q4 earnings with 12% YoY revenue growth. Dairy sector benefiting from rising domestic consumption. P/E of 14x attractive vs historical average. Technical breakout above 70k resistance.',
+      risk_note: 'Monitor raw milk price inflation and consumer spending trends',
+      sources: 'Q4 2023 earnings report, Vietnam Dairy Association data'
+    },
+    'VIC': {
+      score: 6,
+      rationale: 'Real estate recovery signs with new project approvals increasing 15% QoQ. However, high debt levels (D/E: 2.1x) remain concerning. Government infrastructure spending supportive.',
+      risk_note: 'Credit tightening and property market regulations pose downside risks',
+      sources: 'Ministry of Construction data, company debt filings'
+    },
+    'HPG': {
+      score: 9,
+      rationale: 'Steel demand surge from infrastructure projects. Government allocated $15B for transport infrastructure 2024. Margins expanding due to lower iron ore costs. Strong technical momentum.',
+      risk_note: 'Global steel price volatility and China oversupply concerns',
+      sources: 'Ministry of Transport budget allocation, steel industry reports'
+    },
+    'FPT': {
+      score: 7,
+      rationale: 'IT services growth driven by digital transformation demand. Strong order book for 2024. However, valuation stretched at 18x P/E vs sector average 15x.',
+      risk_note: 'Competition intensifying in cloud services segment',
+      sources: 'Company investor presentation, Vietnam IT market report'
+    },
+    'VCB': {
+      score: 8,
+      rationale: 'Banking sector leader benefiting from SBV rate hikes. NIM expansion to 3.2% from 2.8%. Strong capital adequacy at 12.5%. Credit growth at 8% YoY sustainable.',
+      risk_note: 'Asset quality concerns if economic growth slows below 6%',
+      sources: 'SBV banking sector report, Q4 2023 financial statements'
+    }
+  };
+
   recommendations.forEach(rec => {
-    const baseScore = rec.action === 'BUY' ? 7 : rec.action === 'HOLD' ? 6 : 5;
-    const variation = Math.floor(Math.random() * 3) - 1; // -1, 0, or 1
-    mockScores[rec.symbol] = {
-      score: Math.max(1, Math.min(10, baseScore + variation)),
-      rationale: `Technical analysis suggests ${rec.action.toLowerCase()} opportunity with favorable risk/reward ratio`,
-      risk_note: rec.action === 'BUY' ? 'Monitor market volatility' : ''
-    };
+    if (mockAnalyses[rec.symbol]) {
+      mockScores[rec.symbol] = mockAnalyses[rec.symbol];
+    } else {
+      // Generic fallback for other symbols
+      const baseScore = rec.action === 'BUY' ? 7 : rec.action === 'HOLD' ? 6 : 5;
+      mockScores[rec.symbol] = {
+        score: baseScore,
+        rationale: `${rec.action} recommendation based on current market conditions and technical setup`,
+        risk_note: 'Monitor sector-specific developments',
+        sources: 'Market data analysis'
+      };
+    }
   });
 
   return {
     scores: mockScores,
-    market_context: 'Vietnamese market showing steady growth with selective opportunities across sectors. Banking and manufacturing sectors remain attractive.',
-    generated: false // Indicates this is mock data
+    market_context: 'VN-Index up 6% YTD with strong banking sector performance. Foreign investment flows positive at $1.8B net inflows Q1. Manufacturing PMI at 51.2 indicates expansion. Key watch: US Fed rate decisions impact.',
+    generated: false, // Indicates this is mock data
+    analysis_date: new Date().toISOString().split('T')[0],
+    data_sources: 'HSX trading data, company earnings reports, SBV statistics, GSO economic indicators'
   };
 }
 
