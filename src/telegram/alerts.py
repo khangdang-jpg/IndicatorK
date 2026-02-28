@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 from src.models import Alert, WeeklyPlan
+from src.telegram.alerts_once import check_zone_once, check_threshold_below_once, check_threshold_above_once
 
 logger = logging.getLogger(__name__)
 
@@ -37,8 +38,12 @@ def check_alerts(
     plan: WeeklyPlan,
     current_prices: dict[str, float],
     alerts_state: dict,
+    held_positions: dict[str, object] | None = None,
 ) -> tuple[list[Alert], dict, bool]:
     """Check all recommendations against current prices.
+
+    Only checks TP/SL for held positions to eliminate spam.
+    Buy zone alerts are checked for all symbols.
 
     Returns (alerts_to_send, updated_state, state_changed).
     """
@@ -46,50 +51,58 @@ def check_alerts(
     state_changed = False
     now = datetime.utcnow()
 
+    # Get held position symbols for position-aware alerting
+    held_symbols = set(held_positions.keys()) if held_positions else set()
+
     for rec in plan.recommendations:
         sym = rec.symbol
         price = current_prices.get(sym)
         if price is None:
             continue
 
-        # Check buy zone
+        # Check buy zone - one-time alert for all symbols (no position filter)
         if rec.buy_zone_low > 0 and rec.buy_zone_high > 0:
-            alert, changed = _check_zone(
+            alert, changed = check_zone_once(
                 alerts_state, sym, "ENTERED_BUY_ZONE",
                 price, rec.buy_zone_low, rec.buy_zone_high, now,
             )
             if alert:
                 alert.message = (
-                    f"BUY ZONE {sym}: {price:,.0f} "
+                    f"🔵 BUY ZONE {sym}: {price:,.0f} "
                     f"(zone {rec.buy_zone_low:,.0f}-{rec.buy_zone_high:,.0f})"
                 )
                 alerts.append(alert)
             if changed:
                 state_changed = True
 
-        # Check stop loss
-        if rec.stop_loss > 0:
-            alert, changed = _check_threshold_below(
+        # Check stop loss - ONLY for held positions or explicit HOLD/REDUCE/SELL actions
+        should_check_tpsl = (
+            sym in held_symbols or
+            rec.action in ("HOLD", "REDUCE", "SELL")
+        )
+
+        if should_check_tpsl and rec.stop_loss > 0:
+            alert, changed = check_threshold_below_once(
                 alerts_state, sym, "STOP_LOSS_HIT",
                 price, rec.stop_loss, now,
             )
             if alert:
                 alert.message = (
-                    f"STOP LOSS {sym}: {price:,.0f} <= {rec.stop_loss:,.0f}"
+                    f"🔴 STOP LOSS {sym}: {price:,.0f} <= {rec.stop_loss:,.0f}"
                 )
                 alerts.append(alert)
             if changed:
                 state_changed = True
 
-        # Check take profit
-        if rec.take_profit > 0:
-            alert, changed = _check_threshold_above(
+        # Check take profit - ONLY for held positions or explicit HOLD/REDUCE/SELL actions
+        if should_check_tpsl and rec.take_profit > 0:
+            alert, changed = check_threshold_above_once(
                 alerts_state, sym, "TAKE_PROFIT_HIT",
                 price, rec.take_profit, now,
             )
             if alert:
                 alert.message = (
-                    f"TAKE PROFIT {sym}: {price:,.0f} >= {rec.take_profit:,.0f}"
+                    f"🟢 TAKE PROFIT {sym}: {price:,.0f} >= {rec.take_profit:,.0f}"
                 )
                 alerts.append(alert)
             if changed:
