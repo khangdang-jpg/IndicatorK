@@ -1,142 +1,51 @@
 {
-  "generated_at": "2026-02-27T05:46:31.827106",
-  "strategy_id": "trend_momentum_atr",
-  "strategy_version": "2.0.0",
-  "allocation_targets": {
-    "stock": 0.6,
-    "bond_fund": 0.4
-  },
+  "generated_at": "2026-03-01T10:00:00Z",
+  "week_of": "2026-03-01",
+  "market_outlook": "Bullish trend with selective stock picking opportunities",
   "recommendations": [
     {
       "symbol": "VNM",
-      "asset_class": "stock",
       "action": "BUY",
-      "buy_zone_low": 70570.0,
-      "buy_zone_high": 70920.0,
-      "stop_loss": 60360.0,
-      "take_profit": 79860.0,
-      "position_target_pct": 0.1,
-      "rationale_bullets": [
-        "Trend UP: price 70600 > MA10w 66430 > MA30w 61610",
-        "RSI(14): 61.1",
-        "ATR: 4643",
-        "Entry: breakout @ T-1 high 70500 [close-confirmed, T+1]"
-      ],
-      "entry_type": "breakout",
-      "breakout_level": 70500.0,
-      "entry_price": 70570.0,
-      "signal_week_end": "2026-02-26",
-      "earliest_entry_date": "2026-03-02"
-    },
-    {
-      "symbol": "MWG",
-      "asset_class": "stock",
-      "action": "BUY",
-      "buy_zone_low": 88120.0,
-      "buy_zone_high": 90860.0,
-      "stop_loss": 77440.0,
-      "take_profit": 100450.0,
-      "position_target_pct": 0.1,
-      "rationale_bullets": [
-        "Trend UP: price 93600 > MA10w 88480 > MA30w 81483",
-        "RSI(14): 63.7",
-        "ATR: 5479",
-        "Entry: pullback mid-zone"
-      ],
-      "entry_type": "pullback",
-      "breakout_level": 0.0,
-      "entry_price": 89490.0,
-      "signal_week_end": "2026-02-26",
-      "earliest_entry_date": null
-    },
-    {
-      "symbol": "VCB",
-      "asset_class": "stock",
-      "action": "BUY",
-      "buy_zone_low": 61060.0,
-      "buy_zone_high": 63230.0,
-      "stop_loss": 52600.0,
-      "take_profit": 70840.0,
-      "position_target_pct": 0.1,
-      "rationale_bullets": [
-        "Trend UP: price 65400 > MA10w 64710 > MA30w 62649",
-        "RSI(14): 57.6",
-        "ATR: 4343",
-        "Entry: pullback mid-zone"
-      ],
-      "entry_type": "pullback",
-      "breakout_level": 0.0,
-      "entry_price": 62150.0,
-      "signal_week_end": "2026-02-26",
-      "earliest_entry_date": null
-    },
-    {
-      "symbol": "BID",
-      "asset_class": "stock",
-      "action": "BUY",
-      "buy_zone_low": 44660.0,
-      "buy_zone_high": 46560.0,
-      "stop_loss": 37270.0,
-      "take_profit": 53190.0,
-      "position_target_pct": 0.1,
-      "rationale_bullets": [
-        "Trend UP: price 48450 > MA10w 46400 > MA30w 41534",
-        "RSI(14): 67.5",
-        "ATR: 3789",
-        "Entry: pullback mid-zone"
-      ],
-      "entry_type": "pullback",
-      "breakout_level": 0.0,
-      "entry_price": 45610.0,
-      "signal_week_end": "2026-02-26",
-      "earliest_entry_date": null
-    },
-    {
-      "symbol": "CTG",
-      "asset_class": "stock",
-      "action": "BUY",
-      "buy_zone_low": 36230.0,
-      "buy_zone_high": 37370.0,
-      "stop_loss": 31810.0,
-      "take_profit": 41330.0,
-      "position_target_pct": 0.1,
-      "rationale_bullets": [
-        "Trend UP: price 38500 > MA10w 37800 > MA30w 35532",
-        "RSI(14): 66.7",
-        "ATR: 2266",
-        "Entry: pullback mid-zone"
-      ],
-      "entry_type": "pullback",
-      "breakout_level": 0.0,
-      "entry_price": 36800.0,
-      "signal_week_end": "2026-02-26",
-      "earliest_entry_date": null
+      "buy_zone_low": 68000,
+      "buy_zone_high": 72000,
+      "target_price": 78000,
+      "stop_loss": 65000,
+      "rationale": "Strong fundamentals, good dividend yield"
     },
     {
       "symbol": "VIC",
-      "asset_class": "stock",
+      "action": "HOLD",
+      "current_price": 85000,
+      "target_price": 95000,
+      "rationale": "Real estate recovery expected"
+    },
+    {
+      "symbol": "HPG",
       "action": "BUY",
-      "buy_zone_low": 164260.0,
-      "buy_zone_high": 165080.0,
-      "stop_loss": 118700.0,
-      "take_profit": 205670.0,
-      "position_target_pct": 0.1,
-      "rationale_bullets": [
-        "Trend UP: price 168900 > MA10w 157480 > MA30w 112968",
-        "RSI(14): 69.3",
-        "ATR: 20707",
-        "Entry: breakout @ T-1 high 164100 [close-confirmed, T+1]"
-      ],
-      "entry_type": "breakout",
-      "breakout_level": 164100.0,
-      "entry_price": 164260.0,
-      "signal_week_end": "2026-02-26",
-      "earliest_entry_date": "2026-03-02"
+      "buy_zone_low": 25000,
+      "buy_zone_high": 27000,
+      "target_price": 32000,
+      "stop_loss": 23000,
+      "rationale": "Steel demand increasing, infrastructure projects"
+    },
+    {
+      "symbol": "FPT",
+      "action": "REDUCE",
+      "current_price": 78000,
+      "reduce_at": 80000,
+      "rationale": "Take partial profits after strong run"
+    },
+    {
+      "symbol": "VCB",
+      "action": "WATCH",
+      "watch_level": 68000,
+      "target_price": 75000,
+      "rationale": "Banking sector consolidation, wait for better entry"
     }
   ],
-  "notes": [
-    "MA10w/MA30w trend + RSI(14) momentum",
-    "ATR(14)-based stops: 2.2x stop, 2.0x target",
-    "Hybrid: breakout(weekly-close-confirmed) or pullback; buffer=0.001"
-  ]
+  "risk_management": {
+    "max_position_size": "20%",
+    "stop_loss_level": "7%",
+    "portfolio_cash_target": "15-25%"
+  }
 }
