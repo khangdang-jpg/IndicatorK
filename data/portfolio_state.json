@@ -4,12 +4,7 @@
   "total_realized_pnl": 0,
   "last_updated": "2026-03-01T10:51:38.164044+00:00",
   "sequence_number": 1,
-  "lock": {
-    "locked_by": "worker_1772364124399_vupmvstox",
-    "locked_at": "2026-03-01T11:22:04.567Z",
-    "expires_at": "2026-03-01T11:23:04.567Z",
-    "operation": "setcash_{\"amount\":15000000,\"reason\":\"manual_adjustment\"}"
-  },
+  "lock": null,
   "metadata": {
     "last_operation": "migration_from_csv",
     "last_source": "state_manager",
