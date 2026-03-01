@@ -2,13 +2,13 @@
   "cash": 10000000.0,
   "positions": {},
   "total_realized_pnl": 0,
-  "last_updated": "2026-03-01T10:44:35.271070+00:00",
+  "last_updated": "2026-03-01T10:51:38.164044+00:00",
   "sequence_number": 1,
   "lock": null,
   "metadata": {
     "last_operation": "migration_from_csv",
     "last_source": "state_manager",
-    "github_actions_run_id": "test_run_12345",
+    "github_actions_run_id": "22541830342",
     "total_fees": 0,
     "cash_adjustments": []
   }
