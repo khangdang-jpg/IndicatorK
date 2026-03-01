@@ -1,9 +1,9 @@
 name: Telegram Bot
 
 on:
-  schedule:
-    # Every 5 min, 24/7 — commands work anytime
-    - cron: '*/5 * * * *'
+  # Disabled: Using Cloudflare Worker for real-time commands instead
+  # schedule:
+  #   - cron: '*/5 * * * *'
   workflow_dispatch: {}
 
 # Prevent concurrent runs that would cause git conflicts
