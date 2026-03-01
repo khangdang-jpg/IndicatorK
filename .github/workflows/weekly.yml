@@ -40,8 +40,22 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/weekly_plan.json data/guardrails_report.json data/portfolio_weekly.csv data/weekly_runs_processed.json
+
+          # Debug: show git status
+          echo "Git status before commit:"
+          git status
+
+          # Add all changes to avoid unstaged files during rebase
+          git add -A
           git diff --staged --quiet && echo "No changes to commit" && exit 0
+
           git commit -m "chore: update weekly plan and portfolio snapshot"
-          git pull --rebase
+
+          # Handle rebase conflicts gracefully
+          git pull --rebase || {
+            echo "Rebase conflict detected, trying merge strategy"
+            git rebase --abort
+            git pull --no-rebase
+          }
+
           git push
