@@ -21,7 +21,7 @@ from typing import Optional
 logger = logging.getLogger(__name__)
 
 # Gemini model for weekly stock analysis — using latest model
-_DEFAULT_MODEL = "gemini-2.5-flash"
+_DEFAULT_MODEL = "gemini-1.5-flash"
 
 def _get_model() -> str:
     """Get model name with environment variable override support."""
