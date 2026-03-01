@@ -441,8 +441,8 @@ function formatPlanSummary(plan, totalValue, aiAnalysis = null) {
       const icon = entryType === 'breakout' ? '⬆' : '⬇';
       const entryPrice = rec.entry_price || rec.buy_zone_low || 0;
 
-      // Calculate allocation (default 10% if not specified)
-      const positionPct = rec.position_target_pct || 10;
+      // Calculate allocation (default 10% = 0.1 as decimal if not specified)
+      const positionPct = rec.position_target_pct || 0.1;
       const allocation = Math.round(positionPct * totalValue / 100000) * 100000;
 
       lines.push(`${symbol} ${icon} ${entryType.charAt(0).toUpperCase() + entryType.slice(1)} ${allocation.toLocaleString()} ₫`);
@@ -535,7 +535,7 @@ function formatPlanSummary(plan, totalValue, aiAnalysis = null) {
       lines.push(`📋 Analysis based on: ${aiAnalysis.data_sources}`);
     }
 
-    const source = aiAnalysis.generated ? 'Powered by Gemini Pro AI' : 'Using cached analysis';
+    const source = aiAnalysis.generated ? 'Powered by Gemini 2.0 Flash AI' : 'Using cached analysis';
     const analysisDate = aiAnalysis.analysis_date || new Date().toISOString().split('T')[0];
     lines.push(`_${source} | Updated: ${analysisDate}_`);
   }
@@ -676,7 +676,7 @@ Respond ONLY with valid JSON in this exact format:
 }
 
 async function callGeminiAPI(prompt, apiKey) {
-  const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+  const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent';
 
   const payload = {
     contents: [{ parts: [{ text: prompt }] }],
