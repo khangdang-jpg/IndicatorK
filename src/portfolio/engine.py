@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import csv
 import logging
+import os
 from datetime import datetime
 from pathlib import Path
 
@@ -11,6 +12,9 @@ from src.models import OHLCV, PortfolioState, Position, TradeRecord
 from src.utils.csv_safety import sanitize_csv_field, validate_symbol
 
 logger = logging.getLogger(__name__)
+
+# Flag to enable atomic state system
+USE_ATOMIC_STATE = os.environ.get("USE_ATOMIC_STATE", "true").lower() == "true"
 
 TRADES_HEADER = "timestamp_iso,asset_class,symbol,side,qty,price,fee,note"
 
@@ -107,11 +111,30 @@ def compute_positions(trades: list[TradeRecord]) -> tuple[dict[str, Position], f
     return positions, cash
 
 
+def get_atomic_portfolio_state(current_prices: dict[str, float] | None = None) -> PortfolioState:
+    """Get portfolio state from atomic JSON store (new system)."""
+    from src.portfolio.state_manager import PortfolioStateManager
+
+    manager = PortfolioStateManager()
+    return manager.to_legacy_portfolio_state(current_prices)
+
+
 def get_portfolio_state(
     trades_path: str = "data/trades.csv",
     current_prices: dict[str, float] | None = None,
 ) -> PortfolioState:
-    """Build complete portfolio state from trades and current prices."""
+    """Build complete portfolio state from trades and current prices.
+
+    Uses atomic JSON state when USE_ATOMIC_STATE=true, falls back to CSV otherwise.
+    """
+    # Use atomic state system if enabled and available
+    if USE_ATOMIC_STATE:
+        try:
+            return get_atomic_portfolio_state(current_prices)
+        except Exception as e:
+            logger.warning(f"Failed to load atomic state, falling back to CSV: {e}")
+
+    # Fallback to CSV-based system
     trades = load_trades(trades_path)
     positions, cash = compute_positions(trades)
 

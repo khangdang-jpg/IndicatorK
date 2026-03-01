@@ -13,6 +13,7 @@ Steps:
 
 import json
 import logging
+import os
 import sys
 from datetime import date, timedelta
 from pathlib import Path
@@ -20,6 +21,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from src.guardrails.engine import run_guardrails, save_guardrails_report
+from src.portfolio.state_manager import PortfolioStateManager
 from src.portfolio.engine import (
     append_portfolio_snapshot,
     get_portfolio_state,
@@ -36,6 +38,17 @@ logger = logging.getLogger(__name__)
 def main() -> None:
     setup_logging()
     logger.info("Starting weekly plan generation")
+
+    # Idempotency check - prevent double processing on GitHub Actions retry
+    run_id = os.environ.get("GITHUB_RUN_ID")
+    run_attempt = os.environ.get("GITHUB_RUN_ATTEMPT", "1")
+
+    if run_id:
+        state_manager = PortfolioStateManager()
+        if state_manager.is_idempotent_operation(run_id):
+            logger.info(f"Run {run_id} already processed, skipping execution")
+            return
+        logger.info(f"Processing GitHub Actions run {run_id} (attempt {run_attempt})")
 
     # Load config
     provider = get_provider()
@@ -179,6 +192,11 @@ def main() -> None:
                     f.write(f"  - {rec}\n")
     except OSError:
         pass
+
+    # Mark GitHub Actions run as processed (for idempotency)
+    if run_id:
+        state_manager.mark_run_processed(run_id)
+        logger.info(f"Marked run {run_id} as processed")
 
     logger.info("Weekly workflow complete")
 
