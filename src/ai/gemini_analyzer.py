@@ -20,8 +20,12 @@ from typing import Optional
 
 logger = logging.getLogger(__name__)
 
-# Gemini model for weekly stock analysis — using proven free tier model
-_DEFAULT_MODEL = "gemini-2.0-flash"
+# Gemini model for weekly stock analysis — using latest model
+_DEFAULT_MODEL = "gemini-2.5-flash"
+
+def _get_model() -> str:
+    """Get model name with environment variable override support."""
+    return os.environ.get("GEMINI_MODEL", _DEFAULT_MODEL)
 _API_URL_TEMPLATE = (
     "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 )
@@ -55,50 +59,97 @@ def is_available() -> bool:
     return bool(get_api_key())
 
 
-def _build_scoring_prompt(recommendations: list[dict], portfolio_summary: str) -> str:
-    """Build the prompt for Gemini to score recommendations."""
+def _build_scoring_prompt(recommendations: list[dict], portfolio_summary: str,
+                          as_of_timestamp: str = "", market_snapshot: str = "") -> str:
+    """Build the prompt for Gemini to score recommendations.
+
+    Args:
+        recommendations: List of recommendation dictionaries
+        portfolio_summary: Current portfolio state
+        as_of_timestamp: When this analysis was generated (ISO format)
+        market_snapshot: Optional current market context data
+    """
     rec_lines = []
     for r in recommendations:
+        # Extract technical indicators for weekly analysis
+        rationale_text = '; '.join(r.get('rationale_bullets', []))
         rec_lines.append(
             f"- {r['symbol']}: {r['action']} | entry_type={r.get('entry_type', 'N/A')} | "
             f"entry={r.get('entry_price', 0):,.0f} | SL={r.get('stop_loss', 0):,.0f} | "
             f"TP={r.get('take_profit', 0):,.0f} | "
-            f"rationale: {'; '.join(r.get('rationale_bullets', []))}"
+            f"rationale: {rationale_text}"
         )
     rec_block = "\n".join(rec_lines)
 
-    return f"""You are a Vietnamese stock market analyst. Analyze these weekly trading recommendations
-and provide a confidence score (1-10) for each, plus a brief market context summary.
+    # Build data context section
+    data_context = f"PORTFOLIO:\n{portfolio_summary}\n\nRECOMMENDATIONS:\n{rec_block}"
 
-PORTFOLIO:
-{portfolio_summary}
+    if as_of_timestamp:
+        data_context = f"DATA AS OF: {as_of_timestamp}\n\n{data_context}"
 
-RECOMMENDATIONS:
-{rec_block}
+    if market_snapshot:
+        data_context += f"\n\nMARKET SNAPSHOT:\n{market_snapshot}"
+
+    # Market context instruction based on data availability
+    market_context_instruction = (
+        "4. Write a 2-3 sentence overall Vietnamese market context summary using PROVIDED data only. "
+        "If market snapshot not provided, state 'Insufficient market context for broader analysis.'"
+        if not market_snapshot
+        else "4. Write a 2-3 sentence overall Vietnamese market context summary based on the provided market snapshot."
+    )
+
+    return f"""You are a Vietnamese stock market analyst. Use ONLY the provided data below to analyze these weekly trading recommendations.
+
+{data_context}
+
+CRITICAL: Use ONLY the data provided above. Do not reference external knowledge or recent market events unless included in the input data.
+
+WEEKLY TRADING SCORING CRITERIA (1-10):
+1. Weekly trend alignment:
+   - MA10w > MA30w for BUY signals (uptrend confirmation)
+   - Price position relative to weekly moving averages
+   - Weekly close confirmation vs intraday noise
+
+2. Technical setup quality:
+   - RSI(14) levels: oversold (<30) = pullback opportunity, overbought (>70) = breakout strength
+   - ATR(14) context: entry timing relative to volatility
+   - Breakout confirmation: T+1 earliest entry date after weekly close above resistance
+
+3. Entry type suitability (Vietnamese market):
+   - BREAKOUT: requires weekly close confirmation + volume
+   - PULLBACK: requires ATR mid-zone touch (typically 1-1.5x ATR from recent high)
+   - Tick-step rounding for Vietnamese stocks (500đ, 1000đ, etc.)
+
+4. Risk/reward optimization:
+   - SL distance vs ATR(14) - should be 1-2x ATR maximum
+   - TP distance vs SL - minimum 1.5:1 ratio preferred
+   - Position sizing considerations for Vietnamese market liquidity
 
 INSTRUCTIONS:
-1. Score each recommendation 1-10 based on:
-   - Technical setup quality (trend alignment, entry timing)
-   - Risk/reward ratio (SL vs TP distance)
-   - Vietnamese market context (sector trends, macro conditions)
-   - Entry type suitability (breakout confirmation vs pullback value)
+1. Score each recommendation 1-10 using WEEKLY TRADING CRITERIA above.
 
-2. Provide a 1-sentence rationale for each score in Vietnamese or English.
+2. Provide 1-sentence rationale focusing on weekly technical setup quality.
 
-3. Flag any significant risks (e.g., low liquidity, sector headwinds).
+3. Flag risks: low liquidity, sector weakness, or poor risk/reward.
 
-4. Write a 2-3 sentence overall Vietnamese market context summary.
+{market_context_instruction}
 
-Respond ONLY with valid JSON in this exact format:
+CRITICAL RESPONSE FORMAT:
+- Output MUST be valid JSON only
+- NO markdown backticks, NO ```json, NO extra text
+- NO explanations before or after JSON
+- If unsure about format, return: {{}}
+
+EXACT FORMAT REQUIRED:
 {{
   "scores": {{
     "SYMBOL": {{
       "score": 7,
-      "rationale": "Strong breakout with volume confirmation",
+      "rationale": "Weekly MA10w > MA30w with RSI(14) at 65 showing breakout strength",
       "risk_note": ""
     }}
   }},
-  "market_context": "Overall VN market summary here."
+  "market_context": "Market context based on provided data or 'Insufficient market context for broader analysis.'"
 }}"""
 
 
@@ -106,7 +157,7 @@ def _call_gemini(prompt: str, api_key: str) -> Optional[dict]:
     """Make a single Gemini API call and parse the JSON response."""
     import requests
 
-    url = _API_URL_TEMPLATE.format(model=_DEFAULT_MODEL)
+    url = _API_URL_TEMPLATE.format(model=_get_model())
     headers = {"Content-Type": "application/json"}
     payload = {
         "contents": [{"parts": [{"text": prompt}]}],
@@ -145,12 +196,16 @@ def _call_gemini(prompt: str, api_key: str) -> Optional[dict]:
 def analyze_weekly_plan(
     plan_dict: dict,
     portfolio_summary: str = "",
+    as_of_timestamp: str = "",
+    market_snapshot: str = "",
 ) -> AIAnalysis:
     """Score all recommendations in a weekly plan using Gemini.
 
     Args:
         plan_dict: WeeklyPlan.to_dict() output
         portfolio_summary: short text describing portfolio state
+        as_of_timestamp: ISO timestamp when analysis was generated
+        market_snapshot: optional current market context/data
 
     Returns:
         AIAnalysis with scores and market context.
@@ -166,7 +221,12 @@ def analyze_weekly_plan(
     if not recommendations:
         return AIAnalysis(generated=True, market_context="No recommendations to analyze.")
 
-    prompt = _build_scoring_prompt(recommendations, portfolio_summary)
+    # Add current timestamp if not provided
+    if not as_of_timestamp:
+        from datetime import datetime, timezone
+        as_of_timestamp = datetime.now(timezone.utc).isoformat()
+
+    prompt = _build_scoring_prompt(recommendations, portfolio_summary, as_of_timestamp, market_snapshot)
     result = _call_gemini(prompt, api_key)
 
     if result is None:

@@ -232,4 +232,41 @@ def format_plan_summary(plan_data: dict, total_value: float = 0.0) -> str:
                 f"  {icon} `{sym}` {r.get('action')}{now_str}  SL {r.get('stop_loss', 0):,.0f}"
             )
 
+    # Add cached AI analysis section if available
+    ai_analysis = plan_data.get("ai_analysis")
+    if ai_analysis and ai_analysis.get("generated"):
+        lines.append("")
+        lines.append("*🤖 AI Analysis*")
+
+        # Market context
+        if ai_analysis.get("market_context"):
+            lines.append(f"_{ai_analysis['market_context']}_")
+            lines.append("")
+
+        # AI scores for recommendations
+        ai_scores = ai_analysis.get("scores", {})
+        for r in recs[:5]:  # Limit to first 5 recommendations
+            sym = r["symbol"]
+            ai_score = ai_scores.get(sym)
+            if ai_score:
+                score = ai_score.get("score", 5)
+                rationale = ai_score.get("rationale", "")
+                risk_note = ai_score.get("risk_note", "")
+
+                # Score bar
+                if score >= 8:
+                    bar = "🟢"
+                elif score >= 6:
+                    bar = "🔵"
+                elif score >= 4:
+                    bar = "🟡"
+                else:
+                    bar = "🔴"
+
+                lines.append(f"  `{sym}` {bar} {score}/10")
+                if rationale:
+                    lines.append(f"    {rationale}")
+                if risk_note:
+                    lines.append(f"    ⚠ {risk_note}")
+
     return "\n".join(lines)

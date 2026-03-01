@@ -131,12 +131,16 @@ class BacktestEngine:
         initial_cash: float,
         order_size: float | None = None,
         tie_breaker: str = "worst",
+        exit_mode: str = "tpsl_only",
     ) -> None:
         if tie_breaker not in ("worst", "best"):
             raise ValueError(f"tie_breaker must be 'worst' or 'best', got {tie_breaker!r}")
+        if exit_mode not in ("tpsl_only", "3action", "4action"):
+            raise ValueError(f"exit_mode must be 'tpsl_only', '3action', or '4action', got {exit_mode!r}")
         self.initial_cash = initial_cash
         self.order_size = order_size  # None = use position_target_pct sizing
         self.tie_breaker = tie_breaker
+        self.exit_mode = exit_mode
         self.cash = float(initial_cash)
         self.open_trades: list[OpenTrade] = []
         self.closed_trades: list[ClosedTrade] = []
@@ -232,6 +236,103 @@ class BacktestEngine:
         return True
 
     # ------------------------------------------------------------------
+    # Manual exits (for REDUCE/SELL signals)
+    # ------------------------------------------------------------------
+
+    def force_exit_at_market(
+        self,
+        symbol: str,
+        current_date: date,
+        market_price: float,
+        reason: str = "SELL",
+    ) -> bool:
+        """Force exit entire position at market price.
+
+        Returns True if position was closed, False if no position found.
+        """
+        for i, trade in enumerate(self.open_trades):
+            if trade.symbol == symbol:
+                # Close the trade at market price
+                proceeds = trade.qty * market_price
+                self.cash += proceeds
+                pnl = proceeds - trade.cost_vnd
+                return_pct = (market_price - trade.entry_price) / trade.entry_price * 100
+                hold_days = (current_date - trade.entry_date).days
+
+                self.closed_trades.append(
+                    ClosedTrade(
+                        symbol=trade.symbol,
+                        entry_date=trade.entry_date,
+                        entry_price=trade.entry_price,
+                        exit_date=current_date,
+                        exit_price=market_price,
+                        reason=reason,
+                        qty=trade.qty,
+                        return_pct=round(return_pct, 4),
+                        pnl_vnd=round(pnl, 2),
+                        hold_days=hold_days,
+                    )
+                )
+
+                # Remove the trade from open positions
+                self.open_trades.pop(i)
+                return True
+        return False
+
+    def reduce_position(
+        self,
+        symbol: str,
+        current_date: date,
+        market_price: float,
+        reduction_fraction: float = 0.5,
+        reason: str = "REDUCE",
+    ) -> bool:
+        """Reduce position by specified fraction at market price.
+
+        Args:
+            reduction_fraction: Fraction to sell (0.5 = sell 50%, keep 50%)
+
+        Returns True if position was reduced, False if no position found.
+        """
+        for trade in self.open_trades:
+            if trade.symbol == symbol:
+                # Calculate quantity to sell
+                qty_to_sell = math.floor(trade.qty * reduction_fraction)
+                if qty_to_sell <= 0:
+                    return False
+
+                # Execute the partial sale
+                proceeds = qty_to_sell * market_price
+                self.cash += proceeds
+
+                # Calculate PnL on the sold portion
+                cost_of_sold = (trade.cost_vnd / trade.qty) * qty_to_sell
+                pnl = proceeds - cost_of_sold
+                return_pct = (market_price - trade.entry_price) / trade.entry_price * 100
+                hold_days = (current_date - trade.entry_date).days
+
+                self.closed_trades.append(
+                    ClosedTrade(
+                        symbol=trade.symbol,
+                        entry_date=trade.entry_date,
+                        entry_price=trade.entry_price,
+                        exit_date=current_date,
+                        exit_price=market_price,
+                        reason=reason,
+                        qty=qty_to_sell,
+                        return_pct=round(return_pct, 4),
+                        pnl_vnd=round(pnl, 2),
+                        hold_days=hold_days,
+                    )
+                )
+
+                # Update the remaining position
+                trade.qty -= qty_to_sell
+                trade.cost_vnd -= cost_of_sold
+                return True
+        return False
+
+    # ------------------------------------------------------------------
     # Daily processing (SL/TP check + equity curve snapshot)
     # ------------------------------------------------------------------
 
@@ -243,61 +344,66 @@ class BacktestEngine:
         """Check SL/TP for all open trades and record today's equity curve.
 
         Trades entered on *current_date* are skipped (no same-day exit).
+
+        In manual exit modes (3action, 4action), SL/TP checks are skipped -
+        exits are handled by explicit REDUCE/SELL signals.
         """
         # Update last-known prices from today's candles
         for sym, candle in candles_by_symbol.items():
             self._last_price[sym] = candle.close
 
-        still_open: list[OpenTrade] = []
-        for trade in self.open_trades:
-            # Never exit on the same day as entry
-            if trade.entry_date >= current_date:
-                still_open.append(trade)
-                continue
+        # Only check automatic SL/TP in "tpsl_only" mode
+        if self.exit_mode == "tpsl_only":
+            still_open: list[OpenTrade] = []
+            for trade in self.open_trades:
+                # Never exit on the same day as entry
+                if trade.entry_date >= current_date:
+                    still_open.append(trade)
+                    continue
 
-            candle = candles_by_symbol.get(trade.symbol)
-            if candle is None:
-                still_open.append(trade)
-                continue
+                candle = candles_by_symbol.get(trade.symbol)
+                if candle is None:
+                    still_open.append(trade)
+                    continue
 
-            hit_sl = sl_touched(candle, trade.stop_loss)
-            hit_tp = tp_touched(candle, trade.take_profit)
+                hit_sl = sl_touched(candle, trade.stop_loss)
+                hit_tp = tp_touched(candle, trade.take_profit)
 
-            if hit_sl and hit_tp:
-                reason, exit_price = resolve_same_day(
-                    self.tie_breaker, trade.stop_loss, trade.take_profit
+                if hit_sl and hit_tp:
+                    reason, exit_price = resolve_same_day(
+                        self.tie_breaker, trade.stop_loss, trade.take_profit
+                    )
+                elif hit_tp:
+                    reason, exit_price = "TP", trade.take_profit
+                elif hit_sl:
+                    reason, exit_price = "SL", trade.stop_loss
+                else:
+                    still_open.append(trade)
+                    continue
+
+                # Close the trade
+                proceeds = trade.qty * exit_price
+                self.cash += proceeds
+                pnl = proceeds - trade.cost_vnd
+                return_pct = (exit_price - trade.entry_price) / trade.entry_price * 100
+                hold_days = (current_date - trade.entry_date).days
+
+                self.closed_trades.append(
+                    ClosedTrade(
+                        symbol=trade.symbol,
+                        entry_date=trade.entry_date,
+                        entry_price=trade.entry_price,
+                        exit_date=current_date,
+                        exit_price=exit_price,
+                        reason=reason,
+                        qty=trade.qty,
+                        return_pct=round(return_pct, 4),
+                        pnl_vnd=round(pnl, 2),
+                        hold_days=hold_days,
+                    )
                 )
-            elif hit_tp:
-                reason, exit_price = "TP", trade.take_profit
-            elif hit_sl:
-                reason, exit_price = "SL", trade.stop_loss
-            else:
-                still_open.append(trade)
-                continue
 
-            # Close the trade
-            proceeds = trade.qty * exit_price
-            self.cash += proceeds
-            pnl = proceeds - trade.cost_vnd
-            return_pct = (exit_price - trade.entry_price) / trade.entry_price * 100
-            hold_days = (current_date - trade.entry_date).days
-
-            self.closed_trades.append(
-                ClosedTrade(
-                    symbol=trade.symbol,
-                    entry_date=trade.entry_date,
-                    entry_price=trade.entry_price,
-                    exit_date=current_date,
-                    exit_price=exit_price,
-                    reason=reason,
-                    qty=trade.qty,
-                    return_pct=round(return_pct, 4),
-                    pnl_vnd=round(pnl, 2),
-                    hold_days=hold_days,
-                )
-            )
-
-        self.open_trades = still_open
+            self.open_trades = still_open
 
         # Equity curve snapshot (mark open positions to last known price)
         open_value = sum(

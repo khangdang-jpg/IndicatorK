@@ -67,18 +67,38 @@ def generate_plan_from_data(
     market_data: dict[str, list[OHLCV]],
     strategy,
     risk_config: dict,
+    open_positions: dict[str, dict] | None = None,
 ) -> WeeklyPlan:
     """Run *strategy*.generate_weekly_plan on pre-sliced market data.
 
-    An empty PortfolioState is used because the backtest engine manages its
-    own position accounting separately from the live portfolio.
+    Args:
+        market_data: Historical OHLCV data sliced to exclude lookahead
+        strategy: Strategy instance to generate the plan
+        risk_config: Risk configuration dictionary
+        open_positions: Dict of {symbol: {"qty": float, "entry_price": float}}
+                        representing currently held positions from the engine.
+                        Used in manual exit modes to generate HOLD/REDUCE/SELL signals.
+
+    The PortfolioState is constructed from open_positions so the strategy
+    can be portfolio-aware and generate appropriate exit signals.
     """
-    empty_portfolio = PortfolioState(
-        positions={},
-        cash=0.0,
-        total_value=0.0,
-        allocation={"stock_pct": 0.0, "bond_fund_pct": 0.0, "cash_pct": 1.0},
-        unrealized_pnl=0.0,
-        realized_pnl=0.0,
-    )
-    return strategy.generate_weekly_plan(market_data, empty_portfolio, risk_config)
+    # Construct PortfolioState from engine's open positions
+    if open_positions:
+        portfolio = PortfolioState(
+            positions=open_positions,
+            cash=0.0,  # Not used by strategy logic
+            total_value=0.0,  # Not used by strategy logic
+            allocation={"stock_pct": 0.0, "bond_fund_pct": 0.0, "cash_pct": 1.0},
+            unrealized_pnl=0.0,
+            realized_pnl=0.0,
+        )
+    else:
+        portfolio = PortfolioState(
+            positions={},
+            cash=0.0,
+            total_value=0.0,
+            allocation={"stock_pct": 0.0, "bond_fund_pct": 0.0, "cash_pct": 1.0},
+            unrealized_pnl=0.0,
+            realized_pnl=0.0,
+        )
+    return strategy.generate_weekly_plan(market_data, portfolio, risk_config)

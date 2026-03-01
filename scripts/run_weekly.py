@@ -75,7 +75,44 @@ def main() -> None:
     plan = strategy.generate_weekly_plan(market_data, portfolio_state, risk_config)
     logger.info("Generated plan with %d recommendations", len(plan.recommendations))
 
-    # Write weekly plan
+    # AI analysis (run BEFORE saving plan so we can cache the results)
+    from src.ai.gemini_analyzer import analyze_weekly_plan, is_available as ai_available
+    ai_analysis = None
+    if ai_available():
+        logger.info("Running Gemini AI analysis...")
+        portfolio_summary = (
+            f"Total: {portfolio_state.total_value:,.0f} VND | "
+            f"Cash: {portfolio_state.cash:,.0f} | "
+            f"Positions: {len(portfolio_state.positions)} | "
+            f"Unrealized PnL: {portfolio_state.unrealized_pnl:+,.0f}"
+        )
+        ai_analysis = analyze_weekly_plan(plan.to_dict(), portfolio_summary)
+        if ai_analysis.generated:
+            logger.info("AI analysis complete: %d scores", len(ai_analysis.scores))
+            # Convert AIAnalysis to dict for caching (compatible with Cloudflare Workers format)
+            from datetime import datetime
+            ai_dict = {
+                "generated": ai_analysis.generated,
+                "market_context": ai_analysis.market_context,
+                "analysis_date": datetime.now().strftime("%Y-%m-%d"),
+                "data_sources": "Weekly technical analysis using Gemini AI",
+                "scores": {
+                    sym: {
+                        "symbol": score.symbol,
+                        "score": score.score,
+                        "rationale": score.rationale,
+                        "risk_note": score.risk_note
+                    }
+                    for sym, score in ai_analysis.scores.items()
+                }
+            }
+            plan.ai_analysis = ai_dict
+        else:
+            logger.warning("AI analysis returned empty — continuing without it")
+    else:
+        logger.info("Gemini API not configured — skipping AI analysis")
+
+    # Write weekly plan (now includes AI analysis if available)
     plan_path = Path("data/weekly_plan.json")
     plan_path.parent.mkdir(parents=True, exist_ok=True)
     with open(plan_path, "w") as f:
@@ -93,25 +130,6 @@ def main() -> None:
     )
     save_guardrails_report(guardrails_report)
 
-    # AI analysis (optional — runs only if GEMINI_API_KEY is set)
-    from src.ai.gemini_analyzer import analyze_weekly_plan, is_available as ai_available
-    ai_analysis = None
-    if ai_available():
-        logger.info("Running Gemini AI analysis...")
-        portfolio_summary = (
-            f"Total: {portfolio_state.total_value:,.0f} VND | "
-            f"Cash: {portfolio_state.cash:,.0f} | "
-            f"Positions: {len(portfolio_state.positions)} | "
-            f"Unrealized PnL: {portfolio_state.unrealized_pnl:+,.0f}"
-        )
-        ai_analysis = analyze_weekly_plan(plan.to_dict(), portfolio_summary)
-        if ai_analysis.generated:
-            logger.info("AI analysis complete: %d scores", len(ai_analysis.scores))
-        else:
-            logger.warning("AI analysis returned empty — continuing without it")
-    else:
-        logger.info("Gemini API not configured — skipping AI analysis")
-
     # Append portfolio snapshot (weekly tracking)
     append_portfolio_snapshot(portfolio_state)
     logger.info("Portfolio snapshot appended")
@@ -122,7 +140,27 @@ def main() -> None:
 
     # Send weekly digest via Telegram
     bot = TelegramBot()
-    digest = format_weekly_digest(plan, portfolio_state, guardrails_report, ai_analysis)
+    # Convert cached AI analysis back to AIAnalysis object for digest formatting
+    digest_ai_analysis = ai_analysis  # Use original AIAnalysis object if available
+    if ai_analysis is None and plan.ai_analysis:
+        # If we only have cached data, reconstruct AIAnalysis object
+        from src.ai.gemini_analyzer import AIAnalysis, AIScore
+        cached_ai = plan.ai_analysis
+        scores = {}
+        for sym, score_data in cached_ai.get("scores", {}).items():
+            scores[sym] = AIScore(
+                symbol=score_data["symbol"],
+                score=score_data["score"],
+                rationale=score_data["rationale"],
+                risk_note=score_data["risk_note"]
+            )
+        digest_ai_analysis = AIAnalysis(
+            scores=scores,
+            market_context=cached_ai.get("market_context", ""),
+            generated=cached_ai.get("generated", False)
+        )
+
+    digest = format_weekly_digest(plan, portfolio_state, guardrails_report, digest_ai_analysis)
     bot.send_admin(digest)
     logger.info("Weekly digest sent")
 

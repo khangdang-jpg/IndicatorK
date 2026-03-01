@@ -142,8 +142,8 @@ async function handlePlan(env) {
     const trades = await getTrades(env);
     const portfolioState = computePortfolioState(trades);
 
-    // Get real AI analysis with recent news
-    const aiAnalysis = await getGeminiAnalysis(plan, portfolioState, env);
+    // Use cached AI analysis from plan (no more live API calls)
+    const aiAnalysis = plan.ai_analysis || null;
 
     return formatPlanSummary(plan, portfolioState.totalValue, aiAnalysis);
   } catch (error) {

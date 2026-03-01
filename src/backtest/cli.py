@@ -48,6 +48,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
                    help="Exit rule (only touch supported)")
     p.add_argument("--tie-breaker", default="worst", choices=["worst", "best"],
                    help="Same-day SL+TP tie-breaker: worst=SL first, best=TP first")
+    p.add_argument("--exit-mode", default="tpsl_only",
+                   choices=["tpsl_only", "3action", "4action"],
+                   help=(
+                       "Exit strategy: tpsl_only=automatic TP/SL only (default), "
+                       "3action=BUY/HOLD/SELL signals, 4action=BUY/HOLD/REDUCE/SELL signals"
+                   ))
     p.add_argument("--mode", default="generate", choices=["plan", "generate"],
                    help=(
                        "plan: reuse data/weekly_plan.json for every week; "
@@ -76,6 +82,7 @@ def _run_single(
     mode: str,
     plan_file: str,
     tie_breaker: str,
+    exit_mode: str,
     provider,
     strategy,
     risk_config: dict,
@@ -122,6 +129,7 @@ def _run_single(
         initial_cash=initial_cash,
         order_size=order_size if order_size else None,  # None = pct-based sizing
         tie_breaker=tie_breaker,
+        exit_mode=exit_mode,
     )
 
     # ------------------------------------------------------------------
@@ -165,11 +173,27 @@ def _run_single(
                 logger.warning("No market data before %s, skipping week", week_start)
                 pending_entries.clear()
                 continue
+
+            # Build open_positions dict for portfolio-awareness
+            # Format: {symbol: {"qty": float, "entry_price": float}}
+            open_positions = {
+                trade.symbol: {
+                    "qty": trade.qty,
+                    "entry_price": trade.entry_price,
+                }
+                for trade in engine.open_trades
+            }
+
             try:
-                plan = generate_plan_from_data(week_market_data, strategy, risk_config)
+                plan = generate_plan_from_data(
+                    week_market_data,
+                    strategy,
+                    risk_config,
+                    open_positions=open_positions,
+                )
                 logger.debug(
-                    "Week %d (%s): %d recommendations",
-                    week_idx + 1, week_start, len(plan.recommendations),
+                    "Week %d (%s): %d recommendations (open positions: %d)",
+                    week_idx + 1, week_start, len(plan.recommendations), len(open_positions),
                 )
             except Exception as exc:
                 logger.warning(
@@ -245,7 +269,23 @@ def _run_single(
             for sym in filled:
                 del pending_entries[sym]
 
-            # Check SL/TP on existing open trades
+            # Process REDUCE/SELL signals (only in manual exit modes)
+            if exit_mode in ("3action", "4action"):
+                open_symbol_set = {t.symbol for t in engine.open_trades}
+                for rec in plan.recommendations:
+                    if rec.symbol in open_symbol_set and rec.symbol in candles_today:
+                        candle = candles_today[rec.symbol]
+                        market_price = candle.close  # Use closing price for manual exits
+
+                        if rec.action == "SELL" and exit_mode in ("3action", "4action"):
+                            if engine.force_exit_at_market(rec.symbol, current_day, market_price, "SELL"):
+                                logger.debug("  SELL %s @ %.2f on %s", rec.symbol, market_price, current_day)
+
+                        elif rec.action == "REDUCE" and exit_mode == "4action":
+                            if engine.reduce_position(rec.symbol, current_day, market_price, 0.5, "REDUCE"):
+                                logger.debug("  REDUCE %s @ %.2f (50%%) on %s", rec.symbol, market_price, current_day)
+
+            # Check SL/TP on existing open trades (automatic exits in tpsl_only mode)
             engine.process_day(candles_today, current_day)
 
             current_day += timedelta(days=1)
@@ -332,6 +372,7 @@ def run_backtest(
     trades_per_week: int = 4,
     universe: str = "data/watchlist.txt",
     tie_breaker: str = "worst",
+    exit_mode: str = "tpsl_only",
     mode: str = "generate",
     plan_file: str = "data/weekly_plan.json",
     run_range: bool = False,
@@ -387,6 +428,7 @@ def run_backtest(
             mode=mode,
             plan_file=plan_file,
             tie_breaker=tb,
+            exit_mode=exit_mode,
             provider=provider,
             strategy=strategy,
             risk_config=risk_config,
@@ -429,6 +471,7 @@ def main(argv: list[str] | None = None) -> None:
         trades_per_week=args.trades_per_week,
         universe=args.universe,
         tie_breaker=args.tie_breaker,
+        exit_mode=args.exit_mode,
         mode=args.mode,
         plan_file=args.plan_file,
         run_range=args.run_range,

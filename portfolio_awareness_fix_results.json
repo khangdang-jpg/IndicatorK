@@ -1,0 +1,53 @@
+{
+  "tpsl_only": {
+    "output_dir": "reports_tpsl_only_fixed/20260301_125340",
+    "summary": {
+      "from_date": "2025-02-01",
+      "to_date": "2026-02-25",
+      "initial_cash": 20000000,
+      "final_value": 26379854.0,
+      "cagr": 0.2967,
+      "max_drawdown": 0.0934,
+      "win_rate": 0.6857,
+      "avg_hold_days": 25.34,
+      "num_trades": 35,
+      "profit_factor": 3.9262,
+      "avg_invested_pct": 0.3258,
+      "tie_breaker": "worst"
+    }
+  },
+  "3action": {
+    "output_dir": "reports_3action_fixed/20260301_125352",
+    "summary": {
+      "from_date": "2025-02-01",
+      "to_date": "2026-02-25",
+      "initial_cash": 20000000,
+      "final_value": 30226727.0,
+      "cagr": 0.4733,
+      "max_drawdown": 0.2185,
+      "win_rate": 0.5,
+      "avg_hold_days": 118.75,
+      "num_trades": 12,
+      "profit_factor": 3.0194,
+      "avg_invested_pct": 0.8041,
+      "tie_breaker": "worst"
+    }
+  },
+  "4action": {
+    "output_dir": "reports_4action_fixed/20260301_125405",
+    "summary": {
+      "from_date": "2025-02-01",
+      "to_date": "2026-02-25",
+      "initial_cash": 20000000,
+      "final_value": 21008853.0,
+      "cagr": 0.0473,
+      "max_drawdown": 0.1516,
+      "win_rate": 0.61,
+      "avg_hold_days": 55.08,
+      "num_trades": 100,
+      "profit_factor": 0.618,
+      "avg_invested_pct": 0.2621,
+      "tie_breaker": "worst"
+    }
+  }
+}

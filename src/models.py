@@ -89,6 +89,7 @@ class WeeklyPlan:
     allocation_targets: dict[str, float]
     recommendations: list[Recommendation]
     notes: list[str] = field(default_factory=list)
+    ai_analysis: Optional[dict] = None  # Cache AI analysis results
 
     def to_dict(self) -> dict:
         return {
@@ -98,6 +99,7 @@ class WeeklyPlan:
             "allocation_targets": self.allocation_targets,
             "recommendations": [r.to_dict() for r in self.recommendations],
             "notes": self.notes,
+            "ai_analysis": self.ai_analysis,  # Include cached AI analysis
         }
 
     @classmethod
@@ -118,6 +120,7 @@ class WeeklyPlan:
             allocation_targets=d.get("allocation_targets", {}),
             recommendations=recs,
             notes=d.get("notes", []),
+            ai_analysis=d.get("ai_analysis"),  # Load cached AI analysis
         )
 
 
