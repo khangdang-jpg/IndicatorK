@@ -215,27 +215,31 @@ class PortfolioStateManager:
 
     def to_legacy_portfolio_state(self, current_prices: Optional[dict] = None) -> PortfolioState:
         """Convert atomic state to legacy PortfolioState for backward compatibility."""
+        import copy
         state = self.get_state()
 
-        # Update current prices if provided
+        # CRITICAL FIX: Deep copy positions to prevent in-place mutation
+        positions_copy = {symbol: copy.deepcopy(position) for symbol, position in state.positions.items()}
+
+        # Update current prices on the COPY (not original)
         if current_prices:
-            for symbol, position in state.positions.items():
+            for symbol, position in positions_copy.items():
                 if symbol in current_prices:
                     position.current_price = current_prices[symbol]
                     position.unrealized_pnl = (position.current_price - position.avg_cost) * position.qty
 
-        # Calculate totals
+        # Calculate totals using the copied positions
         stock_value = sum(
             pos.current_price * pos.qty
-            for pos in state.positions.values()
+            for pos in positions_copy.values()
             if pos.asset_class == "stock"
         )
         bond_fund_value = sum(
             pos.current_price * pos.qty
-            for pos in state.positions.values()
+            for pos in positions_copy.values()
             if pos.asset_class in ["bond", "fund"]
         )
-        total_unrealized = sum(pos.unrealized_pnl for pos in state.positions.values())
+        total_unrealized = sum(pos.unrealized_pnl for pos in positions_copy.values())
 
         total_value = state.cash + stock_value + bond_fund_value
 
@@ -247,7 +251,7 @@ class PortfolioStateManager:
         }
 
         return PortfolioState(
-            positions=state.positions,
+            positions=positions_copy,  # Use copied positions, not original
             cash=state.cash,
             total_value=total_value,
             allocation=allocation,
