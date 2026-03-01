@@ -116,16 +116,19 @@ async function handleMoneyOperation(operationType, operationData, env) {
     const maxRetries = 3;
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
-        const lockId = `worker_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-        const operation = `${operationType}_${JSON.stringify(operationData).slice(0, 50)}`;
-        let lockAcquired = false;
 
         try {
             console.log(`Money operation attempt ${attempt}/${maxRetries}: ${operationType}`);
 
-            // 1. Acquire atomic lock (with fresh state)
-            const { state, originalSha } = await acquireStateLock(lockId, operation, env);
-            lockAcquired = true;
+            // 1. Load current state and check for locks (NO COMMIT)
+            const { content, sha } = await getFileContent('data/portfolio_state.json', env);
+            const state = JSON.parse(content);
+
+            // Check if locked by another operation (without acquiring our own lock)
+            if (state.lock && new Date(state.lock.expires_at) > new Date()) {
+                const timeLeft = Math.round((new Date(state.lock.expires_at) - new Date()) / 1000);
+                throw new Error(`Operation in progress by ${state.lock.locked_by}, wait ${timeLeft}s`);
+            }
 
             // 2. Validate operation (sufficient funds, valid data, etc.)
             validateMoneyOperation(state, operationType, operationData);
@@ -134,10 +137,10 @@ async function handleMoneyOperation(operationType, operationData, env) {
             const newState = applyMoneyOperation(state, operationType, operationData);
             newState.sequence_number += 1;
             newState.last_updated = new Date().toISOString();
-            newState.lock = null; // Release lock in new state
+            newState.lock = null; // Ensure no lock in final state
 
-            // 4. Update state atomically
-            await updateFile('data/portfolio_state.json', JSON.stringify(newState, null, 2), originalSha, `${operationType}: ${JSON.stringify(operationData)}`, env);
+            // 4. ATOMIC UPDATE - single commit for entire operation
+            await updateFile('data/portfolio_state.json', JSON.stringify(newState, null, 2), sha, `${operationType}: ${JSON.stringify(operationData)}`, env);
 
             // 5. Log operation in audit trail
             await appendTradeLog({
@@ -158,11 +161,6 @@ async function handleMoneyOperation(operationType, operationData, env) {
 
         } catch (error) {
             console.error(`Money operation attempt ${attempt} failed: ${operationType}`, error.message);
-
-            // Release lock on error if we acquired it
-            if (lockAcquired) {
-                await releaseStateLock(lockId, env);
-            }
 
             // Retry on 409 conflicts (SHA mismatch)
             if ((error.message.includes('409') || error.message.includes('conflict') || error.message.includes('does not match')) && attempt < maxRetries) {
