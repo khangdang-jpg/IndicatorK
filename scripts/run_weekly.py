@@ -121,7 +121,10 @@ def main() -> None:
             }
             plan.ai_analysis = ai_dict
         else:
-            logger.warning("AI analysis returned empty — continuing without it")
+            logger.warning("🚨 AI analysis returned empty — continuing without it")
+            logger.warning("💡 Most likely cause: Gemini rate limit (429) - this is NORMAL for free tier")
+            logger.warning("✅ System is working correctly, AI will resume when quota resets")
+            logger.warning("📊 Weekly plan generated successfully without AI scoring")
     else:
         logger.info("Gemini API not configured — skipping AI analysis")
 

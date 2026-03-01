@@ -135,7 +135,13 @@ def _call_gemini(prompt: str, api_key: str) -> Optional[dict]:
         logger.warning("Gemini API timeout after %ds", _TIMEOUT)
         return None
     except requests.exceptions.RequestException as e:
-        logger.warning("Gemini API request failed: %s", e)
+        # Detect specific rate limit error (429)
+        if hasattr(e, 'response') and e.response is not None and e.response.status_code == 429:
+            logger.warning("🚨 GEMINI RATE LIMIT (429) - AI analysis skipped")
+            logger.warning("⏰ This is normal for free tier. AI will work when quota resets.")
+            logger.warning("✅ System deployment is working correctly, just hitting rate limits")
+        else:
+            logger.warning("Gemini API request failed: %s", e)
         return None
     except (KeyError, IndexError, json.JSONDecodeError) as e:
         logger.warning("Failed to parse Gemini response: %s", e)
