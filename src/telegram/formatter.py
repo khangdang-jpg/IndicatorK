@@ -141,14 +141,28 @@ def format_weekly_digest(
             lines.append(f"  {rec}")
 
     # AI Analysis section
-    if ai_analysis and ai_analysis.generated:
-        from src.ai.gemini_analyzer import format_ai_section
-        ai_section = format_ai_section(
-            ai_analysis,
-            [r.to_dict() for r in plan.recommendations],
-        )
-        if ai_section:
-            lines.append(ai_section)
+    if ai_analysis:
+        if ai_analysis.generated:
+            # Normal AI analysis with scores
+            from src.ai.gemini_analyzer import format_ai_section
+            ai_section = format_ai_section(
+                ai_analysis,
+                [r.to_dict() for r in plan.recommendations],
+            )
+            if ai_section:
+                lines.append(ai_section)
+        else:
+            # Rate limit or API not configured notice
+            lines.append("")
+            lines.append("*🤖 AI Analysis*")
+            if hasattr(ai_analysis, 'market_context') and ai_analysis.market_context:
+                lines.append(f"_{ai_analysis.market_context}_")
+
+            # Show status-specific notice
+            if hasattr(ai_analysis, 'notice') and ai_analysis.notice:
+                lines.append(f"{ai_analysis.notice}")
+
+            lines.append("")
 
     return "\n".join(lines)
 
@@ -317,7 +331,7 @@ def format_plan_summary(plan_data: dict, total_value: float = 0.0) -> str:
 
     # Add cached AI analysis section if available
     ai_analysis = plan_data.get("ai_analysis")
-    if ai_analysis and ai_analysis.get("generated"):
+    if ai_analysis:
         lines.append("")
         lines.append("*🤖 AI Analysis*")
 
@@ -326,30 +340,36 @@ def format_plan_summary(plan_data: dict, total_value: float = 0.0) -> str:
             lines.append(f"_{ai_analysis['market_context']}_")
             lines.append("")
 
-        # AI scores for recommendations
-        ai_scores = ai_analysis.get("scores", {})
-        for r in recs[:5]:  # Limit to first 5 recommendations
-            sym = r["symbol"]
-            ai_score = ai_scores.get(sym)
-            if ai_score:
-                score = ai_score.get("score", 5)
-                rationale = ai_score.get("rationale", "")
-                risk_note = ai_score.get("risk_note", "")
+        if ai_analysis.get("generated"):
+            # Normal AI analysis with scores
+            ai_scores = ai_analysis.get("scores", {})
+            for r in recs[:5]:  # Limit to first 5 recommendations
+                sym = r["symbol"]
+                ai_score = ai_scores.get(sym)
+                if ai_score:
+                    score = ai_score.get("score", 5)
+                    rationale = ai_score.get("rationale", "")
+                    risk_note = ai_score.get("risk_note", "")
 
-                # Score bar
-                if score >= 8:
-                    bar = "🟢"
-                elif score >= 6:
-                    bar = "🔵"
-                elif score >= 4:
-                    bar = "🟡"
-                else:
-                    bar = "🔴"
+                    # Score bar
+                    if score >= 8:
+                        bar = "🟢"
+                    elif score >= 6:
+                        bar = "🔵"
+                    elif score >= 4:
+                        bar = "🟡"
+                    else:
+                        bar = "🔴"
 
-                lines.append(f"  `{sym}` {bar} {score}/10")
-                if rationale:
-                    lines.append(f"    {rationale}")
-                if risk_note:
-                    lines.append(f"    ⚠ {risk_note}")
+                    lines.append(f"  `{sym}` {bar} {score}/10")
+                    if rationale:
+                        lines.append(f"    {rationale}")
+                    if risk_note:
+                        lines.append(f"    ⚠ {risk_note}")
+        else:
+            # Rate limit or API not configured notice
+            if ai_analysis.get("notice"):
+                lines.append(f"{ai_analysis['notice']}")
+            lines.append("")
 
     return "\n".join(lines)

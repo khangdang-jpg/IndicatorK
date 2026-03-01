@@ -125,8 +125,34 @@ def main() -> None:
             logger.warning("💡 Most likely cause: Gemini rate limit (429) - this is NORMAL for free tier")
             logger.warning("✅ System is working correctly, AI will resume when quota resets")
             logger.warning("📊 Weekly plan generated successfully without AI scoring")
+
+            # Add rate limit notice to weekly plan
+            from datetime import datetime
+            rate_limit_notice = {
+                "generated": False,
+                "market_context": "AI analysis unavailable due to Gemini rate limit (429). This is normal for free tier.",
+                "analysis_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "data_sources": "Rate limit encountered - AI will work when quota resets",
+                "scores": {},
+                "status": "RATE_LIMITED",
+                "notice": "🚨 Gemini API rate limit hit. System is working correctly, just need to wait for quota reset."
+            }
+            plan.ai_analysis = rate_limit_notice
     else:
         logger.info("Gemini API not configured — skipping AI analysis")
+
+        # Add API not configured notice to weekly plan
+        from datetime import datetime
+        no_api_notice = {
+            "generated": False,
+            "market_context": "AI analysis unavailable - Gemini API key not configured.",
+            "analysis_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "data_sources": "Gemini API not configured",
+            "scores": {},
+            "status": "API_NOT_CONFIGURED",
+            "notice": "🔑 Set GEMINI_API_KEY environment variable to enable AI analysis."
+        }
+        plan.ai_analysis = no_api_notice
 
     # Write weekly plan (now includes AI analysis if available)
     plan_path = Path("data/weekly_plan.json")
