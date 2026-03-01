@@ -1,15 +1,23 @@
 {
-  "cash": 10000000,
+  "cash": 15000000,
   "positions": {},
   "total_realized_pnl": 0,
-  "last_updated": "2026-03-01T10:51:38.164044+00:00",
-  "sequence_number": 1,
+  "last_updated": "2026-03-01T12:02:02.454Z",
+  "sequence_number": 2,
   "lock": null,
   "metadata": {
-    "last_operation": "migration_from_csv",
-    "last_source": "state_manager",
+    "last_operation": "setcash_{\"amount\":15000000,\"reason\":\"manual_adjustment\"}",
+    "last_source": "worker",
     "github_actions_run_id": "22541830342",
     "total_fees": 0,
-    "cash_adjustments": []
+    "cash_adjustments": [
+      {
+        "timestamp": "2026-03-01T12:02:02.454Z",
+        "from": 10000000,
+        "to": 15000000,
+        "difference": 5000000,
+        "reason": "manual_adjustment"
+      }
+    ]
   }
 }
