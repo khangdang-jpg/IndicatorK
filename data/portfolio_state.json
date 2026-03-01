@@ -4,12 +4,7 @@
   "total_realized_pnl": 0,
   "last_updated": "2026-03-01T10:51:38.164044+00:00",
   "sequence_number": 1,
-  "lock": {
-    "locked_by": "worker_1772364175784_stobxidks",
-    "locked_at": "2026-03-01T11:22:55.982Z",
-    "expires_at": "2026-03-01T11:23:55.982Z",
-    "operation": "setcash_{\"amount\":1,\"reason\":\"manual_adjustment\"}"
-  },
+  "lock": null,
   "metadata": {
     "last_operation": "migration_from_csv",
     "last_source": "state_manager",
