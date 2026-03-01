@@ -190,14 +190,34 @@ async function acquireStateLock(lockId, operation, env) {
             const state = JSON.parse(content);
 
             // Check if already locked by another operation
-            if (state.lock && new Date(state.lock.expires_at) > new Date()) {
-                if (attempt < MAX_RETRY_ATTEMPTS) {
-                    const delay = RETRY_DELAY_BASE * Math.pow(2, attempt - 1);
-                    console.log(`Lock held by ${state.lock.locked_by}, retrying in ${delay}ms (attempt ${attempt})`);
-                    await sleep(delay);
-                    continue;
+            if (state.lock) {
+                const lockExpiry = new Date(state.lock.expires_at);
+                const now = new Date();
+
+                if (lockExpiry > now) {
+                    // Lock is still active
+                    if (attempt < MAX_RETRY_ATTEMPTS) {
+                        const delay = RETRY_DELAY_BASE * Math.pow(2, attempt - 1);
+                        const timeLeft = Math.round((lockExpiry - now) / 1000);
+                        console.log(`Lock held by ${state.lock.locked_by}, expires in ${timeLeft}s, retrying in ${delay}ms (attempt ${attempt})`);
+                        await sleep(delay);
+                        continue;
+                    } else {
+                        throw new Error(`Could not acquire lock after ${MAX_RETRY_ATTEMPTS} attempts. Lock held by: ${state.lock.locked_by}`);
+                    }
                 } else {
-                    throw new Error(`Could not acquire lock after ${MAX_RETRY_ATTEMPTS} attempts. Lock held by: ${state.lock.locked_by}`);
+                    // Lock has expired, clear it automatically
+                    const expiredLockId = state.lock.locked_by;
+                    console.log(`🕐 Clearing expired lock from ${expiredLockId} (expired ${Math.round((now - lockExpiry) / 1000)}s ago)`);
+                    state.lock = null;
+                    try {
+                        await updateFile('data/portfolio_state.json', JSON.stringify(state, null, 2), sha, `Clear expired lock: ${expiredLockId}`, env);
+                        console.log(`✅ Expired lock cleared automatically`);
+                        // Continue to acquire our own lock below
+                    } catch (expireError) {
+                        console.log(`Failed to clear expired lock, will retry: ${expireError.message}`);
+                        continue; // Retry the whole acquisition
+                    }
                 }
             }
 
@@ -235,18 +255,36 @@ async function acquireStateLock(lockId, operation, env) {
  * Release lock by clearing the lock field
  */
 async function releaseStateLock(lockId, env) {
-    try {
-        const { content, sha } = await getFileContent('data/portfolio_state.json', env);
-        const state = JSON.parse(content);
+    // Retry lock release up to 3 times to prevent stuck locks
+    for (let attempt = 1; attempt <= 3; attempt++) {
+        try {
+            const { content, sha } = await getFileContent('data/portfolio_state.json', env);
+            const state = JSON.parse(content);
 
-        // Only release if we own the lock
-        if (state.lock && state.lock.locked_by === lockId) {
-            state.lock = null;
-            await updateFile('data/portfolio_state.json', JSON.stringify(state, null, 2), sha, `Release lock: ${lockId}`, env);
-            console.log(`Lock released by ${lockId}`);
+            // Only release if we own the lock
+            if (state.lock && state.lock.locked_by === lockId) {
+                state.lock = null;
+                await updateFile('data/portfolio_state.json', JSON.stringify(state, null, 2), sha, `Release lock: ${lockId}`, env);
+                console.log(`Lock released by ${lockId} (attempt ${attempt})`);
+                return; // Success
+            } else if (!state.lock) {
+                console.log(`Lock ${lockId} already released`);
+                return; // Already released
+            } else {
+                console.log(`Lock ${lockId} not owned by us, owned by: ${state.lock.locked_by}`);
+                return; // Not our lock
+            }
+        } catch (error) {
+            console.error(`Failed to release lock ${lockId} (attempt ${attempt}):`, error.message);
+
+            if (attempt < 3) {
+                const delay = 1000 * attempt; // 1s, 2s delays
+                console.log(`Retrying lock release in ${delay}ms...`);
+                await sleep(delay);
+            } else {
+                console.error(`❌ CRITICAL: Lock ${lockId} stuck after 3 release attempts. Lock will auto-expire in 1 minute.`);
+            }
         }
-    } catch (error) {
-        console.error(`Failed to release lock ${lockId}:`, error.message);
     }
 }
 
