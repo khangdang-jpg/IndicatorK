@@ -113,55 +113,71 @@ async function handleMoneyCommand(operationType, args, env, parser) {
  * Universal handler for all money-related operations (ATOMIC)
  */
 async function handleMoneyOperation(operationType, operationData, env) {
-    const lockId = `worker_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    const operation = `${operationType}_${JSON.stringify(operationData).slice(0, 50)}`;
+    const maxRetries = 3;
 
-    let lockAcquired = false;
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        const lockId = `worker_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const operation = `${operationType}_${JSON.stringify(operationData).slice(0, 50)}`;
+        let lockAcquired = false;
 
-    try {
-        // 1. Acquire atomic lock
-        const { state, originalSha } = await acquireStateLock(lockId, operation, env);
-        lockAcquired = true;
+        try {
+            console.log(`Money operation attempt ${attempt}/${maxRetries}: ${operationType}`);
 
-        // 2. Validate operation (sufficient funds, valid data, etc.)
-        validateMoneyOperation(state, operationType, operationData);
+            // 1. Acquire atomic lock (with fresh state)
+            const { state, originalSha } = await acquireStateLock(lockId, operation, env);
+            lockAcquired = true;
 
-        // 3. Apply operation to state
-        const newState = applyMoneyOperation(state, operationType, operationData);
-        newState.sequence_number += 1;
-        newState.last_updated = new Date().toISOString();
-        newState.lock = null; // Release lock in new state
+            // 2. Validate operation (sufficient funds, valid data, etc.)
+            validateMoneyOperation(state, operationType, operationData);
 
-        // 4. Update state atomically
-        await updateFile('data/portfolio_state.json', JSON.stringify(newState, null, 2), originalSha, `${operationType}: ${JSON.stringify(operationData)}`, env);
+            // 3. Apply operation to state
+            const newState = applyMoneyOperation(state, operationType, operationData);
+            newState.sequence_number += 1;
+            newState.last_updated = new Date().toISOString();
+            newState.lock = null; // Release lock in new state
 
-        // 5. Log operation in audit trail
-        await appendTradeLog({
-            operation: operationType,
-            source: 'worker',
-            data: operationData,
-            sequence_before: state.sequence_number,
-            sequence_after: newState.sequence_number
-        }, env);
+            // 4. Update state atomically
+            await updateFile('data/portfolio_state.json', JSON.stringify(newState, null, 2), originalSha, `${operationType}: ${JSON.stringify(operationData)}`, env);
 
-        console.log(`Money operation completed: ${operationType}`, operationData);
+            // 5. Log operation in audit trail
+            await appendTradeLog({
+                operation: operationType,
+                source: 'worker',
+                data: operationData,
+                sequence_before: state.sequence_number,
+                sequence_after: newState.sequence_number
+            }, env);
 
-        return {
-            success: true,
-            newState: newState,
-            message: formatOperationSuccess(operationType, operationData, newState)
-        };
+            console.log(`Money operation completed: ${operationType}`, operationData);
 
-    } catch (error) {
-        console.error(`Money operation failed: ${operationType}`, error.message);
+            return {
+                success: true,
+                newState: newState,
+                message: formatOperationSuccess(operationType, operationData, newState)
+            };
 
-        // Release lock on error if we acquired it
-        if (lockAcquired) {
-            await releaseStateLock(lockId, env);
+        } catch (error) {
+            console.error(`Money operation attempt ${attempt} failed: ${operationType}`, error.message);
+
+            // Release lock on error if we acquired it
+            if (lockAcquired) {
+                await releaseStateLock(lockId, env);
+            }
+
+            // Retry on 409 conflicts (SHA mismatch)
+            if ((error.message.includes('409') || error.message.includes('conflict') || error.message.includes('does not match')) && attempt < maxRetries) {
+                const delay = 1000 * attempt; // 1s, 2s, 3s delays
+                console.log(`409 conflict detected, retrying in ${delay}ms (attempt ${attempt + 1}/${maxRetries})`);
+                await sleep(delay);
+                continue;
+            }
+
+            // Non-retryable error or max retries exceeded
+            throw error;
         }
-
-        throw error;
     }
+
+    throw new Error(`Failed after ${maxRetries} attempts due to repeated conflicts`);
 }
 
 /**
