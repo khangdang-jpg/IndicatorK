@@ -63,7 +63,7 @@ async function handleCommand(text, env) {
 
   const handler = COMMAND_HANDLERS[command];
   if (!handler) {
-    return `Unknown command: ${command}\\nType /help for available commands.`;
+    return `Unknown command: ${command}\nType /help for available commands.`;
   }
 
   try {
@@ -99,9 +99,9 @@ async function handleTrade(args, side, env) {
   await appendTrade(trade, env);
 
   const total = parsed.price * parsed.qty + (trade.fee * (side === 'BUY' ? 1 : -1));
-  return `Recorded ${side} ${trade.symbol}\\n` +
-         `Qty: ${trade.qty.toLocaleString()} @ ${trade.price.toLocaleString()}\\n` +
-         `Asset: ${trade.asset_class} | Fee: ${trade.fee.toLocaleString()}\\n` +
+  return `Recorded ${side} ${trade.symbol}\n` +
+         `Qty: ${trade.qty.toLocaleString()} @ ${trade.price.toLocaleString()}\n` +
+         `Asset: ${trade.asset_class} | Fee: ${trade.fee.toLocaleString()}\n` +
          `Total: ${total.toLocaleString()}`;
 }
 
@@ -292,7 +292,7 @@ function parseTradesCsv(csvText) {
     return [];
   }
 
-  const lines = csvText.trim().split('\\n');
+  const lines = csvText.trim().split('\n');
   const trades = [];
 
   // Skip header line
@@ -323,7 +323,7 @@ function formatTradesCsv(trades) {
   const rows = trades.map(t =>
     `${t.timestamp_iso},${t.asset_class},${t.symbol},${t.side},${t.qty},${t.price},${t.fee},"${t.note}"`
   );
-  return [header, ...rows].join('\\n');
+  return [header, ...rows].join('\n');
 }
 
 // Portfolio computation (simplified version of Python logic)
@@ -392,19 +392,19 @@ function computePortfolioState(trades) {
 
 // Message formatting
 function formatStatusMessage(state) {
-  let msg = `*Portfolio Status*\\n\\n`;
-  msg += `💰 Cash: ${state.cash.toLocaleString()} ₫\\n`;
-  msg += `📊 Total Value: ${state.totalValue.toLocaleString()} ₫\\n\\n`;
+  let msg = `*Portfolio Status*\n\n`;
+  msg += `💰 Cash: ${state.cash.toLocaleString()} ₫\n`;
+  msg += `📊 Total Value: ${state.totalValue.toLocaleString()} ₫\n\n`;
 
   const positions = Object.values(state.positions);
   if (positions.length === 0) {
     msg += `📈 Positions: None`;
   } else {
-    msg += `📈 Positions (${positions.length}):\\n`;
+    msg += `📈 Positions (${positions.length}):\n`;
     for (const pos of positions) {
       const marketValue = pos.avg_cost * pos.qty;
       msg += `• ${pos.symbol}: ${pos.qty.toLocaleString()} @ ${pos.avg_cost.toLocaleString()} ` +
-             `(${marketValue.toLocaleString()} ₫)\\n`;
+             `(${marketValue.toLocaleString()} ₫)\n`;
     }
   }
 
@@ -535,7 +535,7 @@ function formatPlanSummary(plan, totalValue, aiAnalysis = null) {
       lines.push(`📋 Analysis based on: ${aiAnalysis.data_sources}`);
     }
 
-    const source = aiAnalysis.generated ? 'Powered by Gemini 2.0 Flash AI' : 'Using cached analysis';
+    const source = aiAnalysis.generated ? 'Powered by Gemini 1.5 Flash AI' : 'Using cached analysis';
     const analysisDate = aiAnalysis.analysis_date || new Date().toISOString().split('T')[0];
     lines.push(`_${source} | Updated: ${analysisDate}_`);
   }
@@ -676,7 +676,7 @@ Respond ONLY with valid JSON in this exact format:
 }
 
 async function callGeminiAPI(prompt, apiKey) {
-  const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+  const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
 
   const payload = {
     contents: [{ parts: [{ text: prompt }] }],
