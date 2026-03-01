@@ -26,6 +26,49 @@ _DEFAULT_MODEL = "gemini-2.5-flash"
 def _get_model() -> str:
     """Get model name with environment variable override support."""
     return os.environ.get("GEMINI_MODEL", _DEFAULT_MODEL)
+
+
+def _clean_gemini_json(text: str) -> str:
+    """Clean up common JSON issues in Gemini responses."""
+    # Remove markdown code blocks if present
+    text = text.strip()
+    if text.startswith("```json"):
+        text = text[7:]
+    if text.startswith("```"):
+        text = text[3:]
+    if text.endswith("```"):
+        text = text[:-3]
+
+    # Remove any leading/trailing whitespace and newlines
+    text = text.strip()
+
+    # Find JSON boundaries (first { to last })
+    start_idx = text.find('{')
+    end_idx = text.rfind('}')
+
+    if start_idx == -1 or end_idx == -1:
+        logger.warning("No valid JSON boundaries found in response")
+        return "{}"
+
+    json_text = text[start_idx:end_idx+1]
+
+    # Fix common issues
+    # Replace unescaped newlines in strings with \\n
+    import re
+    # This regex finds strings and replaces unescaped newlines within them
+    def fix_newlines(match):
+        string_content = match.group(0)
+        # Replace unescaped newlines with escaped ones
+        return string_content.replace('\n', '\\n').replace('\r', '\\r')
+
+    # Apply newline fixes within quoted strings only
+    try:
+        json_text = re.sub(r'"[^"]*"', fix_newlines, json_text)
+    except Exception:
+        # If regex fails, just continue with original text
+        pass
+
+    return json_text
 _API_URL_TEMPLATE = (
     "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 )
@@ -180,7 +223,10 @@ def _call_gemini(prompt: str, api_key: str) -> Optional[dict]:
 
         data = resp.json()
         text = data["candidates"][0]["content"]["parts"][0]["text"]
-        return json.loads(text)
+
+        # Robust JSON parsing with cleanup for common Gemini issues
+        cleaned_text = _clean_gemini_json(text)
+        return json.loads(cleaned_text)
 
     except requests.exceptions.Timeout:
         logger.warning("Gemini API timeout after %ds", _TIMEOUT)
