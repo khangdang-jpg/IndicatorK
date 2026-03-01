@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-01T13:12:42.974695",
+  "generated_at": "2026-03-01T13:22:28.579991",
   "strategy_id": "trend_momentum_atr",
   "strategy_version": "2.0.0",
   "allocation_targets": {
@@ -170,7 +170,7 @@
   "ai_analysis": {
     "generated": false,
     "market_context": "AI analysis unavailable due to Gemini rate limit (429). This is normal for free tier.",
-    "analysis_date": "2026-03-01 13:12:43",
+    "analysis_date": "2026-03-01 13:22:28",
     "data_sources": "Rate limit encountered - AI will work when quota resets",
     "scores": {},
     "status": "RATE_LIMITED",
