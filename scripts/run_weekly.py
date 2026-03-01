@@ -126,8 +126,10 @@ def main() -> None:
             logger.warning("✅ System is working correctly, AI will resume when quota resets")
             logger.warning("📊 Weekly plan generated successfully without AI scoring")
 
-            # Add rate limit notice to weekly plan
+            # Add rate limit notice to weekly plan and create ai_analysis object for Telegram
             from datetime import datetime
+            from types import SimpleNamespace
+
             rate_limit_notice = {
                 "generated": False,
                 "market_context": "AI analysis unavailable due to Gemini rate limit (429). This is normal for free tier.",
@@ -138,11 +140,21 @@ def main() -> None:
                 "notice": "🚨 Gemini API rate limit hit. System is working correctly, just need to wait for quota reset."
             }
             plan.ai_analysis = rate_limit_notice
+
+            # Also create ai_analysis object for immediate use
+            ai_analysis = SimpleNamespace(
+                generated=False,
+                market_context=rate_limit_notice["market_context"],
+                notice=rate_limit_notice["notice"],
+                status=rate_limit_notice["status"]
+            )
     else:
         logger.info("Gemini API not configured — skipping AI analysis")
 
-        # Add API not configured notice to weekly plan
+        # Add API not configured notice to weekly plan and create ai_analysis object
         from datetime import datetime
+        from types import SimpleNamespace
+
         no_api_notice = {
             "generated": False,
             "market_context": "AI analysis unavailable - Gemini API key not configured.",
@@ -153,6 +165,14 @@ def main() -> None:
             "notice": "🔑 Set GEMINI_API_KEY environment variable to enable AI analysis."
         }
         plan.ai_analysis = no_api_notice
+
+        # Also create ai_analysis object for immediate use
+        ai_analysis = SimpleNamespace(
+            generated=False,
+            market_context=no_api_notice["market_context"],
+            notice=no_api_notice["notice"],
+            status=no_api_notice["status"]
+        )
 
     # Write weekly plan (now includes AI analysis if available)
     plan_path = Path("data/weekly_plan.json")
@@ -183,24 +203,36 @@ def main() -> None:
     # Send weekly digest via Telegram
     bot = TelegramBot()
     # Convert cached AI analysis back to AIAnalysis object for digest formatting
-    digest_ai_analysis = ai_analysis  # Use original AIAnalysis object if available
-    if ai_analysis is None and plan.ai_analysis:
+    digest_ai_analysis = ai_analysis  # Use original AIAnalysis or SimpleNamespace object if available
+    if (ai_analysis is None or (hasattr(ai_analysis, 'generated') and not ai_analysis.generated and not hasattr(ai_analysis, 'notice'))) and plan.ai_analysis:
         # If we only have cached data, reconstruct AIAnalysis object
         from src.ai.gemini_analyzer import AIAnalysis, AIScore
+        from types import SimpleNamespace
         cached_ai = plan.ai_analysis
-        scores = {}
-        for sym, score_data in cached_ai.get("scores", {}).items():
-            scores[sym] = AIScore(
-                symbol=score_data["symbol"],
-                score=score_data["score"],
-                rationale=score_data["rationale"],
-                risk_note=score_data["risk_note"]
+
+        if cached_ai.get("generated", False):
+            # Normal AI analysis with scores
+            scores = {}
+            for sym, score_data in cached_ai.get("scores", {}).items():
+                scores[sym] = AIScore(
+                    symbol=score_data["symbol"],
+                    score=score_data["score"],
+                    rationale=score_data["rationale"],
+                    risk_note=score_data["risk_note"]
+                )
+            digest_ai_analysis = AIAnalysis(
+                scores=scores,
+                market_context=cached_ai.get("market_context", ""),
+                generated=cached_ai.get("generated", False)
             )
-        digest_ai_analysis = AIAnalysis(
-            scores=scores,
-            market_context=cached_ai.get("market_context", ""),
-            generated=cached_ai.get("generated", False)
-        )
+        else:
+            # Rate limit or API not configured - create SimpleNamespace with needed attributes
+            digest_ai_analysis = SimpleNamespace(
+                generated=cached_ai.get("generated", False),
+                market_context=cached_ai.get("market_context", ""),
+                notice=cached_ai.get("notice", ""),
+                status=cached_ai.get("status", "UNKNOWN")
+            )
 
     digest = format_weekly_digest(plan, portfolio_state, guardrails_report, digest_ai_analysis)
     bot.send_admin(digest)
