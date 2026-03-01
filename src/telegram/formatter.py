@@ -74,25 +74,52 @@ def format_weekly_digest(
 
     buys = [r for r in plan.recommendations if r.action == "BUY"][:10]
     if buys:
-        lines.append(f"*🟢 BUY ({len(buys)})*")
+        lines.append(f"*🟢 BUY Signals ({len(buys)})*")
+        lines.append("")
         for r in buys:
             icon = _ENTRY_ICON.get(r.entry_type, "·")
             vnd = _alloc_vnd(r.position_target_pct, total) if r.position_target_pct and total else 0
-            alloc_str = f"  Alloc {vnd:,.0f} ₫" if vnd else ""
+            alloc_str = f" — {vnd:,.0f} ₫" if vnd else ""
             ai_tag = _ai_score_tag(ai_analysis, r.symbol)
-            lines.append(f"`{r.symbol}` {icon} {r.entry_type.capitalize()}{alloc_str}{ai_tag}")
-            lines.append(f"  Entry {r.entry_price:,.0f}  Zone {r.buy_zone_low:,.0f}–{r.buy_zone_high:,.0f}")
-            lines.append(f"  SL {r.stop_loss:,.0f}  TP {r.take_profit:,.0f}")
-        lines.append("")
+            lines.append(f"  📈 `{r.symbol}` {icon} {r.entry_type.capitalize()}{alloc_str}{ai_tag}")
+            lines.append(f"    🎯 Entry: {r.entry_price:,.0f}")
+            lines.append(f"    📊 Zone: {r.buy_zone_low:,.0f}–{r.buy_zone_high:,.0f}")
+            lines.append(f"    🛡️ Protection: SL {r.stop_loss:,.0f} | TP {r.take_profit:,.0f}")
+            lines.append("")
 
+    # Simplified - treat all held positions the same
     holds = [r for r in plan.recommendations if r.action in ("HOLD", "REDUCE", "SELL")]
     if holds:
-        lines.append("*📋 Positions*")
-        for r in holds:
-            icon = _ACTION_ICON.get(r.action, "·")
-            ai_tag = _ai_score_tag(ai_analysis, r.symbol)
-            lines.append(f"  {icon} `{r.symbol}` {r.action}  SL {r.stop_loss:,.0f}{ai_tag}")
+        lines.append("*📋 Open Positions — Alert Monitoring*")
         lines.append("")
+
+        # Load current prices for better context
+        cached = _load_cached_prices([r.symbol for r in holds])
+
+        for r in holds:
+            ai_tag = _ai_score_tag(ai_analysis, r.symbol)
+
+            # Show current price + P&L if available
+            current = cached.get(r.symbol)
+            if current and r.entry_price and r.entry_price > 0:
+                pnl_pct = ((current - r.entry_price) / r.entry_price) * 100
+                status_line = f"  📊 `{r.symbol}` @ {current:,.0f} ({pnl_pct:+.1f}%)"
+            else:
+                status_line = f"  📊 `{r.symbol}` Monitoring"
+
+            lines.append(status_line)
+
+            # Clean exit alert format
+            tp_str = f"TP {r.take_profit:,.0f}" if r.take_profit else ""
+            sl_str = f"SL {r.stop_loss:,.0f}" if r.stop_loss else ""
+            exit_levels = " | ".join(filter(None, [sl_str, tp_str]))
+
+            lines.append(f"    🔔 Exit alerts: {exit_levels}{ai_tag}")
+            lines.append("")  # Spacing between positions
+
+        # Remove extra line at end
+        if lines and lines[-1] == "":
+            lines.pop()
 
     alloc = portfolio_state.allocation
     targets = plan.allocation_targets
@@ -126,24 +153,63 @@ def format_weekly_digest(
     return "\n".join(lines)
 
 
-def format_alert(alert: Alert) -> str:
-    """Format a single price alert message."""
+def format_alert(alert: Alert, portfolio_state: PortfolioState | None = None) -> str:
+    """Format price alert with clear action guidance."""
+
     if alert.alert_type == "STOP_LOSS_HIT":
-        return (
-            f"🔴 *STOP LOSS* `{alert.symbol}`\n"
-            f"Price {alert.current_price:,.0f} ≤ SL {alert.threshold:,.0f}"
-        )
+        lines = [
+            f"🔴 **STOP LOSS HIT**",
+            f"`{alert.symbol}` — Price hit {alert.current_price:,.0f}",
+            f"💡 *SL threshold: {alert.threshold:,.0f}*"
+        ]
+
+        # Add helpful P&L context
+        if portfolio_state and alert.symbol in portfolio_state.positions:
+            pos = portfolio_state.positions[alert.symbol]
+            pnl_pct = ((alert.current_price - pos.avg_cost) / pos.avg_cost) * 100
+            pnl_vnd = (alert.current_price - pos.avg_cost) * pos.qty
+
+            lines.extend([
+                "",
+                f"📈 **Trade Summary:**",
+                f"Entry: {pos.avg_cost:,.0f} → Current: {alert.current_price:,.0f}",
+                f"P&L: {pnl_pct:+.1f}% ({pnl_vnd:+,.0f} ₫)"
+            ])
+
+        return "\n".join(lines)
+
     if alert.alert_type == "TAKE_PROFIT_HIT":
-        return (
-            f"🟢 *TAKE PROFIT* `{alert.symbol}`\n"
-            f"Price {alert.current_price:,.0f} ≥ TP {alert.threshold:,.0f}"
-        )
+        lines = [
+            f"🟢 **TAKE PROFIT HIT**",
+            f"`{alert.symbol}` — Price hit {alert.current_price:,.0f}",
+            f"🎯 *TP threshold: {alert.threshold:,.0f}*"
+        ]
+
+        if portfolio_state and alert.symbol in portfolio_state.positions:
+            pos = portfolio_state.positions[alert.symbol]
+            pnl_pct = ((alert.current_price - pos.avg_cost) / pos.avg_cost) * 100
+            pnl_vnd = (alert.current_price - pos.avg_cost) * pos.qty
+
+            lines.extend([
+                "",
+                f"📈 **Trade Summary:**",
+                f"Entry: {pos.avg_cost:,.0f} → Current: {alert.current_price:,.0f}",
+                f"P&L: +{pnl_pct:.1f}% (+{pnl_vnd:,.0f} ₫)"
+            ])
+
+        return "\n".join(lines)
+
     if alert.alert_type == "ENTERED_BUY_ZONE":
         return (
-            f"🔵 *BUY ZONE* `{alert.symbol}`\n"
-            f"Price {alert.current_price:,.0f}  (zone ≥ {alert.threshold:,.0f})"
+            f"🔵 **BUY ZONE ENTRY**\n"
+            f"`{alert.symbol}` — Entered buy zone\n"
+            f"💡 *Current: {alert.current_price:,.0f} | Zone: ≥ {alert.threshold:,.0f}*\n"
+            f"\n"
+            f"📋 Check /plan for entry details"
         )
-    return f"*{alert.alert_type}* `{alert.symbol}`: {alert.current_price:,.0f}"
+
+    # Fallback
+    return f"🔔 **{alert.alert_type}** `{alert.symbol}`: {alert.current_price:,.0f}"
 
 
 def format_status(state: PortfolioState) -> str:
@@ -198,39 +264,56 @@ def format_plan_summary(plan_data: dict, total_value: float = 0.0) -> str:
     others = [r for r in recs if r.get("action") != "BUY"]
 
     if buys:
-        lines.append(f"*🟢 BUY ({len(buys)})*")
+        lines.append(f"*🟢 BUY Signals ({len(buys)})*")
+        lines.append("")
         for r in buys:
             sym = r["symbol"]
             icon = _ENTRY_ICON.get(r.get("entry_type", ""), "·")
             entry = r.get("entry_price", 0)
             pct = r.get("position_target_pct", 0)
             vnd = _alloc_vnd(pct, total_value) if pct and total_value else 0
-            alloc_str = f"  {vnd:,.0f} ₫" if vnd else (f"  {pct:.0%}" if pct else "")
+            alloc_str = f" — {vnd:,.0f} ₫" if vnd else ""
 
-            lines.append(f"`{sym}` {icon} {r.get('entry_type','').capitalize()}{alloc_str}")
+            lines.append(f"  📈 `{sym}` {icon} {r.get('entry_type','').capitalize()}{alloc_str}")
 
             now = cached.get(sym)
             if now:
                 label = _zone_label(now, r.get("buy_zone_low", 0), r.get("buy_zone_high", 0))
-                lines.append(f"  Now {now:,.0f}  {label}")
+                lines.append(f"    📊 Now {now:,.0f}  {label}")
 
-            lines.append(
-                f"  Entry {entry:,.0f}  "
-                f"Zone {r.get('buy_zone_low', 0):,.0f}–{r.get('buy_zone_high', 0):,.0f}"
-            )
-            lines.append(f"  SL {r.get('stop_loss', 0):,.0f}  TP {r.get('take_profit', 0):,.0f}")
+            lines.append(f"    🎯 Entry: {entry:,.0f}")
+            lines.append(f"    📊 Zone: {r.get('buy_zone_low', 0):,.0f}–{r.get('buy_zone_high', 0):,.0f}")
+            lines.append(f"    🛡️ Protection: SL {r.get('stop_loss', 0):,.0f} | TP {r.get('take_profit', 0):,.0f}")
+            lines.append("")
 
     if others:
         lines.append("")
-        lines.append("*📋 Positions*")
+        lines.append("*📋 Open Positions — Alert Monitoring*")
+        lines.append("")
+
         for r in others:
-            icon = _ACTION_ICON.get(r.get("action", ""), "·")
             sym = r["symbol"]
+
+            # Show current price if available
             now = cached.get(sym)
-            now_str = f"  now {now:,.0f}" if now else ""
-            lines.append(
-                f"  {icon} `{sym}` {r.get('action')}{now_str}  SL {r.get('stop_loss', 0):,.0f}"
-            )
+            if now and r.get("entry_price", 0) > 0:
+                pnl_pct = ((now - r["entry_price"]) / r["entry_price"]) * 100
+                status_line = f"  📊 `{sym}` @ {now:,.0f} ({pnl_pct:+.1f}%)"
+            else:
+                now_str = f" — now {now:,.0f}" if now else ""
+                status_line = f"  📊 `{sym}` Monitoring{now_str}"
+
+            lines.append(status_line)
+
+            # Exit levels
+            tp = r.get("take_profit", 0)
+            sl = r.get("stop_loss", 0)
+            tp_str = f"TP {tp:,.0f}" if tp else ""
+            sl_str = f"SL {sl:,.0f}" if sl else ""
+            exit_levels = " | ".join(filter(None, [sl_str, tp_str]))
+
+            lines.append(f"    🔔 Exit alerts: {exit_levels}")
+            lines.append("")
 
     # Add cached AI analysis section if available
     ai_analysis = plan_data.get("ai_analysis")

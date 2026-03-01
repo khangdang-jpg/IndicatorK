@@ -535,7 +535,7 @@ function formatPlanSummary(plan, totalValue, aiAnalysis = null) {
       lines.push(`📋 Analysis based on: ${aiAnalysis.data_sources}`);
     }
 
-    const source = aiAnalysis.generated ? 'Powered by Gemini 1.5 Flash AI' : 'Using cached analysis';
+    const source = aiAnalysis.generated ? 'Powered by Gemini Pro AI' : 'Using cached analysis';
     const analysisDate = aiAnalysis.analysis_date || new Date().toISOString().split('T')[0];
     lines.push(`_${source} | Updated: ${analysisDate}_`);
   }
@@ -676,7 +676,7 @@ Respond ONLY with valid JSON in this exact format:
 }
 
 async function callGeminiAPI(prompt, apiKey) {
-  const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+  const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
 
   const payload = {
     contents: [{ parts: [{ text: prompt }] }],

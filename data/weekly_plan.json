@@ -1,51 +1,177 @@
 {
-  "generated_at": "2026-03-01T10:00:00Z",
-  "week_of": "2026-03-01",
-  "market_outlook": "Bullish trend with selective stock picking opportunities",
+  "generated_at": "2026-03-01T07:11:03.492367",
+  "strategy_id": "trend_momentum_atr",
+  "strategy_version": "2.0.0",
+  "allocation_targets": {
+    "stock": 0.6,
+    "bond_fund": 0.4
+  },
   "recommendations": [
     {
       "symbol": "VNM",
+      "asset_class": "stock",
       "action": "BUY",
-      "buy_zone_low": 68000,
-      "buy_zone_high": 72000,
-      "target_price": 78000,
-      "stop_loss": 65000,
-      "rationale": "Strong fundamentals, good dividend yield"
+      "buy_zone_low": 63500.0,
+      "buy_zone_high": 65800.0,
+      "stop_loss": 57600.0,
+      "take_profit": 76600.0,
+      "position_target_pct": 0.0911,
+      "rationale_bullets": [
+        "Trend UP: price 68200 > MA10w 66190 > MA30w 61530",
+        "RSI(14): 57.7",
+        "ATR: 4750",
+        "Vol: 45,238,100 (1.4x avg)",
+        "Entry: pullback mid-zone"
+      ],
+      "entry_type": "pullback",
+      "breakout_level": 0.0,
+      "entry_price": 64700.0,
+      "signal_week_end": "2026-02-27",
+      "earliest_entry_date": null
     },
     {
-      "symbol": "VIC",
-      "action": "HOLD",
-      "current_price": 85000,
-      "target_price": 95000,
-      "rationale": "Real estate recovery expected"
-    },
-    {
-      "symbol": "HPG",
+      "symbol": "MWG",
+      "asset_class": "stock",
       "action": "BUY",
-      "buy_zone_low": 25000,
-      "buy_zone_high": 27000,
-      "target_price": 32000,
-      "stop_loss": 23000,
-      "rationale": "Steel demand increasing, infrastructure projects"
-    },
-    {
-      "symbol": "FPT",
-      "action": "REDUCE",
-      "current_price": 78000,
-      "reduce_at": 80000,
-      "rationale": "Take partial profits after strong run"
+      "buy_zone_low": 87600.0,
+      "buy_zone_high": 90400.0,
+      "stop_loss": 80800.0,
+      "take_profit": 102700.0,
+      "position_target_pct": 0.1085,
+      "rationale_bullets": [
+        "Trend UP: price 93100 > MA10w 88430 > MA30w 81467",
+        "RSI(14): 63.3",
+        "ATR: 5479",
+        "Vol: 29,972,500 (0.9x avg)",
+        "Entry: pullback mid-zone"
+      ],
+      "entry_type": "pullback",
+      "breakout_level": 0.0,
+      "entry_price": 89000.0,
+      "signal_week_end": "2026-02-27",
+      "earliest_entry_date": null
     },
     {
       "symbol": "VCB",
-      "action": "WATCH",
-      "watch_level": 68000,
-      "target_price": 75000,
-      "rationale": "Banking sector consolidation, wait for better entry"
+      "asset_class": "stock",
+      "action": "BUY",
+      "buy_zone_low": 60600.0,
+      "buy_zone_high": 62700.0,
+      "stop_loss": 55200.0,
+      "take_profit": 72600.0,
+      "position_target_pct": 0.0949,
+      "rationale_bullets": [
+        "Trend UP: price 64900 > MA10w 64660 > MA30w 62633",
+        "RSI(14): 57.0",
+        "ATR: 4343",
+        "Vol: 46,232,600 (1.1x avg)",
+        "Entry: pullback mid-zone"
+      ],
+      "entry_type": "pullback",
+      "breakout_level": 0.0,
+      "entry_price": 61700.0,
+      "signal_week_end": "2026-02-27",
+      "earliest_entry_date": null
+    },
+    {
+      "symbol": "BID",
+      "asset_class": "stock",
+      "action": "BUY",
+      "buy_zone_low": 44100.0,
+      "buy_zone_high": 46000.0,
+      "stop_loss": 39350.0,
+      "take_profit": 54500.0,
+      "position_target_pct": 0.079,
+      "rationale_bullets": [
+        "Trend UP: price 47900 > MA10w 46345 > MA30w 41515",
+        "RSI(14): 66.9",
+        "ATR: 3789",
+        "Vol: 32,882,200 (0.9x avg)",
+        "Entry: pullback mid-zone"
+      ],
+      "entry_type": "pullback",
+      "breakout_level": 0.0,
+      "entry_price": 45050.0,
+      "signal_week_end": "2026-02-27",
+      "earliest_entry_date": null
+    },
+    {
+      "symbol": "CTG",
+      "asset_class": "stock",
+      "action": "BUY",
+      "buy_zone_low": 36000.0,
+      "buy_zone_high": 37100.0,
+      "stop_loss": 33150.0,
+      "take_profit": 42200.0,
+      "position_target_pct": 0.1075,
+      "rationale_bullets": [
+        "Trend UP: price 38250 > MA10w 37775 > MA30w 35524",
+        "RSI(14): 65.6",
+        "ATR: 2266",
+        "Vol: 51,464,300 (0.8x avg)",
+        "Entry: pullback mid-zone"
+      ],
+      "entry_type": "pullback",
+      "breakout_level": 0.0,
+      "entry_price": 36550.0,
+      "signal_week_end": "2026-02-27",
+      "earliest_entry_date": null
+    },
+    {
+      "symbol": "STB",
+      "asset_class": "stock",
+      "action": "BUY",
+      "buy_zone_low": 60300.0,
+      "buy_zone_high": 62900.0,
+      "stop_loss": 53800.0,
+      "take_profit": 74500.0,
+      "position_target_pct": 0.079,
+      "rationale_bullets": [
+        "Trend UP: price 65500 > MA10w 58990 > MA30w 55310",
+        "RSI(14): 69.5",
+        "ATR: 5171",
+        "Vol: 49,071,400 (0.9x avg)",
+        "Entry: pullback mid-zone"
+      ],
+      "entry_type": "pullback",
+      "breakout_level": 0.0,
+      "entry_price": 61600.0,
+      "signal_week_end": "2026-02-27",
+      "earliest_entry_date": null
+    },
+    {
+      "symbol": "VIC",
+      "asset_class": "stock",
+      "action": "BUY",
+      "buy_zone_low": 150600.0,
+      "buy_zone_high": 161300.0,
+      "stop_loss": 123900.0,
+      "take_profit": 209500.0,
+      "position_target_pct": 0.0486,
+      "rationale_bullets": [
+        "Trend UP: price 172000 > MA10w 157790 > MA30w 113072",
+        "RSI(14): 69.9",
+        "ATR: 21386",
+        "Vol: 21,348,100 (0.8x avg)",
+        "Entry: pullback mid-zone"
+      ],
+      "entry_type": "pullback",
+      "breakout_level": 0.0,
+      "entry_price": 156000.0,
+      "signal_week_end": "2026-02-27",
+      "earliest_entry_date": null
     }
   ],
-  "risk_management": {
-    "max_position_size": "20%",
-    "stop_loss_level": "7%",
-    "portfolio_cash_target": "15-25%"
+  "notes": [
+    "MA10w/MA30w trend + RSI(14) momentum",
+    "ATR(14)-based stops: 1.5x stop, 2.5x target",
+    "Hybrid: breakout(weekly-close-confirmed) or pullback; buffer=0.001"
+  ],
+  "ai_analysis": {
+    "generated": true,
+    "market_context": "",
+    "analysis_date": "2026-03-01",
+    "data_sources": "Weekly technical analysis using Gemini AI",
+    "scores": {}
   }
 }

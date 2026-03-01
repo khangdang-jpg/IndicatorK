@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-02-27T05:46:31.828438",
+  "generated_at": "2026-03-01T07:11:12.548968",
   "provider_health": {
     "name": "vnstock->http->cache",
     "error_rate": 0.0,
     "missing_rate": 0.0,
-    "last_success_at": "2026-02-27T05:46:31.815741",
+    "last_success_at": "2026-03-01T07:11:03.483353",
     "total_requests": 23,
     "total_errors": 0
   },
   "strategy_health": {
     "rolling_cagr": null,
-    "drawdown": null,
-    "turnover": null,
-    "weeks_tracked": 0
+    "drawdown": 0.0,
+    "turnover": 0.0,
+    "weeks_tracked": 3
   },
   "recommendations": []
 }
