@@ -1,3 +1,4 @@
 {"timestamp": "2026-03-01T10:40:44.887831+00:00", "operation": "migration", "source": "state_manager", "data": {"trades_file": "data/trades.csv"}, "sequence_before": 0, "sequence_after": 1}
 {"timestamp": "2026-03-01T10:41:09.316033+00:00", "operation": "migration", "source": "state_manager", "data": {"trades_file": "data/trades.csv"}, "sequence_before": 0, "sequence_after": 1}
 {"timestamp": "2026-03-01T10:44:35.271893+00:00", "operation": "test", "source": "test_script", "data": {"test": true}, "sequence_before": 1, "sequence_after": 1}
+{"timestamp":"2026-03-01T12:02:02.941Z","operation":"setcash","source":"worker","data":{"amount":15000000,"reason":"manual_adjustment"},"sequence_before":1,"sequence_after":2,"category":"balance_adjustment"}
