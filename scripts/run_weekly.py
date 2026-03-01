@@ -44,8 +44,8 @@ def main() -> None:
     run_attempt = os.environ.get("GITHUB_RUN_ATTEMPT", "1")
 
     if run_id:
-        state_manager = PortfolioStateManager()
-        if state_manager.is_idempotent_operation(run_id):
+        # Use separate file for idempotency tracking - don't modify portfolio state
+        if _is_run_already_processed(run_id):
             logger.info(f"Run {run_id} already processed, skipping execution")
             return
         logger.info(f"Processing GitHub Actions run {run_id} (attempt {run_attempt})")
@@ -195,10 +195,50 @@ def main() -> None:
 
     # Mark GitHub Actions run as processed (for idempotency)
     if run_id:
-        state_manager.mark_run_processed(run_id)
+        _mark_run_processed(run_id)
         logger.info(f"Marked run {run_id} as processed")
 
     logger.info("Weekly workflow complete")
+
+
+def _is_run_already_processed(run_id: str) -> bool:
+    """Check if GitHub Actions run was already processed (separate from portfolio state)."""
+    idempotency_file = Path("data/weekly_runs_processed.json")
+    if not idempotency_file.exists():
+        return False
+
+    try:
+        with open(idempotency_file, 'r') as f:
+            processed_runs = json.load(f)
+        return run_id in processed_runs.get('runs', [])
+    except (json.JSONDecodeError, KeyError):
+        return False
+
+
+def _mark_run_processed(run_id: str) -> None:
+    """Mark GitHub Actions run as processed (separate from portfolio state)."""
+    idempotency_file = Path("data/weekly_runs_processed.json")
+
+    # Load existing data
+    if idempotency_file.exists():
+        try:
+            with open(idempotency_file, 'r') as f:
+                data = json.load(f)
+        except (json.JSONDecodeError, KeyError):
+            data = {"runs": []}
+    else:
+        data = {"runs": []}
+
+    # Add run_id if not already present
+    if run_id not in data['runs']:
+        data['runs'].append(run_id)
+        # Keep only last 50 runs to prevent file bloat
+        data['runs'] = data['runs'][-50:]
+
+        # Write back
+        idempotency_file.parent.mkdir(parents=True, exist_ok=True)
+        with open(idempotency_file, 'w') as f:
+            json.dump(data, f, indent=2)
 
 
 if __name__ == "__main__":
