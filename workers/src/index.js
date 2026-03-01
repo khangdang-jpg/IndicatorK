@@ -620,7 +620,11 @@ async function getPortfolioState(env) {
 
 async function getWeeklyPlan(env) {
   const url = `https://raw.githubusercontent.com/${env.GITHUB_REPO}/main/data/weekly_plan.json`;
-  const response = await fetch(url);
+  const response = await fetch(url, {
+    headers: {
+      'User-Agent': 'IndicatorK-Bot/2.0'
+    }
+  });
   if (!response.ok) {
     throw new Error(`Failed to load weekly plan: ${response.status}`);
   }
@@ -767,7 +771,11 @@ function getScoreEmoji(score) {
 async function getFileContent(path, env) {
   const url = `https://api.github.com/repos/${env.GITHUB_REPO}/contents/${path}`;
   const response = await fetch(url, {
-    headers: { 'Authorization': `token ${env.GITHUB_TOKEN}` }
+    headers: {
+      'Authorization': `token ${env.GITHUB_TOKEN}`,
+      'User-Agent': 'IndicatorK-Bot/2.0',
+      'Accept': 'application/vnd.github.v3+json'
+    }
   });
 
   if (response.status === 404) {
@@ -799,7 +807,9 @@ async function updateFile(path, content, sha, message, env) {
     method: 'PUT',
     headers: {
       'Authorization': `token ${env.GITHUB_TOKEN}`,
-      'Content-Type': 'application/json'
+      'User-Agent': 'IndicatorK-Bot/2.0',
+      'Content-Type': 'application/json',
+      'Accept': 'application/vnd.github.v3+json'
     },
     body: JSON.stringify(body)
   });
