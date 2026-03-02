@@ -12,9 +12,12 @@ without Gemini.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import logging
 import os
+import random
+import time
 from dataclasses import dataclass, field
 from typing import Optional
 
@@ -30,13 +33,25 @@ _TIMEOUT = 30  # seconds
 # HTTP status codes that are fatal — don't waste remaining API keys on these
 _FATAL_STATUS_CODES = {400, 401, 403, 404}
 
+# Retry config for 429/timeout
+_MAX_RETRIES = 3
+_BACKOFF_BASE = 1.0   # seconds; doubles each attempt: 1s, 2s, 4s
+_RETRY_AFTER_CAP = 60 # cap Retry-After header at 60s
+
+# In-process cache: prompt_hash -> parsed result dict
+# Prevents duplicate API calls within the same run (e.g. retried weekly workflow)
+_CACHE: dict[str, dict] = {}
+
+# Sentinel returned by the per-key helper when it exhausts retries on 429
+_RATE_LIMITED = object()
+
 
 @dataclass
 class AIScore:
     """AI-generated score and rationale for a single recommendation."""
     symbol: str
     score: int  # 1-10 confidence
-    rationale: str  # 1-2 sentence explanation
+    rationale: str  # 1-sentence explanation
     risk_note: str = ""  # optional risk flag
 
 
@@ -51,10 +66,8 @@ class AIAnalysis:
 def get_api_keys() -> list[str]:
     """Read all available Gemini API keys from environment."""
     keys = []
-    # Primary API key
     if key1 := os.environ.get("GEMINI_API_KEY"):
         keys.append(key1)
-    # Secondary API key (for rate limit failover)
     if key2 := os.environ.get("GEMINI_API_KEY_2"):
         keys.append(key2)
     return keys
@@ -71,8 +84,12 @@ def is_available() -> bool:
     return bool(get_api_keys())
 
 
-def _build_scoring_prompt(recommendations: list[dict], portfolio_summary: str) -> str:
-    """Build the prompt for Gemini to score recommendations."""
+def _build_scoring_prompt(
+    recommendations: list[dict],
+    portfolio_summary: str,
+    as_of: str = "",
+) -> str:
+    """Build a tight prompt — 1-sentence rationale, no macro unless provided."""
     rec_lines = []
     for r in recommendations:
         rec_lines.append(
@@ -82,48 +99,36 @@ def _build_scoring_prompt(recommendations: list[dict], portfolio_summary: str) -
             f"rationale: {'; '.join(r.get('rationale_bullets', []))}"
         )
     rec_block = "\n".join(rec_lines)
+    as_of_line = f"DATA AS OF: {as_of}\n" if as_of else ""
 
-    return f"""You are a Vietnamese stock market analyst. Analyze these weekly trading recommendations
-and provide a confidence score (1-10) for each, plus a brief market context summary.
-
-PORTFOLIO:
-{portfolio_summary}
+    return f"""Vietnamese stock analyst. Score these weekly recommendations using ONLY the data provided.
+{as_of_line}
+PORTFOLIO: {portfolio_summary}
 
 RECOMMENDATIONS:
 {rec_block}
 
-INSTRUCTIONS:
-1. Score each recommendation 1-10 based on:
-   - Technical setup quality (trend alignment, entry timing)
-   - Risk/reward ratio (SL vs TP distance)
-   - Vietnamese market context (sector trends, macro conditions)
-   - Entry type suitability (breakout confirmation vs pullback value)
+For each symbol output:
+  score: 1-10 (technical setup + risk/reward ratio + entry type fit)
+  rationale: exactly 1 sentence based on provided technicals only
+  risk_note: 1 sentence if a specific risk is evident, else ""
 
-2. Provide a 1-sentence rationale for each score in Vietnamese or English.
+Also output market_context: 1 sentence summary based only on portfolio state above.
 
-3. Flag any significant risks (e.g., low liquidity, sector headwinds).
-
-4. Write a 2-3 sentence overall Vietnamese market context summary.
-
-Respond ONLY with valid JSON in this exact format:
+Respond ONLY with valid JSON, no markdown:
 {{
   "scores": {{
-    "SYMBOL": {{
-      "score": 7,
-      "rationale": "Strong breakout with volume confirmation",
-      "risk_note": ""
-    }}
+    "SYMBOL": {{"score": 7, "rationale": "...", "risk_note": ""}}
   }},
-  "market_context": "Overall VN market summary here."
+  "market_context": "..."
 }}"""
 
 
 def _is_rate_limited(resp) -> bool:
-    """Check if a response indicates a rate limit (429 or 503 quota exceeded)."""
+    """Return True if the response is a rate-limit (429 or 503 RESOURCE_EXHAUSTED)."""
     if resp.status_code == 429:
         return True
     if resp.status_code == 503:
-        # Gemini uses 503 for RESOURCE_EXHAUSTED — check specific error fields
         try:
             body = resp.json()
             error_info = body.get("error", {})
@@ -140,8 +145,49 @@ def _is_rate_limited(resp) -> bool:
     return False
 
 
-def _call_gemini(prompt: str, api_keys: list[str]) -> Optional[dict]:
-    """Make Gemini API calls with automatic failover between keys."""
+def _extract_429_info(resp) -> tuple[str, float]:
+    """Parse a rate-limit response for quota type and Retry-After seconds.
+
+    Returns (quota_type_hint, retry_after_sec).
+
+    Example log line produced by caller:
+        🚨 key 1/2 (...xIL8) | 429 [RPM] | model=gemini-1.5-flash |
+           Quota exceeded for quota metric 'generate_requests_per_minute' | backoff=1.3s (1/3)
+    """
+    # Retry-After header (Gemini sometimes sends it)
+    retry_after = 0.0
+    ra_header = resp.headers.get("Retry-After", "")
+    if ra_header:
+        try:
+            retry_after = min(float(ra_header), _RETRY_AFTER_CAP)
+        except ValueError:
+            pass
+
+    # Classify quota type from error message
+    quota_type = "RPM/TPM"
+    try:
+        body = resp.json()
+        msg = body.get("error", {}).get("message", "").lower()
+        if "per day" in msg or "daily" in msg or "per_day" in msg:
+            quota_type = "RPD"
+        elif "tokens per minute" in msg or "tpm" in msg:
+            quota_type = "TPM"
+        elif "per minute" in msg or "rpm" in msg:
+            quota_type = "RPM"
+    except Exception:
+        pass
+
+    return quota_type, retry_after
+
+
+def _call_key_with_retry(prompt: str, api_key: str, key_label: str) -> object:
+    """Call one API key with exponential-backoff retries on 429/timeout.
+
+    Returns:
+      - parsed dict on success
+      - _RATE_LIMITED sentinel if all retries exhausted on 429
+      - None on fatal or non-retriable error
+    """
     import requests
 
     url = _API_URL_TEMPLATE.format(model=_DEFAULT_MODEL)
@@ -150,15 +196,12 @@ def _call_gemini(prompt: str, api_keys: list[str]) -> Optional[dict]:
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
             "temperature": 0.3,
-            "maxOutputTokens": 2048,
+            "maxOutputTokens": 512,           # reduced from 2048
             "responseMimeType": "application/json",
         },
     }
 
-    for i, api_key in enumerate(api_keys):
-        key_label = f"API key {i+1}/{len(api_keys)}"
-        logger.info("Trying %s (...%s)", key_label, api_key[-8:])
-
+    for attempt in range(_MAX_RETRIES + 1):
         try:
             resp = requests.post(
                 url,
@@ -168,30 +211,59 @@ def _call_gemini(prompt: str, api_keys: list[str]) -> Optional[dict]:
                 timeout=_TIMEOUT,
             )
 
-            logger.info("%s → HTTP %d", key_label, resp.status_code)
+            logger.info("%s → HTTP %d (attempt %d/%d)", key_label, resp.status_code, attempt + 1, _MAX_RETRIES + 1)
 
-            # Fatal errors: bad key, no access, wrong model — don't try other keys
+            # ── Fatal: bad key / model / permissions ──────────────────────
             if resp.status_code in _FATAL_STATUS_CODES:
                 try:
-                    err_body = resp.json()
-                    err_msg = err_body.get("error", {}).get("message", "no details")
+                    err_msg = resp.json().get("error", {}).get("message", resp.text[:200])
                 except Exception:
                     err_msg = resp.text[:200]
-                logger.error("🔑 %s FATAL error HTTP %d: %s", key_label, resp.status_code, err_msg)
-                logger.error("💡 Check: API key validity, model name (%s), API enabled in console", _DEFAULT_MODEL)
-                return None  # Don't waste remaining keys on auth/config errors
+                logger.error(
+                    "🔑 %s FATAL HTTP %d | model=%s | %s",
+                    key_label, resp.status_code, _DEFAULT_MODEL, err_msg,
+                )
+                logger.error("💡 Check: API key validity, model name, API enabled in console")
+                return None  # don't try other keys
 
-            # Rate limit — try next key
+            # ── Rate limit ────────────────────────────────────────────────
             if _is_rate_limited(resp):
-                logger.warning("🚨 %s RATE LIMIT (%d) — trying next key", key_label, resp.status_code)
-                continue
+                quota_type, retry_after = _extract_429_info(resp)
+                try:
+                    err_msg = resp.json().get("error", {}).get("message", "(no message)")
+                except Exception:
+                    err_msg = "(no message)"
 
-            resp.raise_for_status()  # Catch remaining unexpected HTTP errors
+                if attempt < _MAX_RETRIES:
+                    if retry_after > 0:
+                        sleep_sec = retry_after
+                        logger.warning(
+                            "🚨 %s | %d [%s] | model=%s | %s | Retry-After=%ds → sleeping %ds (attempt %d/%d)",
+                            key_label, resp.status_code, quota_type, _DEFAULT_MODEL,
+                            err_msg, retry_after, sleep_sec, attempt + 1, _MAX_RETRIES,
+                        )
+                    else:
+                        sleep_sec = _BACKOFF_BASE * (2 ** attempt) + random.uniform(0, 0.5)
+                        logger.warning(
+                            "🚨 %s | %d [%s] | model=%s | %s | backoff=%.1fs (attempt %d/%d)",
+                            key_label, resp.status_code, quota_type, _DEFAULT_MODEL,
+                            err_msg, sleep_sec, attempt + 1, _MAX_RETRIES,
+                        )
+                    time.sleep(sleep_sec)
+                    continue
+                else:
+                    logger.warning(
+                        "🚨 %s | %d [%s] | model=%s | %s | retries exhausted",
+                        key_label, resp.status_code, quota_type, _DEFAULT_MODEL, err_msg,
+                    )
+                    return _RATE_LIMITED
+
+            resp.raise_for_status()
 
             data = resp.json()
             if "candidates" not in data or not data["candidates"]:
-                logger.warning("❌ %s returned no candidates — trying next key", key_label)
-                continue
+                logger.warning("❌ %s no candidates in response", key_label)
+                return None
 
             text = data["candidates"][0]["content"]["parts"][0]["text"]
             result = json.loads(text)
@@ -199,41 +271,77 @@ def _call_gemini(prompt: str, api_keys: list[str]) -> Optional[dict]:
             return result
 
         except requests.exceptions.Timeout:
-            logger.warning("⏰ %s timeout after %ds — trying next key", key_label, _TIMEOUT)
-            continue
+            if attempt < _MAX_RETRIES:
+                sleep_sec = _BACKOFF_BASE * (2 ** attempt)
+                logger.warning("⏰ %s timeout — backoff %.1fs (attempt %d/%d)", key_label, sleep_sec, attempt + 1, _MAX_RETRIES)
+                time.sleep(sleep_sec)
+                continue
+            logger.warning("⏰ %s timeout — retries exhausted", key_label)
+            return None
 
         except requests.exceptions.RequestException as e:
-            logger.warning("❌ %s request failed: %s — trying next key", key_label, e)
-            continue
+            logger.warning("❌ %s request error: %s", key_label, e)
+            return None
 
         except (KeyError, IndexError) as e:
-            logger.warning("❌ %s unexpected response structure: %s — trying next key", key_label, e)
-            continue
+            logger.warning("❌ %s unexpected response structure: %s", key_label, e)
+            return None
 
         except json.JSONDecodeError as e:
-            logger.warning("❌ %s non-JSON response (safety filter?): %s — trying next key", key_label, e)
+            logger.warning("❌ %s non-JSON response (safety filter?): %s", key_label, e)
+            return None
+
+    return None
+
+
+def _call_gemini(prompt: str, api_keys: list[str]) -> Optional[dict]:
+    """Multi-key failover. Each key gets its own retry budget (_MAX_RETRIES).
+
+    Cache: responses are stored in _CACHE keyed by prompt hash so the same
+    analysis is never requested twice in the same process run.
+    """
+    cache_key = hashlib.sha256(prompt.encode()).hexdigest()[:16]
+    if cache_key in _CACHE:
+        logger.info("📦 Gemini cache hit (hash=%s) — skipping API call", cache_key)
+        return _CACHE[cache_key]
+
+    for i, api_key in enumerate(api_keys):
+        key_label = f"key {i+1}/{len(api_keys)} (...{api_key[-8:]})"
+        result = _call_key_with_retry(prompt, api_key, key_label)
+
+        if result is _RATE_LIMITED:
+            if i < len(api_keys) - 1:
+                logger.info("🔄 Key %d rate-limited — failing over to key %d", i + 1, i + 2)
+            else:
+                logger.warning("🚨 ALL %d key(s) rate-limited — AI analysis skipped", len(api_keys))
             continue
 
-    # All API keys exhausted by rate limits / transient errors
-    logger.warning("🚨 ALL %d API KEY(S) exhausted — AI analysis skipped", len(api_keys))
-    logger.warning("⏰ Free tier quota reached. AI will resume when quotas reset.")
+        if result is None:
+            # Fatal or parse error — stop trying (don't waste other keys on same bad prompt)
+            return None
+
+        # Success — cache and return
+        _CACHE[cache_key] = result
+        return result
+
     return None
 
 
 def analyze_weekly_plan(
     plan_dict: dict,
     portfolio_summary: str = "",
+    as_of: str = "",
 ) -> AIAnalysis:
     """Score all recommendations in a weekly plan using Gemini.
 
     Args:
         plan_dict: WeeklyPlan.to_dict() output
         portfolio_summary: short text describing portfolio state
+        as_of: ISO timestamp string for the data snapshot (used as cache key component)
 
     Returns:
         AIAnalysis with scores and market context.
-        If API is unavailable or fails, returns an empty AIAnalysis
-        with generated=False.
+        Returns empty AIAnalysis(generated=False) on any failure.
     """
     api_keys = get_api_keys()
     if not api_keys:
@@ -244,22 +352,18 @@ def analyze_weekly_plan(
     if not recommendations:
         return AIAnalysis(generated=True, market_context="No recommendations to analyze.")
 
-    prompt = _build_scoring_prompt(recommendations, portfolio_summary)
-    logger.info(f"Starting Gemini analysis with {len(api_keys)} API key(s)")
+    prompt = _build_scoring_prompt(recommendations, portfolio_summary, as_of)
+    logger.info("Starting Gemini analysis | model=%s keys=%d recs=%d", _DEFAULT_MODEL, len(api_keys), len(recommendations))
     result = _call_gemini(prompt, api_keys)
 
     if result is None:
         logger.warning("Gemini analysis failed — returning empty analysis")
         return AIAnalysis()
 
-    # Parse scores
     scores: dict[str, AIScore] = {}
-    raw_scores = result.get("scores", {})
-    for sym, data in raw_scores.items():
+    for sym, data in result.get("scores", {}).items():
         sym = sym.upper().strip()
-        score_val = data.get("score", 5)
-        # Clamp to 1-10
-        score_val = max(1, min(10, int(score_val)))
+        score_val = max(1, min(10, int(data.get("score", 5))))
         scores[sym] = AIScore(
             symbol=sym,
             score=score_val,
@@ -268,13 +372,8 @@ def analyze_weekly_plan(
         )
 
     market_context = str(result.get("market_context", ""))
-
     logger.info("Gemini scored %d/%d recommendations", len(scores), len(recommendations))
-    return AIAnalysis(
-        scores=scores,
-        market_context=market_context,
-        generated=True,
-    )
+    return AIAnalysis(scores=scores, market_context=market_context, generated=True)
 
 
 def format_ai_section(analysis: AIAnalysis, recommendations: list[dict]) -> str:
@@ -291,7 +390,6 @@ def format_ai_section(analysis: AIAnalysis, recommendations: list[dict]) -> str:
         lines.append(f"_{analysis.market_context}_")
         lines.append("")
 
-    # Show scores for BUY recommendations first, then others
     buys = [r for r in recommendations if r.get("action") == "BUY"]
     others = [r for r in recommendations if r.get("action") != "BUY"]
 
