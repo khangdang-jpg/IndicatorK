@@ -1,8 +1,8 @@
 # Strategy configuration
 # Change 'active' to switch strategies without code edits.
-# Available: trend_momentum_atr | rebalance_50_50
+# Available: trend_momentum_atr | trend_momentum_atr_regime_adaptive | rebalance_50_50
 
-active: trend_momentum_atr
+active: trend_momentum_atr_regime_adaptive
 
 trend_momentum_atr:
   ma_short: 10             # 10-week moving average
@@ -10,10 +10,40 @@ trend_momentum_atr:
   rsi_period: 14           # RSI lookback
   atr_period: 14           # ATR lookback
   atr_stop_mult: 1.5       # stop_loss   = entry_price - 1.5 * ATR
-  atr_target_mult: 2.5     # take_profit = entry_price + 2.5 * ATR
-  rsi_breakout_min: 50     # RSI >= this to use breakout path (default 50)
+  atr_target_mult: 3.0     # take_profit = entry_price + 3.0 * ATR
+  rsi_breakout_min: 55     # RSI >= this to use breakout path (stronger trends)
   entry_buffer_pct: 0.001  # entry_price = breakout_level * (1 + buffer)
   price_tick: 10           # VN price step (VND); all output prices rounded to this
+
+trend_momentum_atr_regime_adaptive:
+  ma_short: 10
+  ma_long: 30
+  rsi_period: 14
+  atr_period: 14
+  entry_buffer_pct: 0.001
+  price_tick: 10
+
+  # Market regime detection
+  regime_lookback: 60        # Days to analyze for regime detection
+  trend_threshold: 0.05      # 5% threshold for bull/bear classification
+
+  # Bull market parameters (strong uptrend)
+  bull_rsi_threshold: 50     # More opportunities in bull market (balanced)
+  bull_position_pct: 0.15    # Aggressive positioning (15%)
+  bull_atr_stop_mult: 1.8    # Room for volatility
+  bull_atr_target_mult: 4.0  # Let winners run longer
+
+  # Bear market parameters (downtrend)
+  bear_rsi_threshold: 65     # Very selective, only strong bounces
+  bear_position_pct: 0.07    # Defensive positioning (7%)
+  bear_atr_stop_mult: 1.2    # Tighter stops to limit losses
+  bear_atr_target_mult: 2.0  # Quick exits on bounces
+
+  # Sideways market parameters (choppy/neutral)
+  sideways_rsi_threshold: 55 # Moderate selectivity
+  sideways_position_pct: 0.10 # Balanced positioning (10%)
+  sideways_atr_stop_mult: 1.5 # Standard stops
+  sideways_atr_target_mult: 2.5 # Standard targets
 
 rebalance_50_50:
   stock_target: 0.50

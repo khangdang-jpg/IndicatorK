@@ -105,6 +105,7 @@ def get_strategy(config_path: str = "config/strategy.yml"):
     """Instantiate the active strategy from config."""
     from src.strategies.rebalance_50_50 import Rebalance5050Strategy
     from src.strategies.trend_momentum_atr import TrendMomentumATRStrategy
+    from src.strategies.trend_momentum_atr_regime_adaptive import TrendMomentumATRRegimeAdaptive
 
     cfg = load_yaml(config_path)
     active = cfg.get("active", "trend_momentum_atr")
@@ -112,6 +113,7 @@ def get_strategy(config_path: str = "config/strategy.yml"):
 
     strategy_map = {
         "trend_momentum_atr": lambda: TrendMomentumATRStrategy(params=params),
+        "trend_momentum_atr_regime_adaptive": lambda: TrendMomentumATRRegimeAdaptive(params=params),
         "rebalance_50_50": lambda: Rebalance5050Strategy(params=params),
     }
 
