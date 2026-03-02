@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-02T03:40:56.504507",
+  "generated_at": "2026-03-02T04:23:34.738863",
   "strategy_id": "trend_momentum_atr",
   "strategy_version": "2.0.0",
   "allocation_targets": {
@@ -17,10 +17,10 @@
       "take_profit": 80.0,
       "position_target_pct": 0.07,
       "rationale_bullets": [
-        "Trend UP: price 69 > MA10w 67 > MA30w 62",
-        "RSI(14): 63.4",
+        "Trend UP: price 68 > MA10w 67 > MA30w 62",
+        "RSI(14): 63.0",
         "ATR: 5",
-        "Vol: 3,939,200 (0.1x avg)",
+        "Vol: 4,568,500 (0.1x avg)",
         "Entry: pullback mid-zone"
       ],
       "entry_type": "pullback",
@@ -40,9 +40,9 @@
       "position_target_pct": 0.09,
       "rationale_bullets": [
         "Trend UP: price 92 > MA10w 89 > MA30w 82",
-        "RSI(14): 63.1",
+        "RSI(14): 63.6",
         "ATR: 5",
-        "Vol: 4,804,500 (0.2x avg)",
+        "Vol: 5,856,400 (0.2x avg)",
         "Entry: pullback mid-zone"
       ],
       "entry_type": "pullback",
@@ -52,46 +52,24 @@
       "earliest_entry_date": null
     },
     {
-      "symbol": "STB",
-      "asset_class": "stock",
-      "action": "BUY",
-      "buy_zone_low": 60.0,
-      "buy_zone_high": 60.0,
-      "stop_loss": 50.0,
-      "take_profit": 70.0,
-      "position_target_pct": 0.06,
-      "rationale_bullets": [
-        "Trend UP: price 67 > MA10w 61 > MA30w 56",
-        "RSI(14): 68.5",
-        "ATR: 5",
-        "Vol: 9,466,400 (0.2x avg)",
-        "Entry: pullback mid-zone"
-      ],
-      "entry_type": "pullback",
-      "breakout_level": 0.0,
-      "entry_price": 60.0,
-      "signal_week_end": "2026-03-02",
-      "earliest_entry_date": null
-    },
-    {
       "symbol": "VIC",
       "asset_class": "stock",
       "action": "BUY",
-      "buy_zone_low": 150.0,
-      "buy_zone_high": 160.0,
-      "stop_loss": 130.0,
-      "take_profit": 210.0,
-      "position_target_pct": 0.0533,
+      "buy_zone_low": 160.0,
+      "buy_zone_high": 170.0,
+      "stop_loss": 140.0,
+      "take_profit": 220.0,
+      "position_target_pct": 0.0567,
       "rationale_bullets": [
-        "Trend UP: price 170 > MA10w 160 > MA30w 117",
-        "RSI(14): 67.2",
-        "ATR: 21",
-        "Vol: 1,418,800 (0.1x avg)",
+        "Trend UP: price 177 > MA10w 161 > MA30w 117",
+        "RSI(14): 69.0",
+        "ATR: 22",
+        "Vol: 2,558,300 (0.1x avg)",
         "Entry: pullback mid-zone"
       ],
       "entry_type": "pullback",
       "breakout_level": 0.0,
-      "entry_price": 160.0,
+      "entry_price": 170.0,
       "signal_week_end": "2026-03-02",
       "earliest_entry_date": null
     }
@@ -104,7 +82,7 @@
   "ai_analysis": {
     "generated": false,
     "market_context": "AI analysis unavailable due to Gemini rate limit (429). This is normal for free tier.",
-    "analysis_date": "2026-03-02 03:40:56",
+    "analysis_date": "2026-03-02 04:23:34",
     "data_sources": "Rate limit encountered - AI will work when quota resets",
     "scores": {},
     "status": "RATE_LIMITED",
