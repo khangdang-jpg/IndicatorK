@@ -46,19 +46,19 @@ class TrendMomentumATRRegimeAdaptive(Strategy):
 
         # Bear market parameters (defensive)
         self.bear_rsi_threshold = params.get("bear_rsi_threshold", 65)
-        self.bear_position_pct = params.get("bear_position_pct", 0.06)
+        self.bear_position_multiplier = params.get("bear_position_multiplier", 0.7)  # 0.7x base allocation
         self.bear_atr_stop_mult = params.get("bear_atr_stop_mult", 1.2)
         self.bear_atr_target_mult = params.get("bear_atr_target_mult", 2.0)
 
         # Bull market parameters (aggressive)
         self.bull_rsi_threshold = params.get("bull_rsi_threshold", 45)
-        self.bull_position_pct = params.get("bull_position_pct", 0.15)
+        self.bull_position_multiplier = params.get("bull_position_multiplier", 1.5)  # 1.5x base allocation
         self.bull_atr_stop_mult = params.get("bull_atr_stop_mult", 1.8)
         self.bull_atr_target_mult = params.get("bull_atr_target_mult", 4.0)
 
         # Sideways market parameters (balanced)
         self.sideways_rsi_threshold = params.get("sideways_rsi_threshold", 55)
-        self.sideways_position_pct = params.get("sideways_position_pct", 0.10)
+        self.sideways_position_multiplier = params.get("sideways_position_multiplier", 1.0)  # 1.0x base allocation
         self.sideways_atr_stop_mult = params.get("sideways_atr_stop_mult", 1.5)
         self.sideways_atr_target_mult = params.get("sideways_atr_target_mult", 2.5)
 
@@ -125,19 +125,19 @@ class TrendMomentumATRRegimeAdaptive(Strategy):
         params_map = {
             "bull": {
                 "rsi_threshold": self.bull_rsi_threshold,
-                "position_pct": self.bull_position_pct,
+                "position_multiplier": self.bull_position_multiplier,
                 "atr_stop_mult": self.bull_atr_stop_mult,
                 "atr_target_mult": self.bull_atr_target_mult,
             },
             "bear": {
                 "rsi_threshold": self.bear_rsi_threshold,
-                "position_pct": self.bear_position_pct,
+                "position_multiplier": self.bear_position_multiplier,
                 "atr_stop_mult": self.bear_atr_stop_mult,
                 "atr_target_mult": self.bear_atr_target_mult,
             },
             "sideways": {
                 "rsi_threshold": self.sideways_rsi_threshold,
-                "position_pct": self.sideways_position_pct,
+                "position_multiplier": self.sideways_position_multiplier,
                 "atr_stop_mult": self.sideways_atr_stop_mult,
                 "atr_target_mult": self.sideways_atr_target_mult,
             },
@@ -231,10 +231,10 @@ class TrendMomentumATRRegimeAdaptive(Strategy):
         atr_target_mult = regime_params["atr_target_mult"]
 
         logger.info(
-            "Regime: %s | RSI≥%.0f | Position: %.1f%% | SL: %.1fx | TP: %.1fx",
+            "Regime: %s | RSI≥%.0f | Position: %.2fx base | SL: %.1fx | TP: %.1fx",
             self.current_regime.upper(),
             rsi_breakout_min,
-            regime_params["position_pct"] * 100,
+            regime_params["position_multiplier"],
             atr_stop_mult,
             atr_target_mult,
         )
@@ -392,10 +392,11 @@ class TrendMomentumATRRegimeAdaptive(Strategy):
             # Ensure stop_loss is not negative
             stop_loss = max(stop_loss, 0.0)
 
-            # Regime-adaptive position sizing
+            # Regime-adaptive position sizing using config + regime multiplier
             if action == "BUY":
-                # Override config with regime-specific position size
-                position_target_pct = regime_params["position_pct"]
+                base_alloc = _compute_alloc_pct(config, entry_price, stop_loss)
+                regime_multiplier = regime_params["position_multiplier"]
+                position_target_pct = _apply_regime_multiplier(base_alloc, regime_multiplier, config)
             else:
                 position_target_pct = 0.0
 
@@ -426,11 +427,12 @@ class TrendMomentumATRRegimeAdaptive(Strategy):
             strategy_version=self.version,
             allocation_targets={"stock": stock_target, "bond_fund": 1.0 - stock_target},
             recommendations=recommendations[:20],
+            market_regime=self.current_regime,
             notes=[
                 f"Regime-Adaptive Strategy | Current regime: {self.current_regime.upper()}",
                 f"MA{self.ma_short}w/MA{self.ma_long}w trend + RSI({self.rsi_period})≥{rsi_breakout_min} momentum",
                 f"ATR({self.atr_period})-based stops: {atr_stop_mult:.1f}x stop, {atr_target_mult:.1f}x target",
-                f"Position sizing: {regime_params['position_pct']:.1%} per trade",
+                f"Position sizing: {regime_params['position_multiplier']:.2f}x base allocation (config-driven)",
             ],
         )
 
@@ -517,3 +519,36 @@ def _std(values: list[float]) -> float:
     mean = sum(values) / len(values)
     variance = sum((x - mean) ** 2 for x in values) / len(values)
     return variance ** 0.5
+
+
+def _compute_alloc_pct(config: dict, entry_price: float, sl: float) -> float:
+    """Compute base position allocation from risk.yml config.
+
+    fixed_pct mode:  returns fixed_alloc_pct_per_trade (clamped)
+    risk_based mode: risk_per_trade_pct / stop_distance_pct (clamped)
+    """
+    alloc_cfg = config.get("allocation", {})
+    mode = alloc_cfg.get("alloc_mode", "fixed_pct")
+    lo = alloc_cfg.get("min_alloc_pct", 0.03)
+    hi = alloc_cfg.get("max_alloc_pct", 0.15)
+
+    if mode == "risk_based":
+        stop_dist = abs(entry_price - sl) / entry_price if entry_price > 0 else 0.0
+        if stop_dist < 0.001:  # Avoid division by zero
+            raw = alloc_cfg.get("fixed_alloc_pct_per_trade", 0.10)
+        else:
+            raw = alloc_cfg.get("risk_per_trade_pct", 0.01) / stop_dist
+    else:
+        raw = alloc_cfg.get("fixed_alloc_pct_per_trade", 0.10)
+
+    return round(max(lo, min(hi, raw)), 4)
+
+
+def _apply_regime_multiplier(base_alloc: float, multiplier: float, config: dict) -> float:
+    """Apply regime multiplier to base allocation and clamp to min/max."""
+    alloc_cfg = config.get("allocation", {})
+    lo = alloc_cfg.get("min_alloc_pct", 0.03)
+    hi = alloc_cfg.get("max_alloc_pct", 0.15)
+
+    adjusted = base_alloc * multiplier
+    return round(max(lo, min(hi, adjusted)), 4)

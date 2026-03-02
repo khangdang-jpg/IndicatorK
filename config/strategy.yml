@@ -29,19 +29,19 @@ trend_momentum_atr_regime_adaptive:
 
   # Bull market parameters (strong uptrend)
   bull_rsi_threshold: 50     # More opportunities in bull market (balanced)
-  bull_position_pct: 0.15    # Aggressive positioning (15%)
+  bull_position_multiplier: 1.5    # 1.5x base allocation from risk.yml (aggressive)
   bull_atr_stop_mult: 1.8    # Room for volatility
   bull_atr_target_mult: 4.0  # Let winners run longer
 
   # Bear market parameters (downtrend)
   bear_rsi_threshold: 65     # Very selective, only strong bounces
-  bear_position_pct: 0.07    # Defensive positioning (7%)
+  bear_position_multiplier: 0.7    # 0.7x base allocation from risk.yml (defensive)
   bear_atr_stop_mult: 1.2    # Tighter stops to limit losses
   bear_atr_target_mult: 2.0  # Quick exits on bounces
 
   # Sideways market parameters (choppy/neutral)
   sideways_rsi_threshold: 55 # Moderate selectivity
-  sideways_position_pct: 0.10 # Balanced positioning (10%)
+  sideways_position_multiplier: 1.0 # 1.0x base allocation from risk.yml (balanced)
   sideways_atr_stop_mult: 1.5 # Standard stops
   sideways_atr_target_mult: 2.5 # Standard targets
 

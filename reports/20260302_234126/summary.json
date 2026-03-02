@@ -1,0 +1,14 @@
+{
+  "from_date": "2022-01-01",
+  "to_date": "2023-01-01",
+  "initial_cash": 20000000,
+  "final_value": 18023550.0,
+  "cagr": -0.0988,
+  "max_drawdown": 0.1768,
+  "win_rate": 0.3,
+  "avg_hold_days": 35.85,
+  "num_trades": 20,
+  "profit_factor": 0.4882,
+  "avg_invested_pct": 0.2573,
+  "tie_breaker": "worst"
+}
