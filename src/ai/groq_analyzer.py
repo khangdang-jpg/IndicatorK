@@ -108,7 +108,8 @@ For each symbol provide:
 
 Also provide market_context: 1 sentence summary based only on portfolio state above.
 
-Respond ONLY with valid JSON, no markdown:
+IMPORTANT: Return ONLY raw JSON. Do NOT wrap in markdown code blocks or ```json tags.
+
 {{
   "scores": {{
     "SYMBOL": {{"score": 7, "rationale": "...", "risk_note": ""}}
@@ -231,6 +232,16 @@ def _call_groq_with_retry(prompt: str, api_key: str) -> object:
 
             content = data["choices"][0]["message"]["content"]
 
+            # Strip markdown code blocks if present (Groq sometimes wraps JSON in ```json ... ```)
+            content = content.strip()
+            if content.startswith("```json"):
+                content = content[7:]  # Remove ```json
+            elif content.startswith("```"):
+                content = content[3:]  # Remove ```
+            if content.endswith("```"):
+                content = content[:-3]  # Remove trailing ```
+            content = content.strip()
+
             # Try to parse as JSON
             try:
                 result = json.loads(content)
@@ -238,6 +249,7 @@ def _call_groq_with_retry(prompt: str, api_key: str) -> object:
                 return result
             except json.JSONDecodeError as e:
                 logger.warning("❌ Non-JSON response | model=%s: %s", _MODEL_ANALYZE, e)
+                logger.warning("Response content: %s", content[:200])
                 return None
 
         except requests.exceptions.Timeout:
