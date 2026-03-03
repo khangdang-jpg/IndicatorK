@@ -89,11 +89,11 @@ def main() -> None:
     logger.info("Generated plan with %d recommendations", len(plan.recommendations))
 
     # AI analysis (run BEFORE saving plan so we can cache the results)
-    from src.ai.gemini_analyzer import analyze_weekly_plan, is_available as ai_available
+    from src.ai.groq_analyzer import analyze_weekly_plan, is_available as ai_available
     from datetime import datetime
     ai_analysis = None
     if ai_available():
-        logger.info("Running Gemini AI analysis...")
+        logger.info("Running Groq AI analysis...")
         portfolio_summary = (
             f"Total: {portfolio_state.total_value:,.0f} VND | "
             f"Cash: {portfolio_state.cash:,.0f} | "
@@ -109,7 +109,7 @@ def main() -> None:
                 "generated": ai_analysis.generated,
                 "market_context": ai_analysis.market_context,
                 "analysis_date": datetime.now().strftime("%Y-%m-%d"),
-                "data_sources": "Weekly technical analysis using Gemini AI",
+                "data_sources": "Weekly technical analysis using Groq AI",
                 "scores": {
                     sym: {
                         "symbol": score.symbol,
@@ -134,7 +134,7 @@ def main() -> None:
                 "data_sources": "AI analysis failed — see GitHub Actions logs",
                 "scores": {},
                 "status": "AI_FAILED",
-                "notice": "⚠ Gemini AI analysis failed. Check logs: may be rate limit, invalid key, or model issue."
+                "notice": "⚠ Groq AI analysis failed. Check logs: may be rate limit, invalid key, or model issue."
             }
             plan.ai_analysis = failure_notice
 
@@ -145,7 +145,7 @@ def main() -> None:
                 status=failure_notice["status"]
             )
     else:
-        logger.info("Gemini API not configured — skipping AI analysis")
+        logger.info("Groq API not configured — skipping AI analysis")
 
         # Add API not configured notice to weekly plan and create ai_analysis object
         from datetime import datetime
@@ -153,12 +153,12 @@ def main() -> None:
 
         no_api_notice = {
             "generated": False,
-            "market_context": "AI analysis unavailable - Gemini API key not configured.",
+            "market_context": "AI analysis unavailable - Groq API key not configured.",
             "analysis_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "data_sources": "Gemini API not configured",
+            "data_sources": "Groq API not configured",
             "scores": {},
             "status": "API_NOT_CONFIGURED",
-            "notice": "🔑 Set GEMINI_API_KEY environment variable to enable AI analysis."
+            "notice": "🔑 Set GROQ_API_KEY environment variable to enable AI analysis."
         }
         plan.ai_analysis = no_api_notice
 
@@ -202,7 +202,7 @@ def main() -> None:
     digest_ai_analysis = ai_analysis  # Use original AIAnalysis or SimpleNamespace object if available
     if (ai_analysis is None or (hasattr(ai_analysis, 'generated') and not ai_analysis.generated and not hasattr(ai_analysis, 'notice'))) and plan.ai_analysis:
         # If we only have cached data, reconstruct AIAnalysis object
-        from src.ai.gemini_analyzer import AIAnalysis, AIScore
+        from src.ai.groq_analyzer import AIAnalysis, AIScore
         from types import SimpleNamespace
         cached_ai = plan.ai_analysis
 

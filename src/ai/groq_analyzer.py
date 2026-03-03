@@ -1,13 +1,19 @@
-"""Gemini API integration for AI-powered stock analysis and scoring.
+"""Groq API integration for AI-powered stock analysis and scoring.
 
-Uses Google's Gemini free tier to provide:
+Uses Groq API with two-stage approach to provide:
   - Confidence scores (1-10) for each weekly recommendation
   - Brief Vietnamese-market-aware rationale per stock
   - Overall market context summary
 
+Features:
+  - Stage 1: llama-3.1-8b-instant for fast structured extraction (JSON)
+  - Stage 2: llama-3.3-70b-versatile for final English digest
+  - Caching and graceful fallbacks on API failures
+  - Compatible with existing weekly workflow
+
 Graceful degradation: all public functions return sensible defaults
 if the API key is missing or a call fails. The system never breaks
-without Gemini.
+without Groq.
 """
 
 from __future__ import annotations
@@ -23,14 +29,12 @@ from typing import Optional
 
 logger = logging.getLogger(__name__)
 
-# Gemini model — override via GEMINI_MODEL env var if needed
-_DEFAULT_MODEL = os.environ.get("GEMINI_MODEL", "gemini-1.5-flash")
-_API_URL_TEMPLATE = (
-    "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
-)
+# Groq API configuration
+_BASE_URL = "https://api.groq.com/openai/v1"
+_MODEL_ANALYZE = os.environ.get("GROQ_MODEL", "llama-3.1-8b-instant")  # For analysis
 _TIMEOUT = 30  # seconds
 
-# HTTP status codes that are fatal — don't waste remaining API keys on these
+# HTTP status codes that are fatal — don't retry
 _FATAL_STATUS_CODES = {400, 401, 403, 404}
 
 # Retry config for 429/timeout
@@ -39,10 +43,10 @@ _BACKOFF_BASE = 1.0   # seconds; doubles each attempt: 1s, 2s, 4s
 _RETRY_AFTER_CAP = 60 # cap Retry-After header at 60s
 
 # In-process cache: prompt_hash -> parsed result dict
-# Prevents duplicate API calls within the same run (e.g. retried weekly workflow)
+# Prevents duplicate API calls within the same run
 _CACHE: dict[str, dict] = {}
 
-# Sentinel returned by the per-key helper when it exhausts retries on 429
+# Sentinel returned when retries exhausted on rate limit
 _RATE_LIMITED = object()
 
 
@@ -63,25 +67,14 @@ class AIAnalysis:
     generated: bool = False  # True if AI actually ran
 
 
-def get_api_keys() -> list[str]:
-    """Read all available Gemini API keys from environment."""
-    keys = []
-    if key1 := os.environ.get("GEMINI_API_KEY"):
-        keys.append(key1)
-    if key2 := os.environ.get("GEMINI_API_KEY_2"):
-        keys.append(key2)
-    return keys
-
-
 def get_api_key() -> Optional[str]:
-    """Read primary Gemini API key from environment (legacy compatibility)."""
-    keys = get_api_keys()
-    return keys[0] if keys else None
+    """Read Groq API key from environment."""
+    return os.environ.get("GROQ_API_KEY")
 
 
 def is_available() -> bool:
-    """Check if Gemini integration is configured."""
-    return bool(get_api_keys())
+    """Check if Groq integration is configured."""
+    return bool(get_api_key())
 
 
 def _build_scoring_prompt(
@@ -89,7 +82,7 @@ def _build_scoring_prompt(
     portfolio_summary: str,
     as_of: str = "",
 ) -> str:
-    """Build a tight prompt — 1-sentence rationale, no macro unless provided."""
+    """Build analysis prompt for Groq API."""
     rec_lines = []
     for r in recommendations:
         rec_lines.append(
@@ -108,12 +101,12 @@ PORTFOLIO: {portfolio_summary}
 RECOMMENDATIONS:
 {rec_block}
 
-For each symbol output:
-  score: 1-10 (technical setup + risk/reward ratio + entry type fit)
-  rationale: exactly 1 sentence based on provided technicals only
-  risk_note: 1 sentence if a specific risk is evident, else ""
+For each symbol provide:
+- score: 1-10 (technical setup + risk/reward ratio + entry type fit)
+- rationale: exactly 1 sentence based on provided technicals only
+- risk_note: 1 sentence if a specific risk is evident, else ""
 
-Also output market_context: 1 sentence summary based only on portfolio state above.
+Also provide market_context: 1 sentence summary based only on portfolio state above.
 
 Respond ONLY with valid JSON, no markdown:
 {{
@@ -125,36 +118,23 @@ Respond ONLY with valid JSON, no markdown:
 
 
 def _is_rate_limited(resp) -> bool:
-    """Return True if the response is a rate-limit (429 or 503 RESOURCE_EXHAUSTED)."""
+    """Return True if the response is a rate-limit (429 or 503)."""
     if resp.status_code == 429:
         return True
     if resp.status_code == 503:
         try:
             body = resp.json()
             error_info = body.get("error", {})
-            status = error_info.get("status", "").upper()
             message = error_info.get("message", "").lower()
-            if status == "RESOURCE_EXHAUSTED":
-                return True
-            if "quota" in message and ("exceeded" in message or "exhausted" in message):
-                return True
-            if "rate limit" in message:
+            if "rate limit" in message or "quota" in message:
                 return True
         except (json.JSONDecodeError, AttributeError):
-            logger.debug("Could not parse 503 response body for rate limit check")
+            pass
     return False
 
 
-def _extract_429_info(resp) -> tuple[str, float]:
-    """Parse a rate-limit response for quota type and Retry-After seconds.
-
-    Returns (quota_type_hint, retry_after_sec).
-
-    Example log line produced by caller:
-        🚨 key 1/2 (...xIL8) | 429 [RPM] | model=gemini-1.5-flash |
-           Quota exceeded for quota metric 'generate_requests_per_minute' | backoff=1.3s (1/3)
-    """
-    # Retry-After header (Gemini sometimes sends it)
+def _extract_retry_after(resp) -> float:
+    """Extract Retry-After header from rate limit response."""
     retry_after = 0.0
     ra_header = resp.headers.get("Retry-After", "")
     if ra_header:
@@ -162,26 +142,11 @@ def _extract_429_info(resp) -> tuple[str, float]:
             retry_after = min(float(ra_header), _RETRY_AFTER_CAP)
         except ValueError:
             pass
-
-    # Classify quota type from error message
-    quota_type = "RPM/TPM"
-    try:
-        body = resp.json()
-        msg = body.get("error", {}).get("message", "").lower()
-        if "per day" in msg or "daily" in msg or "per_day" in msg:
-            quota_type = "RPD"
-        elif "tokens per minute" in msg or "tpm" in msg:
-            quota_type = "TPM"
-        elif "per minute" in msg or "rpm" in msg:
-            quota_type = "RPM"
-    except Exception:
-        pass
-
-    return quota_type, retry_after
+    return retry_after
 
 
-def _call_key_with_retry(prompt: str, api_key: str, key_label: str) -> object:
-    """Call one API key with exponential-backoff retries on 429/timeout.
+def _call_groq_with_retry(prompt: str, api_key: str) -> object:
+    """Call Groq API with exponential-backoff retries on 429/timeout.
 
     Returns:
       - parsed dict on success
@@ -190,15 +155,17 @@ def _call_key_with_retry(prompt: str, api_key: str, key_label: str) -> object:
     """
     import requests
 
-    url = _API_URL_TEMPLATE.format(model=_DEFAULT_MODEL)
-    headers = {"Content-Type": "application/json"}
+    url = f"{_BASE_URL}/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+
     payload = {
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {
-            "temperature": 0.3,
-            "maxOutputTokens": 512,           # reduced from 2048
-            "responseMimeType": "application/json",
-        },
+        "model": _MODEL_ANALYZE,
+        "messages": [{"role": "user", "content": prompt}],
+        "max_tokens": 800,
+        "temperature": 0.3
     }
 
     for attempt in range(_MAX_RETRIES + 1):
@@ -206,29 +173,28 @@ def _call_key_with_retry(prompt: str, api_key: str, key_label: str) -> object:
             resp = requests.post(
                 url,
                 headers=headers,
-                params={"key": api_key},
                 json=payload,
                 timeout=_TIMEOUT,
             )
 
-            logger.info("%s → HTTP %d (attempt %d/%d)", key_label, resp.status_code, attempt + 1, _MAX_RETRIES + 1)
+            logger.info("Groq API → HTTP %d | model=%s (attempt %d/%d)", resp.status_code, _MODEL_ANALYZE, attempt + 1, _MAX_RETRIES + 1)
 
-            # ── Fatal: bad key / model / permissions ──────────────────────
+            # Fatal errors - don't retry
             if resp.status_code in _FATAL_STATUS_CODES:
                 try:
                     err_msg = resp.json().get("error", {}).get("message", resp.text[:200])
                 except Exception:
                     err_msg = resp.text[:200]
                 logger.error(
-                    "🔑 %s FATAL HTTP %d | model=%s | %s",
-                    key_label, resp.status_code, _DEFAULT_MODEL, err_msg,
+                    "🔑 FATAL HTTP %d | model=%s | %s",
+                    resp.status_code, _MODEL_ANALYZE, err_msg,
                 )
-                logger.error("💡 Check: API key validity, model name, API enabled in console")
-                return None  # don't try other keys
+                logger.error("💡 Check: API key validity, model name, API enabled")
+                return None
 
-            # ── Rate limit ────────────────────────────────────────────────
+            # Rate limit - retry with backoff
             if _is_rate_limited(resp):
-                quota_type, retry_after = _extract_429_info(resp)
+                retry_after = _extract_retry_after(resp)
                 try:
                     err_msg = resp.json().get("error", {}).get("message", "(no message)")
                 except Exception:
@@ -238,93 +204,86 @@ def _call_key_with_retry(prompt: str, api_key: str, key_label: str) -> object:
                     if retry_after > 0:
                         sleep_sec = retry_after
                         logger.warning(
-                            "🚨 %s | %d [%s] | model=%s | %s | Retry-After=%ds → sleeping %ds (attempt %d/%d)",
-                            key_label, resp.status_code, quota_type, _DEFAULT_MODEL,
-                            err_msg, retry_after, sleep_sec, attempt + 1, _MAX_RETRIES,
+                            "🚨 Rate limit | model=%s | %s | Retry-After=%ds → sleeping %ds (attempt %d/%d)",
+                            _MODEL_ANALYZE, err_msg, retry_after, sleep_sec, attempt + 1, _MAX_RETRIES,
                         )
                     else:
                         sleep_sec = _BACKOFF_BASE * (2 ** attempt) + random.uniform(0, 0.5)
                         logger.warning(
-                            "🚨 %s | %d [%s] | model=%s | %s | backoff=%.1fs (attempt %d/%d)",
-                            key_label, resp.status_code, quota_type, _DEFAULT_MODEL,
-                            err_msg, sleep_sec, attempt + 1, _MAX_RETRIES,
+                            "🚨 Rate limit | model=%s | %s | backoff=%.1fs (attempt %d/%d)",
+                            _MODEL_ANALYZE, err_msg, sleep_sec, attempt + 1, _MAX_RETRIES,
                         )
                     time.sleep(sleep_sec)
                     continue
                 else:
                     logger.warning(
-                        "🚨 %s | %d [%s] | model=%s | %s | retries exhausted",
-                        key_label, resp.status_code, quota_type, _DEFAULT_MODEL, err_msg,
+                        "🚨 Rate limit | model=%s | %s | retries exhausted",
+                        _MODEL_ANALYZE, err_msg,
                     )
                     return _RATE_LIMITED
 
             resp.raise_for_status()
 
             data = resp.json()
-            if "candidates" not in data or not data["candidates"]:
-                logger.warning("❌ %s no candidates in response", key_label)
+            if "choices" not in data or not data["choices"]:
+                logger.warning("❌ No choices in response | model=%s", _MODEL_ANALYZE)
                 return None
 
-            text = data["candidates"][0]["content"]["parts"][0]["text"]
-            result = json.loads(text)
-            logger.info("✅ %s succeeded", key_label)
-            return result
+            content = data["choices"][0]["message"]["content"]
+
+            # Try to parse as JSON
+            try:
+                result = json.loads(content)
+                logger.info("✅ Groq API succeeded | model=%s", _MODEL_ANALYZE)
+                return result
+            except json.JSONDecodeError as e:
+                logger.warning("❌ Non-JSON response | model=%s: %s", _MODEL_ANALYZE, e)
+                return None
 
         except requests.exceptions.Timeout:
             if attempt < _MAX_RETRIES:
                 sleep_sec = _BACKOFF_BASE * (2 ** attempt)
-                logger.warning("⏰ %s timeout — backoff %.1fs (attempt %d/%d)", key_label, sleep_sec, attempt + 1, _MAX_RETRIES)
+                logger.warning("⏰ Timeout | model=%s — backoff %.1fs (attempt %d/%d)", _MODEL_ANALYZE, sleep_sec, attempt + 1, _MAX_RETRIES)
                 time.sleep(sleep_sec)
                 continue
-            logger.warning("⏰ %s timeout — retries exhausted", key_label)
+            logger.warning("⏰ Timeout | model=%s — retries exhausted", _MODEL_ANALYZE)
             return None
 
         except requests.exceptions.RequestException as e:
-            logger.warning("❌ %s request error: %s", key_label, e)
+            logger.warning("❌ Request error | model=%s: %s", _MODEL_ANALYZE, e)
             return None
 
-        except (KeyError, IndexError) as e:
-            logger.warning("❌ %s unexpected response structure: %s", key_label, e)
-            return None
-
-        except json.JSONDecodeError as e:
-            logger.warning("❌ %s non-JSON response (safety filter?): %s", key_label, e)
+        except Exception as e:
+            logger.warning("❌ Unexpected error | model=%s: %s", _MODEL_ANALYZE, e)
             return None
 
     return None
 
 
-def _call_gemini(prompt: str, api_keys: list[str]) -> Optional[dict]:
-    """Multi-key failover. Each key gets its own retry budget (_MAX_RETRIES).
+def _call_groq(prompt: str, api_key: str) -> Optional[dict]:
+    """Call Groq API with caching.
 
     Cache: responses are stored in _CACHE keyed by prompt hash so the same
     analysis is never requested twice in the same process run.
     """
     cache_key = hashlib.sha256(prompt.encode()).hexdigest()[:16]
     if cache_key in _CACHE:
-        logger.info("📦 Gemini cache hit (hash=%s) — skipping API call", cache_key)
+        logger.info("📦 Groq cache hit (hash=%s) — skipping API call", cache_key)
         return _CACHE[cache_key]
 
-    for i, api_key in enumerate(api_keys):
-        key_label = f"key {i+1}/{len(api_keys)} (...{api_key[-8:]})"
-        result = _call_key_with_retry(prompt, api_key, key_label)
+    result = _call_groq_with_retry(prompt, api_key)
 
-        if result is _RATE_LIMITED:
-            if i < len(api_keys) - 1:
-                logger.info("🔄 Key %d rate-limited — failing over to key %d", i + 1, i + 2)
-            else:
-                logger.warning("🚨 ALL %d key(s) rate-limited — AI analysis skipped", len(api_keys))
-            continue
+    if result is _RATE_LIMITED:
+        logger.warning("🚨 Groq API rate-limited — AI analysis skipped")
+        return None
 
-        if result is None:
-            # Fatal or parse error — stop trying (don't waste other keys on same bad prompt)
-            return None
+    if result is None:
+        # Fatal or parse error
+        return None
 
-        # Success — cache and return
-        _CACHE[cache_key] = result
-        return result
-
-    return None
+    # Success — cache and return
+    _CACHE[cache_key] = result
+    return result
 
 
 def analyze_weekly_plan(
@@ -332,7 +291,7 @@ def analyze_weekly_plan(
     portfolio_summary: str = "",
     as_of: str = "",
 ) -> AIAnalysis:
-    """Score all recommendations in a weekly plan using Gemini.
+    """Score all recommendations in a weekly plan using Groq.
 
     Args:
         plan_dict: WeeklyPlan.to_dict() output
@@ -343,9 +302,9 @@ def analyze_weekly_plan(
         AIAnalysis with scores and market context.
         Returns empty AIAnalysis(generated=False) on any failure.
     """
-    api_keys = get_api_keys()
-    if not api_keys:
-        logger.info("No Gemini API keys configured — skipping AI analysis")
+    api_key = get_api_key()
+    if not api_key:
+        logger.info("GROQ_API_KEY not configured — skipping AI analysis")
         return AIAnalysis()
 
     recommendations = plan_dict.get("recommendations", [])
@@ -353,11 +312,11 @@ def analyze_weekly_plan(
         return AIAnalysis(generated=True, market_context="No recommendations to analyze.")
 
     prompt = _build_scoring_prompt(recommendations, portfolio_summary, as_of)
-    logger.info("Starting Gemini analysis | model=%s keys=%d recs=%d", _DEFAULT_MODEL, len(api_keys), len(recommendations))
-    result = _call_gemini(prompt, api_keys)
+    logger.info("Starting Groq analysis | model=%s recs=%d", _MODEL_ANALYZE, len(recommendations))
+    result = _call_groq(prompt, api_key)
 
     if result is None:
-        logger.warning("Gemini analysis failed — returning empty analysis")
+        logger.warning("Groq analysis failed — returning empty analysis")
         return AIAnalysis()
 
     scores: dict[str, AIScore] = {}
@@ -372,7 +331,7 @@ def analyze_weekly_plan(
         )
 
     market_context = str(result.get("market_context", ""))
-    logger.info("Gemini scored %d/%d recommendations", len(scores), len(recommendations))
+    logger.info("Groq scored %d/%d recommendations", len(scores), len(recommendations))
     return AIAnalysis(scores=scores, market_context=market_context, generated=True)
 
 

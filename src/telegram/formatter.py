@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING
 from src.models import Alert, GuardrailsReport, PortfolioState, WeeklyPlan
 
 if TYPE_CHECKING:
-    from src.ai.gemini_analyzer import AIAnalysis
+    from src.ai.groq_analyzer import AIAnalysis
 
 _ENTRY_ICON = {"breakout": "⬆", "pullback": "⬇"}
 _ACTION_ICON = {"BUY": "🟢", "HOLD": "🔵", "REDUCE": "🟡", "SELL": "🔴"}
@@ -150,7 +150,7 @@ def format_weekly_digest(
     if ai_analysis:
         if ai_analysis.generated:
             # Normal AI analysis with scores
-            from src.ai.gemini_analyzer import format_ai_section
+            from src.ai.groq_analyzer import format_ai_section
             ai_section = format_ai_section(
                 ai_analysis,
                 [r.to_dict() for r in plan.recommendations],
