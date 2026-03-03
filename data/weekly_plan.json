@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-03T09:34:37.642052",
+  "generated_at": "2026-03-03T09:45:44.639249",
   "strategy_id": "trend_momentum_atr_regime_adaptive",
   "strategy_version": "1.0.0",
   "allocation_targets": {
@@ -62,7 +62,7 @@
   "ai_analysis": {
     "generated": false,
     "market_context": "AI analysis unavailable - Groq API key not configured.",
-    "analysis_date": "2026-03-03 09:34:37",
+    "analysis_date": "2026-03-03 09:45:44",
     "data_sources": "Groq API not configured",
     "scores": {},
     "status": "API_NOT_CONFIGURED",
