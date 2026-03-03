@@ -1,12 +1,22 @@
 {
-  "cash": 10000000,
-  "positions": {},
+  "cash": 9998416,
+  "positions": {
+    "MWG": {
+      "symbol": "MWG",
+      "asset_class": "stock",
+      "qty": 18,
+      "avg_cost": 88,
+      "current_price": 88,
+      "unrealized_pnl": 0,
+      "realized_pnl": 0
+    }
+  },
   "total_realized_pnl": 0,
-  "last_updated": "2026-03-01T12:10:56.386Z",
-  "sequence_number": 3,
+  "last_updated": "2026-03-03T07:09:39.276Z",
+  "sequence_number": 4,
   "lock": null,
   "metadata": {
-    "last_operation": "setcash_{\"amount\":10000000,\"reason\":\"manual_adjustment\"}",
+    "last_operation": "buy_{\"symbol\":\"MWG\",\"qty\":18,\"price\":88,\"fee\":0,\"note\":\"\",\"asset_class\":\"stock\",\"side\":\"BUY\"}",
     "last_source": "worker",
     "github_actions_run_id": "22541830342",
     "total_fees": 0,
