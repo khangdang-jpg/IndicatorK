@@ -51,4 +51,4 @@ data/portfolio_history.json
 
 # Temporary files
 *.tmp
-*.temp
+*.temp.DS_Store
