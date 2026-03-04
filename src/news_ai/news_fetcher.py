@@ -2,7 +2,7 @@
 
 Fetches recent news articles about Vietnamese stock symbols from multiple sources:
 - Primary: NewsAPI.org (free tier)
-- Fallback: Light web scraping from VnExpress
+- Fallback: RSS feeds from VnExpress, VietStock, VietNamNet (reliable, no blocking)
 - Cache: Local storage with 24h TTL to avoid repeated fetches
 
 Returns:
@@ -13,6 +13,8 @@ import hashlib
 import json
 import logging
 import os
+import re
+import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -212,133 +214,181 @@ def _fetch_from_newsapi(symbols: List[str], days_back: int = 7) -> List[Dict[str
 
 
 def _fetch_from_vnexpress(symbols: List[str], days_back: int = 7) -> List[Dict[str, Any]]:
-    """Lightweight web scraping from VnExpress financial section.
+    """Fetch news from VnExpress RSS feeds.
 
-    This is a fallback when API is not available.
+    Uses official RSS - reliable and doesn't get blocked.
     """
-    try:
-        from bs4 import BeautifulSoup
-    except ImportError:
-        logger.warning("BeautifulSoup4 not installed - skipping VnExpress scraping")
-        return []
-
     articles = []
+    rss_urls = [
+        "https://vnexpress.net/rss/chung-khoan.rss",  # Stock market
+        "https://vnexpress.net/rss/kinh-doanh.rss",  # Business
+    ]
+    cutoff_date = datetime.now() - timedelta(days=days_back)
+
+    for rss_url in rss_urls:
+        try:
+            response = requests.get(rss_url, timeout=REQUEST_TIMEOUT)
+            response.raise_for_status()
+
+            root = ET.fromstring(response.content)
+
+            for item in root.findall(".//item")[:30]:
+                title_elem = item.find("title")
+                link_elem = item.find("link")
+                desc_elem = item.find("description")
+                pubdate_elem = item.find("pubDate")
+
+                if title_elem is None or link_elem is None:
+                    continue
+
+                title = title_elem.text or ""
+                article_url = link_elem.text or ""
+                description = desc_elem.text if desc_elem is not None else ""
+
+                published_at = datetime.now().isoformat()
+                if pubdate_elem is not None and pubdate_elem.text:
+                    try:
+                        from email.utils import parsedate_to_datetime
+                        pub_dt = parsedate_to_datetime(pubdate_elem.text)
+                        if pub_dt < cutoff_date:
+                            continue
+                        published_at = pub_dt.isoformat()
+                    except:
+                        pass
+
+                snippet = re.sub(r'<[^>]+>', '', description).strip()[:200]
+                if not snippet:
+                    snippet = "VnExpress business news"
+
+                articles.append({
+                    "id": hashlib.md5(article_url.encode()).hexdigest()[:16],
+                    "title": title,
+                    "source": "VnExpress",
+                    "snippet": snippet,
+                    "published_at": published_at,
+                    "url": article_url,
+                })
+
+        except Exception as e:
+            logger.debug(f"Failed to fetch RSS from {rss_url}: {e}")
+            continue
+
+    logger.info(f"Fetched {len(articles)} articles from VnExpress RSS")
+    return articles
+
+
+def _fetch_from_vietstock(symbols: List[str], days_back: int = 7) -> List[Dict[str, Any]]:
+    """Fetch news from VietStock RSS feed."""
+    articles = []
+    rss_url = "https://vietstock.vn/rss"
+    cutoff_date = datetime.now() - timedelta(days=days_back)
 
     try:
-        # VnExpress business/stocks section
-        url = "https://vnexpress.net/kinh-te-chung"
-
-        headers = {
-            "User-Agent": (
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-            )
-        }
-
-        response = requests.get(url, headers=headers, timeout=REQUEST_TIMEOUT)
+        response = requests.get(rss_url, timeout=REQUEST_TIMEOUT)
         response.raise_for_status()
 
-        soup = BeautifulSoup(response.content, "html.parser")
+        root = ET.fromstring(response.content)
 
-        # Find article containers (VnExpress uses various selectors)
-        article_links = soup.find_all("a", {"class": "title-news"}, limit=30)
+        for item in root.findall(".//item")[:30]:
+            title_elem = item.find("title")
+            link_elem = item.find("link")
+            desc_elem = item.find("description")
+            pubdate_elem = item.find("pubDate")
 
-        for idx, link in enumerate(article_links):
-            title = link.get_text(strip=True)
-            article_url = link.get("href", "")
-
-            # Skip if no title
-            if not title:
+            if title_elem is None or link_elem is None:
                 continue
 
-            # Filter for stock-related keywords
-            keywords = ["chứng khoán", "cổ phiếu", "stock", "thị trường", "market"]
-            if not any(kw.lower() in title.lower() for kw in keywords):
-                continue
+            title = title_elem.text or ""
+            article_url = link_elem.text or ""
+            description = desc_elem.text if desc_elem is not None else ""
 
-            # Skip if URL is not absolute
-            if not article_url.startswith("http"):
-                article_url = f"https://vnexpress.net{article_url}"
+            published_at = datetime.now().isoformat()
+            if pubdate_elem is not None and pubdate_elem.text:
+                try:
+                    from email.utils import parsedate_to_datetime
+                    pub_dt = parsedate_to_datetime(pubdate_elem.text)
+                    if pub_dt < cutoff_date:
+                        continue
+                    published_at = pub_dt.isoformat()
+                except:
+                    pass
+
+            snippet = re.sub(r'<[^>]+>', '', description).strip()[:200]
+            if not snippet:
+                snippet = "VietStock market news"
 
             articles.append({
                 "id": hashlib.md5(article_url.encode()).hexdigest()[:16],
                 "title": title,
-                "source": "VnExpress",
-                "snippet": f"Scraped from VnExpress business section",
-                "published_at": datetime.now().isoformat(),
+                "source": "VietStock",
+                "snippet": snippet,
+                "published_at": published_at,
                 "url": article_url,
             })
 
-        logger.info(f"Scraped {len(articles)} articles from VnExpress")
+        logger.info(f"Fetched {len(articles)} articles from VietStock RSS")
         return articles
 
-    except requests.exceptions.Timeout:
-        logger.warning("VnExpress request timeout")
     except Exception as e:
-        logger.warning(f"VnExpress scraping failed: {e}")
+        logger.warning(f"VietStock RSS fetch failed: {e}")
 
     return []
 
 
 def _fetch_from_vietnamnet(symbols: List[str], days_back: int = 7) -> List[Dict[str, Any]]:
-    """Lightweight web scraping from VietNamNet business news."""
-    try:
-        from bs4 import BeautifulSoup
-    except ImportError:
-        logger.warning("BeautifulSoup4 not installed - skipping VietNamNet scraping")
-        return []
-
+    """Fetch news from VietNamNet RSS feed."""
     articles = []
+    rss_url = "https://vnn.vietnamnet.vn/rss/kinh-te.rss"
+    cutoff_date = datetime.now() - timedelta(days=days_back)
 
     try:
-        url = "https://vietnamnet.vn/tieu-dung/"
-
-        headers = {
-            "User-Agent": (
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-            )
-        }
-
-        response = requests.get(url, headers=headers, timeout=REQUEST_TIMEOUT)
+        response = requests.get(rss_url, timeout=REQUEST_TIMEOUT)
         response.raise_for_status()
 
-        soup = BeautifulSoup(response.content, "html.parser")
+        root = ET.fromstring(response.content)
 
-        # Find article containers
-        article_links = soup.find_all("a", limit=30)
+        for item in root.findall(".//item")[:30]:
+            title_elem = item.find("title")
+            link_elem = item.find("link")
+            desc_elem = item.find("description")
+            pubdate_elem = item.find("pubDate")
 
-        for link in article_links:
-            title = link.get_text(strip=True)
-            article_url = link.get("href", "")
-
-            if not title or len(title) < 10:
+            if title_elem is None or link_elem is None:
                 continue
 
-            # Filter for stock-related keywords
-            keywords = ["chứng khoán", "cổ phiếu", "stock", "thị trường", "market"]
-            if not any(kw.lower() in title.lower() for kw in keywords):
-                continue
+            title = title_elem.text or ""
+            article_url = link_elem.text or ""
+            description = desc_elem.text if desc_elem is not None else ""
 
-            if not article_url.startswith("http"):
-                article_url = f"https://vietnamnet.vn{article_url}"
+            published_at = datetime.now().isoformat()
+            if pubdate_elem is not None and pubdate_elem.text:
+                try:
+                    from email.utils import parsedate_to_datetime
+                    pub_dt = parsedate_to_datetime(pubdate_elem.text)
+                    if pub_dt < cutoff_date:
+                        continue
+                    published_at = pub_dt.isoformat()
+                except:
+                    pass
+
+            snippet = re.sub(r'<[^>]+>', '', description).strip()[:200]
+            if not snippet:
+                snippet = "VietNamNet business news"
 
             articles.append({
                 "id": hashlib.md5(article_url.encode()).hexdigest()[:16],
                 "title": title,
                 "source": "VietNamNet",
-                "snippet": "Scraped from VietNamNet business section",
-                "published_at": datetime.now().isoformat(),
+                "snippet": snippet,
+                "published_at": published_at,
                 "url": article_url,
             })
 
-        logger.info(f"Scraped {len(articles)} articles from VietNamNet")
+        logger.info(f"Fetched {len(articles)} articles from VietNamNet RSS")
         return articles
 
-    except requests.exceptions.Timeout:
-        logger.warning("VietNamNet request timeout")
     except Exception as e:
-        logger.warning(f"VietNamNet scraping failed: {e}")
+        logger.warning(f"VietNamNet RSS fetch failed: {e}")
 
     return []
 
@@ -353,8 +403,9 @@ def fetch_recent_news(
     Tries multiple sources in order:
     1. Cache (if valid and use_cache=True)
     2. NewsAPI.org (if NEWS_API_KEY is set)
-    3. VnExpress web scraping (fallback)
-    4. VietNamNet web scraping (fallback)
+    3. VnExpress RSS feeds (reliable, no blocking)
+    4. VietStock RSS feed (stock market focus)
+    5. VietNamNet RSS feed (business news)
 
     Args:
         symbols: List of stock symbols to fetch news for.
@@ -390,15 +441,19 @@ def fetch_recent_news(
         logger.info(f"Successfully fetched {len(articles)} articles")
     else:
         # Fallback to web scraping
-        logger.info("NewsAPI fetch unsuccessful, falling back to web scraping...")
+        logger.info("NewsAPI fetch unsuccessful, falling back to RSS feeds...")
 
-        # Try VnExpress
+        # Try VnExpress RSS (stock market + business)
         vnexpress_articles = _fetch_from_vnexpress(symbols, days_back)
         articles.extend(vnexpress_articles)
 
-        # Try VietNamNet if VnExpress didn't yield enough
-        if len(articles) < 3:
-            logger.info("VnExpress returned few articles, trying VietNamNet...")
+        # Try VietStock RSS (stock market focus)
+        vietstock_articles = _fetch_from_vietstock(symbols, days_back)
+        articles.extend(vietstock_articles)
+
+        # Try VietNamNet RSS if we still need more
+        if len(articles) < 5:
+            logger.info("Trying VietNamNet RSS for more articles...")
             vietnamnet_articles = _fetch_from_vietnamnet(symbols, days_back)
             articles.extend(vietnamnet_articles)
 
