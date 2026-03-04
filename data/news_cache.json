@@ -1,286 +1,107 @@
 {
-  "articles": [
-    {
-      "id": "a1157cfc92748867",
-      "title": "B\u1ea7u \u0110\u1ee9c mu\u1ed1n mua 5 tri\u1ec7u c\u1ed5 phi\u1ebfu HAG",
-      "source": "VnExpress",
-      "snippet": "B\u1ea7u \u0110\u1ee9c v\u1eeba \u0111\u0103ng k\u00fd mua 5 tri\u1ec7u c\u1ed5 phi\u1ebfu HAG theo ph\u01b0\u01a1ng th\u1ee9c kh\u1edbp l\u1ec7nh tr\u00ean s\u00e0n, th\u1eddi gian t\u1eeb 9/3 \u0111\u1ebfn 7/4 v\u1edbi m\u1ee5c \u0111\u00edch t\u0103ng t\u1ef7 l\u1ec7 s\u1edf h\u1eefu.",
-      "published_at": "2026-03-04T08:03:42.343581",
-      "url": "https://vnexpress.net/bau-duc-muon-mua-5-trieu-co-phieu-hag-5046479.html"
-    },
-    {
-      "id": "67c2206edebd7be5",
-      "title": "Ch\u1ee9ng kho\u00e1n H\u00e0n Qu\u1ed1c 'ng\u1eaft c\u1ea7u dao' khi gi\u1ea3m h\u01a1n 12%",
-      "source": "VnExpress",
-      "snippet": "C\u00e1c ch\u1ec9 s\u1ed1 Kopsi v\u00e0 Kosdaq c\u1ee7a H\u00e0n Qu\u1ed1c c\u00f9ng gi\u1ea3m h\u01a1n 10% \u0111\u1ea7u phi\u00ean giao d\u1ecbch ng\u00e0y 4/3.",
-      "published_at": "2026-03-04T08:03:42.343734",
-      "url": "https://vnexpress.net/chung-khoan-han-quoc-ngat-cau-dao-khi-giam-hon-12-5046480.html"
-    },
-    {
-      "id": "a5f65de2ed26edd1",
-      "title": "\u00d4ng Trump d\u1ecda c\u1eaft \u0111\u1ee9t quan h\u1ec7 th\u01b0\u01a1ng m\u1ea1i v\u1edbi T\u00e2y Ban Nha",
-      "source": "VnExpress",
-      "snippet": "T\u1ed5ng th\u1ed1ng M\u1ef9 d\u1ecda c\u1ea5m v\u1eadn th\u01b0\u01a1ng m\u1ea1i T\u00e2y Ban Nha, khi n\u01b0\u1edbc n\u00e0y t\u1eeb ch\u1ed1i cho qu\u00e2n \u0111\u1ed9i M\u1ef9 s\u1eed d\u1ee5ng c\u0103n c\u1ee9 \u0111\u1ec3 t\u1ea5n c\u00f4ng Iran.",
-      "published_at": "2026-03-04T08:03:42.343756",
-      "url": "https://vnexpress.net/ong-trump-doa-cat-dut-quan-he-thuong-mai-voi-tay-ban-nha-5046418.html"
-    },
-    {
-      "id": "19e13b450553cb20",
-      "title": "Gi\u00e1 v\u00e0ng mi\u1ebfng gi\u1ea3m 4 tri\u1ec7u \u0111\u1ed3ng",
-      "source": "VnExpress",
-      "snippet": "S\u00e1ng nay, c\u00e1c th\u01b0\u01a1ng hi\u1ec7u gi\u1ea3m gi\u00e1 mua b\u00e1n v\u00e0ng mi\u1ebfng 4 tri\u1ec7u \u0111\u1ed3ng, theo \u0111\u00e0 \u0111i xu\u1ed1ng tr\u00ean th\u1ebf gi\u1edbi.",
-      "published_at": "2026-03-04T08:03:42.343772",
-      "url": "https://vnexpress.net/gia-vang-mieng-giam-4-trieu-dong-5046407.html"
-    },
-    {
-      "id": "e1a71b0f248abc40",
-      "title": "Doanh nghi\u1ec7p lo thi\u1ebfu ngu\u1ed3n cung x\u0103ng d\u1ea7u v\u00ec b\u1ea5t \u1ed5n \u1edf Trung \u0110\u00f4ng",
-      "source": "VnExpress",
-      "snippet": "Doanh nghi\u1ec7p lo thi\u1ebfu x\u0103ng d\u1ea7u khi b\u1ea5t \u1ed5n Trung \u0110\u00f4ng si\u1ebft ch\u1eb7t ngu\u1ed3n cung, \u0111\u1ea9y m\u1ee9c chi\u1ebft kh\u1ea5u xu\u1ed1ng th\u1ea5p khi\u1ebfn c\u00e1c \u0111\u01a1n v\u1ecb b\u00e1n l\u1ebb g\u1eb7p kh\u00f3 kh\u0103n.",
-      "published_at": "2026-03-04T08:03:42.343785",
-      "url": "https://vnexpress.net/doanh-nghiep-lo-thieu-nguon-cung-xang-dau-vi-bat-on-o-trung-dong-5046263.html"
-    },
-    {
-      "id": "18a073b2b4b6e99f",
-      "title": "C\u0103ng th\u1eb3ng eo bi\u1ec3n Hormuz c\u00f3 nguy c\u01a1 \u0111e d\u1ecda kinh t\u1ebf ch\u00e2u \u00c1",
-      "source": "VnExpress",
-      "snippet": "Xung \u0111\u1ed9t \u1edf Trung \u0110\u00f4ng \u0111e d\u1ecda chu\u1ed7i cung \u1ee9ng d\u1ea7u m\u1ecf qua eo bi\u1ec3n Hormuz c\u00f3 th\u1ec3 khi\u1ebfn s\u1ea3n xu\u1ea5t t\u1ea1i nhi\u1ec1u n\u1ec1n kinh t\u1ebf ch\u00e2u \u00c1 b\u1ecb \u0111\u00ecnh tr\u1ec7, nguy c\u01a1 l\u1ea1m ph\u00e1t gia t\u0103ng.",
-      "published_at": "2026-03-04T08:03:42.343797",
-      "url": "https://vnexpress.net/cang-thang-eo-bien-hormuz-co-nguy-co-de-doa-kinh-te-chau-a-5046102.html"
-    },
-    {
-      "id": "0f41695ea715c4cb",
-      "title": "Nhi\u1ec1u chuy\u1ebfn bay th\u1eb3ng Vi\u1ec7t Nam sang ch\u00e2u \u00c2u 'ch\u00e1y v\u00e9'",
-      "source": "VnExpress",
-      "snippet": "Tr\u00ean h\u1ec7 th\u1ed1ng c\u1ee7a Vietnam Airlines, nhi\u1ec1u ch\u1eb7ng t\u1eeb H\u00e0 N\u1ed9i \u0111i Frankfurt \u0111\u00e3 h\u1ebft v\u00e9 \u0111\u1ebfn ng\u00e0y 13/3, trong khi c\u00e1c h\u00e3ng ngo\u1ea1i ch\u1ec9 c\u00f2n h\u1ea1ng th\u01b0\u01a1ng gia l\u00ean t\u1edbi h\u00e0ng tr\u0103m tri\u1ec7u \u0111\u1ed3ng.",
-      "published_at": "2026-03-04T08:03:42.343813",
-      "url": "https://vnexpress.net/nhieu-chuyen-bay-thang-viet-nam-sang-chau-au-chay-ve-5046120.html"
-    },
-    {
-      "id": "c18dcc0a7ffda6f7",
-      "title": "Chi\u1ebfn s\u1ef1 Trung \u0110\u00f4ng th\u1eed th\u00e1ch \u0111\u00e0 ph\u1ee5c h\u1ed3i c\u1ee7a kinh t\u1ebf M\u1ef9",
-      "source": "VnExpress",
-      "snippet": "C\u0103ng th\u1eb3ng Trung \u0110\u00f4ng \u0111ang \u0111\u1eb7t kinh t\u1ebf M\u1ef9 tr\u01b0\u1edbc ph\u00e9p th\u1eed m\u1edbi, \u0111e d\u1ecda chu\u1ed7i cung \u1ee9ng to\u00e0n c\u1ea7u v\u00e0 c\u00f3 th\u1ec3 l\u00e0m \u0111\u1ea3o l\u1ed9n ch\u00ednh s\u00e1ch c\u1ee7a Fed.",
-      "published_at": "2026-03-04T08:03:42.343830",
-      "url": "https://vnexpress.net/chien-su-trung-dong-thu-thach-da-phuc-hoi-cua-kinh-te-my-5045925.html"
-    },
-    {
-      "id": "4453828ee1d65bc9",
-      "title": "Gi\u00e1 d\u1ea7u, kh\u00ed \u0111\u1ed1t to\u00e0n c\u1ea7u t\u0103ng v\u1ecdt",
-      "source": "VnExpress",
-      "snippet": "Gi\u00e1 d\u1ea7u v\u00e0 kh\u00ed \u0111\u1ed1t to\u00e0n c\u1ea7u t\u0103ng m\u1ea1nh trong phi\u00ean 3/3 khi xung \u0111\u1ed9t t\u1ea1i Trung \u0110\u00f4ng g\u00e2y gi\u00e1n \u0111o\u1ea1n chu\u1ed7i cung \u1ee9ng n\u0103ng l\u01b0\u1ee3ng.",
-      "published_at": "2026-03-04T08:03:42.343853",
-      "url": "https://vnexpress.net/gia-dau-khi-dot-toan-cau-tang-vot-5046319.html"
-    },
-    {
-      "id": "8cce2a307704c4df",
-      "title": "Gi\u00e1 v\u00e0ng th\u1ebf gi\u1edbi, ch\u1ee9ng kho\u00e1n M\u1ef9 c\u00f9ng lao d\u1ed1c",
-      "source": "VnExpress",
-      "snippet": "M\u1ed7i ounce v\u00e0ng m\u1ea5t h\u01a1n 300 USD, trong khi ch\u1ec9 s\u1ed1 DJIA c\u1ee7a ch\u1ee9ng kho\u00e1n M\u1ef9 gi\u1ea3m tr\u00ean 1.000 \u0111i\u1ec3m.",
-      "published_at": "2026-03-04T08:03:42.343866",
-      "url": "https://vnexpress.net/gia-vang-the-gioi-chung-khoan-my-cung-lao-doc-5046314.html"
-    },
-    {
-      "id": "145009e903ca2f03",
-      "title": "Ch\u1ee9ng kho\u00e1n \u0111ang trong t\u00e2m th\u1ebf 'gi\u1ea3m thi\u1ec3u r\u1ee7i ro'",
-      "source": "VnExpress",
-      "snippet": "Xung \u0111\u1ed9t Trung \u0110\u00f4ng nhanh ch\u00f3ng \u1ea3nh h\u01b0\u1edfng t\u1edbi th\u1ecb tr\u01b0\u1eddng ch\u1ee9ng kho\u00e1n, khi\u1ebfn t\u00e2m l\u00fd \"gi\u1ea3m thi\u1ec3u r\u1ee7i ro\" \u0111ang chi\u1ebfm \u01b0u th\u1ebf \u1edf nh\u00e0 \u0111\u1ea7u t\u01b0.",
-      "published_at": "2026-03-04T08:03:42.343879",
-      "url": "https://vnexpress.net/chung-khoan-dang-trong-tam-the-giam-thieu-rui-ro-5045978.html"
-    },
-    {
-      "id": "d526efecc0205269",
-      "title": "VN-Index m\u1ea5t th\u00eam 33 \u0111i\u1ec3m",
-      "source": "VnExpress",
-      "snippet": "VN-Index gi\u1ea3m g\u1ea7n 33 \u0111i\u1ec3m, c\u00f2n VN30 b\u1ecb \"th\u1ed5i bay\" h\u01a1n 51 \u0111i\u1ec3m khi \u00e1p l\u1ef1c x\u1ea3 h\u00e0ng ch\u01b0a c\u00f3 d\u1ea5u hi\u1ec7u suy y\u1ebfu, \u0111\u1eb7c bi\u1ec7t trong r\u1ed5 v\u1ed1n h\u00f3a l\u1edbn.",
-      "published_at": "2026-03-04T08:03:42.343889",
-      "url": "https://vnexpress.net/vn-index-mat-them-33-diem-5046208.html"
-    },
-    {
-      "id": "0f835f74c9ae9011",
-      "title": "B\u00e1nh trung thu hoa sen mini h\u00fat kh\u00e1ch ng\u00e0y r\u1eb1m th\u00e1ng Gi\u00eang",
-      "source": "VnExpress",
-      "snippet": "M\u1eabu m\u00e3 b\u1eaft m\u1eaft, v\u1ecb l\u1ea1, b\u00e1nh trung thu hoa sen mini gi\u00e1 99.000-140.000 \u0111\u1ed3ng m\u1ed9t h\u1ed9p h\u00fat kh\u00e1ch r\u1eb1m th\u00e1ng Gi\u00eang, s\u1ee9c mua c\u0169ng ghi nh\u1eadn t\u0103ng so v\u1edbi n\u0103m ngo\u00e1i.",
-      "published_at": "2026-03-04T08:03:42.343900",
-      "url": "https://vnexpress.net/banh-trung-thu-hoa-sen-mini-hut-khach-ngay-ram-thang-gieng-5046032.html"
-    },
-    {
-      "id": "947969237c408772",
-      "title": "VN-Index th\u01b0\u1eddng ra sao khi th\u1ebf gi\u1edbi c\u00f3 chi\u1ebfn s\u1ef1?",
-      "source": "VnExpress",
-      "snippet": "VN-Index \u00edt ch\u1ecbu t\u00e1c \u0111\u1ed9ng tr\u1ef1c ti\u1ebfp h\u01a1n c\u00e1c ch\u1ec9 s\u1ed1 ch\u1ee9ng kho\u00e1n to\u00e0n c\u1ea7u khi xung \u0111\u1ed9t qu\u00e2n s\u1ef1 n\u1ed5 ra, d\u00f9 bi\u1ebfn \u0111\u1ed9ng ti\u00eau c\u1ef1c trong ng\u1eafn h\u1ea1n l\u00e0 \u0111i\u1ec1u kh\u00f3 tr\u00e1nh.",
-      "published_at": "2026-03-04T08:03:42.343910",
-      "url": "https://vnexpress.net/vn-index-thuong-ra-sao-khi-the-gioi-co-chien-su-5046078.html"
-    },
-    {
-      "id": "e0013fef94021a25",
-      "title": "Anh nguy c\u01a1 l\u1ee1 m\u1ee5c ti\u00eau Net Zero khi trung t\u00e2m d\u1eef li\u1ec7u qu\u00e1 ng\u1ed1n \u0111i\u1ec7n",
-      "source": "VnExpress",
-      "snippet": "Anh \u0111ang k\u1eb9t gi\u1eefa m\u1ee5c ti\u00eau Net Zero v\u00e0 ph\u00e1t tri\u1ec3n AI, trong b\u1ed1i c\u1ea3nh c\u00e1c d\u1ef1 \u00e1n trung t\u00e2m d\u1eef li\u1ec7u \u0111\u1ec1 xu\u1ea5t k\u1ebft n\u1ed1i 50 GW, v\u01b0\u1ee3t qu\u00e1 ti\u00eau th\u1ee5 c\u1ee7a c\u1ea3 n\u01b0\u1edbc hi\u1ec7n t\u1ea1i.",
-      "published_at": "2026-03-04T08:03:42.343920",
-      "url": "https://vnexpress.net/anh-nguy-co-lo-muc-tieu-net-zero-khi-trung-tam-du-lieu-qua-ngon-dien-5045889.html"
-    },
-    {
-      "id": "eda26367d76a8880",
-      "title": "V\u1eadn t\u1ea3i to\u00e0n c\u1ea7u gi\u00e1n \u0111o\u1ea1n v\u00ec h\u00e0ng tr\u0103m t\u00e0u k\u1eb9t \u1edf eo bi\u1ec3n Hormuz",
-      "source": "VnExpress",
-      "snippet": "Chi\u1ebfn s\u1ef1 khi\u1ebfn h\u01a1n 10% \u0111\u1ed9i t\u00e0u container to\u00e0n c\u1ea7u k\u1eb9t \u1edf eo bi\u1ec3n Hormuz, nhi\u1ec1u t\u00e0u d\u1ea7u h\u01b0 h\u1ea1i v\u00e0 c\u00e1c h\u00e3ng t\u1eeb ch\u1ed1i b\u1ea3o hi\u1ec3m cho ph\u01b0\u01a1ng ti\u1ec7n qua \u0111\u00e2y.",
-      "published_at": "2026-03-04T08:03:42.343930",
-      "url": "https://vnexpress.net/van-tai-toan-cau-gian-doan-vi-hang-tram-tau-ket-o-eo-bien-hormuz-5046014.html"
-    },
-    {
-      "id": "07125a6b7b1b06c5",
-      "title": "Gi\u00e1 v\u00e0ng mi\u1ebfng gi\u1ea3m g\u1ea7n 3 tri\u1ec7u \u0111\u1ed3ng",
-      "source": "VnExpress",
-      "snippet": "Chi\u1ec1u 3/3, c\u00e1c th\u01b0\u01a1ng hi\u1ec7u b\u00e1n ra v\u00e0ng mi\u1ebfng quanh 188,2 tri\u1ec7u \u0111\u1ed3ng, gi\u1ea3m 2,7 tri\u1ec7u \u0111\u1ed3ng so v\u1edbi h\u00f4m qua.",
-      "published_at": "2026-03-04T08:03:42.343940",
-      "url": "https://vnexpress.net/gia-vang-moi-nhat-hom-nay-ngay-3-3-5046010.html"
-    },
-    {
-      "id": "9b3e285f1b5be3f5",
-      "title": "Gi\u00e1 v\u00e0ng th\u1ebf gi\u1edbi b\u1eadt t\u0103ng, ch\u1ee9ng kho\u00e1n ch\u00e2u \u00c1 \u0111\u1ecf l\u1eeda",
-      "source": "VnExpress",
-      "snippet": "Gi\u00e1 v\u00e0ng th\u1ebf gi\u1edbi t\u0103ng h\u01a1n 30 USD, ch\u1ee9ng kho\u00e1n ch\u00e2u \u00c1 ti\u1ebfp t\u1ee5c \u0111i xu\u1ed1ng khi chi\u1ebfn s\u1ef1 t\u1ea1i Trung \u0110\u00f4ng lan r\u1ed9ng v\u00e0 nhi\u1ec1u kh\u1ea3 n\u0103ng k\u00e9o d\u00e0i.",
-      "published_at": "2026-03-04T08:03:42.343949",
-      "url": "https://vnexpress.net/gia-vang-the-gioi-bat-tang-chung-khoan-chau-a-do-lua-5045913.html"
-    },
-    {
-      "id": "b1e3c594bb025b29",
-      "title": "Kinh t\u1ebf Iran thi\u1ec7t h\u1ea1i n\u1eb7ng v\u00ec chi\u1ebfn s\u1ef1, l\u1ec7nh tr\u1eebng ph\u1ea1t",
-      "source": "VnExpress",
-      "snippet": "Iran t\u00ecm m\u1ecdi c\u00e1ch duy tr\u00ec xu\u1ea5t kh\u1ea9u d\u1ea7u v\u00e0 t\u00e1i thi\u1ebft \u0111\u1ea5t n\u01b0\u1edbc, trong b\u1ed1i c\u1ea3nh kinh t\u1ebf v\u1ed1n \u0111\u00e3 ch\u1ecbu s\u1ee9c \u00e9p nhi\u1ec1u n\u0103m qua.",
-      "published_at": "2026-03-04T08:03:42.343959",
-      "url": "https://vnexpress.net/kinh-te-iran-thiet-hai-nang-vi-chien-su-lenh-trung-phat-5045626.html"
-    },
-    {
-      "id": "630742125feaa64c",
-      "title": "R\u1ee7i ro c\u1ee7a xung \u0111\u1ed9t \u1edf Trung \u0110\u00f4ng v\u1edbi kinh t\u1ebf to\u00e0n c\u1ea7u",
-      "source": "VnExpress",
-      "snippet": "C\u0103ng th\u1eb3ng \u1edf Iran c\u00f3 th\u1ec3 k\u00e9o theo l\u1ea1m ph\u00e1t do gi\u00e1n \u0111o\u1ea1n v\u1eadn t\u1ea3i qua Trung \u0110\u00f4ng v\u00e0 gia t\u0103ng y\u1ebfu t\u1ed1 b\u1ea5t \u1ed5n v\u1edbi kinh t\u1ebf th\u1ebf gi\u1edbi.",
-      "published_at": "2026-03-04T08:03:42.343970",
-      "url": "https://vnexpress.net/rui-ro-cua-xung-dot-o-trung-dong-voi-kinh-te-toan-cau-5045764.html"
-    },
-    {
-      "id": "9d7bb7c27bd9ad51",
-      "title": "\u00d4ng Nguy\u1ec5n \u0110\u1ee9c Th\u1ee5y l\u00e0m T\u1ed5ng gi\u00e1m \u0111\u1ed1c Sacombank",
-      "source": "VnExpress",
-      "snippet": "\u00d4ng Nguy\u1ec5n \u0110\u1ee9c Th\u1ee5y l\u00e0m T\u1ed5ng gi\u00e1m \u0111\u1ed1c Sacombank t\u1eeb ng\u00e0y 3/3, sau hai th\u00e1ng gia nh\u1eadp nh\u00e0 b\u0103ng n\u00e0y.",
-      "published_at": "2026-03-04T08:03:42.343979",
-      "url": "https://vnexpress.net/ong-nguyen-duc-thuy-lam-tong-giam-doc-sacombank-5045986.html"
-    },
-    {
-      "id": "bce243d68614092e",
-      "title": "Xanh SM nh\u1eadn vinh danh \u1ee8ng d\u1ee5ng g\u1ecdi xe \u0111i\u1ec7n xu\u1ea5t s\u1eafc",
-      "source": "VnExpress",
-      "snippet": "Sensor Tower vinh danh Xanh SM l\u00e0 \u1ee8ng d\u1ee5ng g\u1ecdi xe \u0111i\u1ec7n xu\u1ea5t s\u1eafc khu v\u1ef1c ch\u00e2u \u00c1 Th\u00e1i B\u00ecnh D\u01b0\u01a1ng, trong khu\u00f4n kh\u1ed5 gi\u1ea3i th\u01b0\u1edfng Sensor Tower APAC Awards 2025.",
-      "published_at": "2026-03-04T08:03:42.343989",
-      "url": "https://vnexpress.net/xanh-sm-nhan-vinh-danh-ung-dung-goi-xe-dien-xuat-sac-5046273.html"
-    },
-    {
-      "id": "7f767153ea4a1e31",
-      "title": "PVGas gi\u1ea3m giao h\u00e0ng do \u0111\u1ee9t g\u00e3y ngu\u1ed3n cung t\u1eeb Trung \u0110\u00f4ng",
-      "source": "VnExpress",
-      "snippet": "S\u1ef1 c\u1ed1 \u1edf c\u01a1 s\u1edf s\u1ea3n xu\u1ea5t kh\u00ed h\u00f3a l\u1ecfng v\u00e0 c\u0103ng th\u1eb3ng v\u0169 trang \u1edf Trung \u0110\u00f4ng khi\u1ebfn ngu\u1ed3n LPG nh\u1eadp kh\u1ea9u gi\u00e1n \u0111o\u1ea1n, bu\u1ed9c PVGas Trading gi\u1ea3m ti\u1ebfn \u0111\u1ed9 giao h\u00e0ng.",
-      "published_at": "2026-03-04T08:03:42.343999",
-      "url": "https://vnexpress.net/pvgas-giam-giao-hang-do-dut-gay-nguon-cung-tu-trung-dong-5045881.html"
-    },
-    {
-      "id": "c762e93ff84fc398",
-      "title": "Nhi\u1ec1u n\u01b0\u1edbc Trung \u0110\u00f4ng d\u1eebng khai th\u00e1c d\u1ea7u kh\u00ed",
-      "source": "VnExpress",
-      "snippet": "Qatar ng\u1eebng s\u1ea3n xu\u1ea5t kh\u00ed h\u00f3a l\u1ecfng, Israel t\u1ea1m \u0111\u00f3ng m\u1ecf kh\u00ed \u0111\u1ed1t, trong khi Saudi Arabia \u0111\u00f3ng c\u1eeda nh\u00e0 m\u00e1y l\u1ecdc d\u1ea7u l\u1edbn nh\u1ea5t n\u01b0\u1edbc v\u00ec chi\u1ebfn s\u1ef1.",
-      "published_at": "2026-03-04T08:03:42.344008",
-      "url": "https://vnexpress.net/nhieu-nuoc-trung-dong-dung-khai-thac-dau-khi-5045867.html"
-    },
-    {
-      "id": "cdd34df7bc5f9f8d",
-      "title": "'C\u1ea7n th\u1eadn tr\u1ecdng khi mua m\u1edbi c\u1ed5 phi\u1ebfu d\u1ea7u kh\u00ed l\u00fac n\u00e0y'",
-      "source": "VnExpress",
-      "snippet": "Xung \u0111\u1ed9t Iran \u0111\u01b0\u1ee3c d\u1ef1 \u0111o\u00e1n h\u1ed7 tr\u1ee3 c\u1ed5 phi\u1ebfu d\u1ea7u kh\u00ed, nh\u01b0ng \u0111\u1ecbnh gi\u00e1 nh\u00f3m n\u00e0y kh\u00f4ng c\u00f2n r\u1ebb, nh\u00e0 \u0111\u1ea7u t\u01b0 d\u1ec5 r\u01a1i v\u00e0o tr\u1ea1ng th\u00e1i \"\u0111u \u0111\u1ec9nh\", theo chuy\u00ean gia.",
-      "published_at": "2026-03-04T08:03:42.344018",
-      "url": "https://vnexpress.net/can-than-trong-khi-mua-moi-co-phieu-dau-khi-luc-nay-5045567.html"
-    },
-    {
-      "id": "2eb65bcb5f9acd5a",
-      "title": "Doanh nghi\u1ec7p xu\u1ea5t kh\u1ea9u lo r\u1ee7i ro tr\u01b0\u1edbc xung \u0111\u1ed9t t\u1ea1i Trung \u0110\u00f4ng",
-      "source": "VnExpress",
-      "snippet": "Xung \u0111\u1ed9t Trung \u0110\u00f4ng leo thang khi\u1ebfn nhi\u1ec1u doanh nghi\u1ec7p xu\u1ea5t kh\u1ea9u lo \u0111\u1ee9t g\u00e3y chu\u1ed7i cung \u1ee9ng, c\u01b0\u1edbc v\u1eadn t\u1ea3i t\u0103ng v\u1ecdt v\u00e0 r\u1ee7i ro h\u1ecfng n\u00f4ng s\u1ea3n t\u01b0\u01a1i.",
-      "published_at": "2026-03-04T08:03:42.344028",
-      "url": "https://vnexpress.net/doanh-nghiep-xuat-khau-lo-rui-ro-truoc-xung-dot-tai-trung-dong-5045739.html"
-    },
-    {
-      "id": "b54b67fb5c3353dc",
-      "title": "VN-Index gi\u1ea3m m\u1ea1nh nh\u1ea5t t\u1eeb \u0111\u1ea7u n\u0103m",
-      "source": "VnExpress",
-      "snippet": "\u00c1p l\u1ef1c b\u00e1n th\u00e1o tr\u00ean di\u1ec7n r\u1ed9ng (tr\u1eeb nh\u00f3m d\u1ea7u kh\u00ed) khi\u1ebfn VN-Index m\u1ea5t h\u01a1n 34 \u0111i\u1ec3m, \u0111\u00e1nh d\u1ea5u phi\u00ean gi\u1ea3m s\u00e2u nh\u1ea5t t\u1eeb \u0111\u1ea7u n\u0103m.",
-      "published_at": "2026-03-04T08:03:42.344038",
-      "url": "https://vnexpress.net/vn-index-giam-manh-nhat-tu-dau-nam-5045754.html"
-    },
-    {
-      "id": "0beeae76728db0c6",
-      "title": "N\u0103ng l\u1ef1c d\u1ea7u kh\u00ed c\u1ee7a Iran th\u1ebf n\u00e0o?",
-      "source": "VnExpress",
-      "snippet": "L\u00e0 n\u01b0\u1edbc s\u1ea3n xu\u1ea5t d\u1ea7u th\u00f4 l\u1edbn th\u1ee9 3 OPEC nh\u01b0ng ng\u00e0nh n\u0103ng l\u01b0\u1ee3ng c\u1ee7a Iran \u0111\u1ed1i m\u1eb7t nguy c\u01a1 gi\u00e1n \u0111o\u1ea1n nghi\u00eam tr\u1ecdng sau c\u00e1c cu\u1ed9c t\u1eadp k\u00edch qu\u00e2n s\u1ef1 t\u1eeb M\u1ef9 v\u00e0 Israel.",
-      "published_at": "2026-03-04T08:03:42.344048",
-      "url": "https://vnexpress.net/nang-luc-dau-khi-cua-iran-the-nao-5045557.html"
-    },
-    {
-      "id": "3e65ca8181e6fe72",
-      "title": "Gi\u00e1 v\u00e0ng l\u00ean 191 tri\u1ec7u \u0111\u1ed3ng m\u1ed9t l\u01b0\u1ee3ng",
-      "source": "VnExpress",
-      "snippet": "M\u1ed7i l\u01b0\u1ee3ng v\u00e0ng chi\u1ec1u nay t\u0103ng g\u1ea7n 4 tri\u1ec7u \u0111\u1ed3ng, l\u00ean g\u1ea7n 191 tri\u1ec7u, ngu\u1ed3n cung quay tr\u1edf l\u1ea1i nh\u1ecf gi\u1ecdt sau ng\u00e0y v\u00eda Th\u1ea7n T\u00e0i.",
-      "published_at": "2026-03-04T08:03:42.344058",
-      "url": "https://vnexpress.net/gia-vang-hom-nay-2-3-5045522.html"
-    },
-    {
-      "id": "1861f93b3606bf20",
-      "title": "Gi\u00e1 v\u00e0ng, d\u1ea7u th\u1ebf gi\u1edbi t\u0103ng v\u1ecdt v\u00ec c\u0103ng th\u1eb3ng Trung \u0110\u00f4ng",
-      "source": "VnExpress",
-      "snippet": "M\u1ed7i ounce v\u00e0ng t\u0103ng h\u01a1n 100 USD, trong khi gi\u00e1 d\u1ea7u th\u1ebf gi\u1edbi \u0111\u1eaft th\u00eam 9% v\u00ec di\u1ec5n bi\u1ebfn cu\u1ed1i tu\u1ea7n tr\u01b0\u1edbc t\u1ea1i Trung \u0110\u00f4ng.",
-      "published_at": "2026-03-04T08:03:42.344067",
-      "url": "https://vnexpress.net/gia-vang-dau-the-gioi-tang-vot-vi-cang-thang-trung-dong-5045449.html"
-    }
-  ],
-  "fetched_at": "2026-03-04T08:03:43.293056",
-  "symbols": [
-    "HPG",
-    "VNM",
-    "FPT",
-    "MWG",
-    "VCB",
-    "TCB",
-    "MBB",
-    "ACB",
-    "BID",
-    "CTG"
-  ],
-  "days_back": 7,
-  "STB_d75171398898": {
-    "symbol_scores": [
+  "symbol_news": {
+    "STB": [
       {
-        "symbol": "STB",
-        "buy_potential_score": 50,
-        "risk_score": 50,
-        "confidence": 0.0,
-        "horizon": "1-4w",
-        "key_bull_points": [],
-        "key_risks": [],
-        "evidence": []
+        "id": "9d7bb7c27bd9ad51",
+        "title": "\u00d4ng Nguy\u1ec5n \u0110\u1ee9c Th\u1ee5y l\u00e0m T\u1ed5ng gi\u00e1m \u0111\u1ed1c Sacombank",
+        "source": "VnExpress",
+        "snippet": "\u00d4ng Nguy\u1ec5n \u0110\u1ee9c Th\u1ee5y l\u00e0m T\u1ed5ng gi\u00e1m \u0111\u1ed1c Sacombank t\u1eeb ng\u00e0y 3/3, sau hai th\u00e1ng gia nh\u1eadp nh\u00e0 b\u0103ng n\u00e0y.",
+        "published_at": "2026-03-04T15:20:01.215187",
+        "url": "https://vnexpress.net/ong-nguyen-duc-thuy-lam-tong-giam-doc-sacombank-5045986.html",
+        "scope": "symbol"
+      },
+      {
+        "id": "b54b67fb5c3353dc",
+        "title": "VN-Index gi\u1ea3m m\u1ea1nh nh\u1ea5t t\u1eeb \u0111\u1ea7u n\u0103m",
+        "source": "VnExpress",
+        "snippet": "\u00c1p l\u1ef1c b\u00e1n th\u00e1o tr\u00ean di\u1ec7n r\u1ed9ng (tr\u1eeb nh\u00f3m d\u1ea7u kh\u00ed) khi\u1ebfn VN-Index m\u1ea5t h\u01a1n 34 \u0111i\u1ec3m, \u0111\u00e1nh d\u1ea5u phi\u00ean gi\u1ea3m s\u00e2u nh\u1ea5t t\u1eeb \u0111\u1ea7u n\u0103m.",
+        "published_at": "2026-03-04T15:20:01.215235",
+        "url": "https://vnexpress.net/vn-index-giam-manh-nhat-tu-dau-nam-5045754.html",
+        "scope": "market"
+      },
+      {
+        "id": "2eb65bcb5f9acd5a",
+        "title": "Doanh nghi\u1ec7p xu\u1ea5t kh\u1ea9u lo r\u1ee7i ro tr\u01b0\u1edbc xung \u0111\u1ed9t t\u1ea1i Trung \u0110\u00f4ng",
+        "source": "VnExpress",
+        "snippet": "Xung \u0111\u1ed9t Trung \u0110\u00f4ng leo thang khi\u1ebfn nhi\u1ec1u doanh nghi\u1ec7p xu\u1ea5t kh\u1ea9u lo \u0111\u1ee9t g\u00e3y chu\u1ed7i cung \u1ee9ng, c\u01b0\u1edbc v\u1eadn t\u1ea3i t\u0103ng v\u1ecdt v\u00e0 r\u1ee7i ro h\u1ecfng n\u00f4ng s\u1ea3n t\u01b0\u01a1i.",
+        "published_at": "2026-03-04T15:20:01.215227",
+        "url": "https://vnexpress.net/doanh-nghiep-xuat-khau-lo-rui-ro-truoc-xung-dot-tai-trung-dong-5045739.html",
+        "scope": "market"
+      },
+      {
+        "id": "cdd34df7bc5f9f8d",
+        "title": "'C\u1ea7n th\u1eadn tr\u1ecdng khi mua m\u1edbi c\u1ed5 phi\u1ebfu d\u1ea7u kh\u00ed l\u00fac n\u00e0y'",
+        "source": "VnExpress",
+        "snippet": "Xung \u0111\u1ed9t Iran \u0111\u01b0\u1ee3c d\u1ef1 \u0111o\u00e1n h\u1ed7 tr\u1ee3 c\u1ed5 phi\u1ebfu d\u1ea7u kh\u00ed, nh\u01b0ng \u0111\u1ecbnh gi\u00e1 nh\u00f3m n\u00e0y kh\u00f4ng c\u00f2n r\u1ebb, nh\u00e0 \u0111\u1ea7u t\u01b0 d\u1ec5 r\u01a1i v\u00e0o tr\u1ea1ng th\u00e1i \"\u0111u \u0111\u1ec9nh\", theo chuy\u00ean gia.",
+        "published_at": "2026-03-04T15:20:01.215219",
+        "url": "https://vnexpress.net/can-than-trong-khi-mua-moi-co-phieu-dau-khi-luc-nay-5045567.html",
+        "scope": "market"
+      }
+    ],
+    "MWG": [
+      {
+        "id": "b54b67fb5c3353dc",
+        "title": "VN-Index gi\u1ea3m m\u1ea1nh nh\u1ea5t t\u1eeb \u0111\u1ea7u n\u0103m",
+        "source": "VnExpress",
+        "snippet": "\u00c1p l\u1ef1c b\u00e1n th\u00e1o tr\u00ean di\u1ec7n r\u1ed9ng (tr\u1eeb nh\u00f3m d\u1ea7u kh\u00ed) khi\u1ebfn VN-Index m\u1ea5t h\u01a1n 34 \u0111i\u1ec3m, \u0111\u00e1nh d\u1ea5u phi\u00ean gi\u1ea3m s\u00e2u nh\u1ea5t t\u1eeb \u0111\u1ea7u n\u0103m.",
+        "published_at": "2026-03-04T15:20:01.215235",
+        "url": "https://vnexpress.net/vn-index-giam-manh-nhat-tu-dau-nam-5045754.html",
+        "scope": "market"
+      },
+      {
+        "id": "2eb65bcb5f9acd5a",
+        "title": "Doanh nghi\u1ec7p xu\u1ea5t kh\u1ea9u lo r\u1ee7i ro tr\u01b0\u1edbc xung \u0111\u1ed9t t\u1ea1i Trung \u0110\u00f4ng",
+        "source": "VnExpress",
+        "snippet": "Xung \u0111\u1ed9t Trung \u0110\u00f4ng leo thang khi\u1ebfn nhi\u1ec1u doanh nghi\u1ec7p xu\u1ea5t kh\u1ea9u lo \u0111\u1ee9t g\u00e3y chu\u1ed7i cung \u1ee9ng, c\u01b0\u1edbc v\u1eadn t\u1ea3i t\u0103ng v\u1ecdt v\u00e0 r\u1ee7i ro h\u1ecfng n\u00f4ng s\u1ea3n t\u01b0\u01a1i.",
+        "published_at": "2026-03-04T15:20:01.215227",
+        "url": "https://vnexpress.net/doanh-nghiep-xuat-khau-lo-rui-ro-truoc-xung-dot-tai-trung-dong-5045739.html",
+        "scope": "market"
+      },
+      {
+        "id": "cdd34df7bc5f9f8d",
+        "title": "'C\u1ea7n th\u1eadn tr\u1ecdng khi mua m\u1edbi c\u1ed5 phi\u1ebfu d\u1ea7u kh\u00ed l\u00fac n\u00e0y'",
+        "source": "VnExpress",
+        "snippet": "Xung \u0111\u1ed9t Iran \u0111\u01b0\u1ee3c d\u1ef1 \u0111o\u00e1n h\u1ed7 tr\u1ee3 c\u1ed5 phi\u1ebfu d\u1ea7u kh\u00ed, nh\u01b0ng \u0111\u1ecbnh gi\u00e1 nh\u00f3m n\u00e0y kh\u00f4ng c\u00f2n r\u1ebb, nh\u00e0 \u0111\u1ea7u t\u01b0 d\u1ec5 r\u01a1i v\u00e0o tr\u1ea1ng th\u00e1i \"\u0111u \u0111\u1ec9nh\", theo chuy\u00ean gia.",
+        "published_at": "2026-03-04T15:20:01.215219",
+        "url": "https://vnexpress.net/can-than-trong-khi-mua-moi-co-phieu-dau-khi-luc-nay-5045567.html",
+        "scope": "market"
+      }
+    ],
+    "VPB": [
+      {
+        "id": "b54b67fb5c3353dc",
+        "title": "VN-Index gi\u1ea3m m\u1ea1nh nh\u1ea5t t\u1eeb \u0111\u1ea7u n\u0103m",
+        "source": "VnExpress",
+        "snippet": "\u00c1p l\u1ef1c b\u00e1n th\u00e1o tr\u00ean di\u1ec7n r\u1ed9ng (tr\u1eeb nh\u00f3m d\u1ea7u kh\u00ed) khi\u1ebfn VN-Index m\u1ea5t h\u01a1n 34 \u0111i\u1ec3m, \u0111\u00e1nh d\u1ea5u phi\u00ean gi\u1ea3m s\u00e2u nh\u1ea5t t\u1eeb \u0111\u1ea7u n\u0103m.",
+        "published_at": "2026-03-04T15:20:01.215235",
+        "url": "https://vnexpress.net/vn-index-giam-manh-nhat-tu-dau-nam-5045754.html",
+        "scope": "market"
+      },
+      {
+        "id": "2eb65bcb5f9acd5a",
+        "title": "Doanh nghi\u1ec7p xu\u1ea5t kh\u1ea9u lo r\u1ee7i ro tr\u01b0\u1edbc xung \u0111\u1ed9t t\u1ea1i Trung \u0110\u00f4ng",
+        "source": "VnExpress",
+        "snippet": "Xung \u0111\u1ed9t Trung \u0110\u00f4ng leo thang khi\u1ebfn nhi\u1ec1u doanh nghi\u1ec7p xu\u1ea5t kh\u1ea9u lo \u0111\u1ee9t g\u00e3y chu\u1ed7i cung \u1ee9ng, c\u01b0\u1edbc v\u1eadn t\u1ea3i t\u0103ng v\u1ecdt v\u00e0 r\u1ee7i ro h\u1ecfng n\u00f4ng s\u1ea3n t\u01b0\u01a1i.",
+        "published_at": "2026-03-04T15:20:01.215227",
+        "url": "https://vnexpress.net/doanh-nghiep-xuat-khau-lo-rui-ro-truoc-xung-dot-tai-trung-dong-5045739.html",
+        "scope": "market"
+      },
+      {
+        "id": "cdd34df7bc5f9f8d",
+        "title": "'C\u1ea7n th\u1eadn tr\u1ecdng khi mua m\u1edbi c\u1ed5 phi\u1ebfu d\u1ea7u kh\u00ed l\u00fac n\u00e0y'",
+        "source": "VnExpress",
+        "snippet": "Xung \u0111\u1ed9t Iran \u0111\u01b0\u1ee3c d\u1ef1 \u0111o\u00e1n h\u1ed7 tr\u1ee3 c\u1ed5 phi\u1ebfu d\u1ea7u kh\u00ed, nh\u01b0ng \u0111\u1ecbnh gi\u00e1 nh\u00f3m n\u00e0y kh\u00f4ng c\u00f2n r\u1ebb, nh\u00e0 \u0111\u1ea7u t\u01b0 d\u1ec5 r\u01a1i v\u00e0o tr\u1ea1ng th\u00e1i \"\u0111u \u0111\u1ec9nh\", theo chuy\u00ean gia.",
+        "published_at": "2026-03-04T15:20:01.215219",
+        "url": "https://vnexpress.net/can-than-trong-khi-mua-moi-co-phieu-dau-khi-luc-nay-5045567.html",
+        "scope": "market"
       }
     ]
   },
-  "MWG_d75171398898": {
-    "symbol_scores": [
-      {
-        "symbol": "MWG",
-        "buy_potential_score": 50,
-        "risk_score": 50,
-        "confidence": 0.0,
-        "horizon": "1-4w",
-        "key_bull_points": [],
-        "key_risks": [],
-        "evidence": []
-      }
-    ]
-  }
+  "fetched_at": "2026-03-04T15:20:01.334053",
+  "symbols": [
+    "STB",
+    "MWG",
+    "VPB"
+  ],
+  "days_back": 7
 }

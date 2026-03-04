@@ -262,16 +262,17 @@ def _score_symbol(symbol: str, news_items: List[Dict], cache: Dict[str, Any]) ->
     return stage_b_result
 
 
-def score_buy_potential(weekly_plan_path: str, news_items: List[Dict]) -> Dict[str, Any]:
+def score_buy_potential(weekly_plan_path: str, symbol_news: Dict[str, List[Dict]]) -> Dict[str, Any]:
     """
-    Score buy potential for symbols using news analysis.
+    Score buy potential for symbols using per-symbol news analysis.
 
     Args:
         weekly_plan_path: Path to weekly_plan.json
-        news_items: List of news items with id, title, source, snippet
+        symbol_news: Dict mapping symbol -> list of news items.
+                     Each news item has: id, title, source, snippet, scope (symbol|market)
 
     Returns:
-        Combined analysis results for all symbols
+        Combined analysis results for all symbols with evidence citations
     """
     if not _is_available():
         logger.warning("Groq API not configured - returning empty scores")
@@ -290,20 +291,13 @@ def score_buy_potential(weekly_plan_path: str, news_items: List[Dict]) -> Dict[s
         logger.info("No symbols to analyze")
         return {"symbol_scores": [], "status": "NO_SYMBOLS"}
 
-    # Group news by symbol (simple keyword matching for now)
-    symbol_news = {}
-    for symbol in symbols:
-        symbol_news[symbol] = [
-            item for item in news_items
-            if symbol.lower() in (item.get("title", "") + " " + item.get("snippet", "")).lower()
-        ]
-
     # Load cache
     cache = _load_cache()
     all_scores = []
 
     try:
         for symbol in symbols:
+            # Get pre-matched news for this symbol (already filtered by company keywords)
             news_for_symbol = symbol_news.get(symbol, [])
 
             result = _score_symbol(symbol, news_for_symbol, cache)
@@ -313,11 +307,12 @@ def score_buy_potential(weekly_plan_path: str, news_items: List[Dict]) -> Dict[s
         # Save updated cache
         _save_cache(cache)
 
+        total_news = sum(len(items) for items in symbol_news.values())
         return {
             "symbol_scores": all_scores,
             "status": "SUCCESS",
             "analyzed_symbols": len(all_scores),
-            "total_news": len(news_items)
+            "total_news": total_news
         }
 
     except Exception as e:

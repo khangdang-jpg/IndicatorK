@@ -1,0 +1,164 @@
+# Symbol to company/brand keyword mappings for Vietnamese stocks
+# Each symbol maps to a list of keywords (Vietnamese + English, with/without diacritics)
+# Used for matching news articles to specific stocks
+
+STB:
+  - sacombank
+  - sai gon thuong tin
+  - sài gòn thương tín
+  - stb bank
+
+VPB:
+  - vpbank
+  - viet nam thinh vuong
+  - việt nam thịnh vượng
+  - vpb bank
+
+MWG:
+  - mobile world
+  - the gioi di dong
+  - thế giới di động
+  - dien may xanh
+  - điện máy xanh
+  - bach hoa xanh
+  - bách hóa xanh
+  - mwg group
+
+VHM:
+  - vinhomes
+  - vinh hung
+  - vĩnh hưng
+  - vin homes
+  - vhm group
+
+VIC:
+  - vingroup
+  - vin group
+  - tập đoàn vin
+  - tap doan vin
+  - vic group
+
+HPG:
+  - hoa phat
+  - hòa phát
+  - hoa phat group
+  - hòa phát group
+  - hpg steel
+
+VRE:
+  - vincom retail
+  - vincom
+  - vin com
+  - vre group
+
+GAS:
+  - petrovietnam gas
+  - pv gas
+  - khi dau
+  - khí đầu
+  - gas petrovietnam
+
+MSN:
+  - masan
+  - ma san
+  - masan group
+  - tập đoàn masan
+  - tap doan masan
+  - winmart
+  - phuc long
+  - phúc long
+
+SSI:
+  - ssi securities
+  - chung khoan ssi
+  - chứng khoán ssi
+  - saigon securities
+  - sai gon securities
+
+VND:
+  - vndirect
+  - vn direct
+  - chung khoan vndirect
+  - chứng khoán vndirect
+
+HCM:
+  - ho chi minh securities
+  - hồ chí minh securities
+  - hcm securities
+  - chung khoan hcm
+  - chứng khoán hcm
+
+VCI:
+  - vietcap securities
+  - viet cap
+  - việt capital
+  - vci securities
+
+SHB:
+  - shb bank
+  - saigon hanoi bank
+  - sai gon ha noi
+  - sài gòn hà nội
+  - shb commercial
+
+TCB:
+  - techcombank
+  - tech com bank
+  - viet nam thuong tin
+  - việt nam thương tín
+  - tcb bank
+
+VCB:
+  - vietcombank
+  - ngan hang ngoai thuong
+  - ngân hàng ngoại thương
+  - vcb bank
+  - vietcom bank
+
+BID:
+  - bidv
+  - bidv bank
+  - ngan hang dau tu phat trien
+  - ngân hàng đầu tư phát triển
+  - bid bank
+
+ACB:
+  - acb bank
+  - a chau
+  - á châu
+  - asia commercial bank
+  - ngan hang a chau
+
+CTG:
+  - vietinbank
+  - vietin bank
+  - cong thuong
+  - công thương
+  - vietnam industry and trade
+
+MBB:
+  - mb bank
+  - military bank
+  - quan doi
+  - quân đội
+  - mbbank
+
+# Generic market-wide keywords (not tied to specific symbols)
+# These will be flagged as "market" scope
+_market_keywords:
+  - chung khoan
+  - chứng khoán
+  - thi truong
+  - thị trường
+  - vnindex
+  - vn-index
+  - co phieu
+  - cổ phiếu
+  - dau tu
+  - đầu tư
+  - nha dau tu
+  - nhà đầu tư
+  - investor
+  - stock market
+  - trading
+  - market trend

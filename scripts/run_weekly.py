@@ -132,24 +132,19 @@ def main() -> None:
         from src.news_ai import score_buy_potential, fetch_recent_news
         logger.info("Running news-based buy potential analysis...")
 
-        # Fetch real news about Vietnamese stocks
+        # Fetch real news about Vietnamese stocks (returns dict: symbol -> [news])
         logger.info("Fetching real news about Vietnamese stock symbols...")
         try:
-            real_news = fetch_recent_news(
+            symbol_news = fetch_recent_news(
                 symbols=all_symbols[:10],  # Fetch for top 10 symbols to manage API limits
                 days_back=7,
                 use_cache=True,
             )
-            logger.info(f"Fetched {len(real_news)} real news articles")
+            total_articles = sum(len(articles) for articles in symbol_news.values())
+            logger.info(f"Fetched news for {len(symbol_news)} symbols ({total_articles} articles total)")
         except Exception as e:
-            logger.warning(f"Failed to fetch real news: {e}, using fallback news")
-            real_news = [{
-                "id": "news_fallback",
-                "title": f"Vietnamese market analysis {datetime.now().strftime('%Y-%m-%d')}",
-                "source": "Default",
-                "snippet": "Vietnamese market sentiment and stock analysis",
-                "published_at": datetime.now().isoformat()
-            }]
+            logger.warning(f"Failed to fetch real news: {e}, using fallback")
+            symbol_news = {}  # Empty dict triggers fallback in scorer
 
         # Save plan temporarily for buy potential scoring
         temp_plan_path = "data/weekly_plan_temp.json"
@@ -157,8 +152,8 @@ def main() -> None:
         with open(temp_plan_path, "w") as f:
             json.dump(plan_dict, f, indent=2)
 
-        # Score buy potential with real news
-        news_scores = score_buy_potential(temp_plan_path, real_news)
+        # Score buy potential with per-symbol news
+        news_scores = score_buy_potential(temp_plan_path, symbol_news)
 
         if news_scores.get("status") == "SUCCESS":
             logger.info("News analysis complete: %d symbols scored", news_scores.get("analyzed_symbols", 0))

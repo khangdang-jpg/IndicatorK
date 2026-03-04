@@ -3,10 +3,11 @@
 Fetches recent news articles about Vietnamese stock symbols from multiple sources:
 - Primary: NewsAPI.org (free tier)
 - Fallback: RSS feeds from VnExpress, VietStock, VietNamNet (reliable, no blocking)
+- Smart symbol matching using company/brand keywords from symbol_aliases.yml
 - Cache: Local storage with 24h TTL to avoid repeated fetches
 
 Returns:
-    List of news items with: id, title, source, snippet, published_at, url (optional)
+    List of news items with: id, title, source, snippet, published_at, url (optional), scope
 """
 
 import hashlib
@@ -14,6 +15,7 @@ import json
 import logging
 import os
 import re
+import unicodedata
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -21,14 +23,150 @@ from typing import Any, Dict, List, Optional
 from urllib.parse import quote
 
 import requests
+import yaml
 
 logger = logging.getLogger(__name__)
 
 # Configuration
 NEWS_CACHE_FILE = "data/news_cache.json"
+SYMBOL_ALIASES_FILE = "data/symbol_aliases.yml"
 CACHE_TTL_HOURS = 24
 REQUEST_TIMEOUT = 15.0
 MAX_RETRIES = 2
+
+
+def _normalize_text(text: str) -> str:
+    """Normalize Vietnamese text: lowercase + remove diacritics.
+
+    Examples:
+        "Thế Giới Di Động" -> "the gioi di dong"
+        "Hòa Phát Group" -> "hoa phat group"
+    """
+    if not text:
+        return ""
+
+    # Convert to lowercase
+    text = text.lower()
+
+    # Remove Vietnamese diacritics using Unicode normalization
+    # NFD decomposes characters into base + combining marks
+    nfd = unicodedata.normalize('NFD', text)
+
+    # Keep only base characters (remove combining marks)
+    without_diacritics = ''.join(
+        char for char in nfd
+        if unicodedata.category(char) != 'Mn'  # Mn = Nonspacing Mark
+    )
+
+    return without_diacritics
+
+
+def _load_symbol_aliases() -> Dict[str, List[str]]:
+    """Load symbol-to-keyword mappings from YAML file.
+
+    Returns dict like:
+        {"STB": ["sacombank", "sai gon thuong tin", ...],
+         "MWG": ["mobile world", "the gioi di dong", ...]}
+    """
+    try:
+        with open(SYMBOL_ALIASES_FILE, 'r', encoding='utf-8') as f:
+            aliases = yaml.safe_load(f)
+
+        # Remove market keywords (starts with _)
+        symbol_aliases = {
+            k: [_normalize_text(kw) for kw in v]
+            for k, v in aliases.items()
+            if not k.startswith('_')
+        }
+
+        logger.info(f"Loaded aliases for {len(symbol_aliases)} symbols")
+        return symbol_aliases
+
+    except Exception as e:
+        logger.warning(f"Failed to load symbol aliases: {e}")
+        return {}
+
+
+def _match_news_to_symbols(
+    articles: List[Dict[str, Any]],
+    symbols: List[str],
+    symbol_aliases: Dict[str, List[str]]
+) -> Dict[str, List[Dict[str, Any]]]:
+    """Match news articles to specific symbols using keyword matching.
+
+    For each symbol:
+    - Match up to 5 articles that contain symbol keywords
+    - If <2 matches, add 3 most recent market-wide articles as fallback
+    - Add "scope" field: "symbol" or "market"
+
+    Returns:
+        Dict mapping symbol -> list of matched news items
+    """
+    # Normalize all article texts once
+    normalized_articles = []
+    for article in articles:
+        title = article.get('title', '')
+        snippet = article.get('snippet', '')
+        combined_text = _normalize_text(f"{title} {snippet}")
+
+        normalized_articles.append({
+            'article': article,
+            'normalized_text': combined_text,
+            'published_at': article.get('published_at', '')
+        })
+
+    # Sort by publication date (most recent first)
+    normalized_articles.sort(key=lambda x: x['published_at'], reverse=True)
+
+    # Match articles to each symbol
+    symbol_news = {}
+
+    for symbol in symbols:
+        keywords = symbol_aliases.get(symbol, [])
+        if not keywords:
+            logger.debug(f"No keywords for symbol {symbol}")
+            continue
+
+        # Find matching articles
+        matched = []
+        for item in normalized_articles:
+            # Check if any keyword appears in the article
+            if any(kw in item['normalized_text'] for kw in keywords):
+                article_copy = item['article'].copy()
+                article_copy['scope'] = 'symbol'
+                matched.append(article_copy)
+
+                if len(matched) >= 5:  # Max 5 per symbol
+                    break
+
+        logger.info(f"Symbol {symbol}: {len(matched)} matched articles")
+
+        # Fallback: if <2 matches, add market-wide news
+        if len(matched) < 2:
+            market_articles_needed = 3
+            added = 0
+
+            for item in normalized_articles[:15]:  # Check top 15 most recent
+                article_copy = item['article'].copy()
+                article_id = article_copy.get('id', '')
+
+                # Skip if already in matched
+                if any(a.get('id') == article_id for a in matched):
+                    continue
+
+                # Add as market-wide fallback
+                article_copy['scope'] = 'market'
+                matched.append(article_copy)
+                added += 1
+
+                if added >= market_articles_needed:
+                    break
+
+            logger.info(f"Symbol {symbol}: added {added} market fallback articles")
+
+        symbol_news[symbol] = matched
+
+    return symbol_news
 
 # Vietnamese stock symbols (common ones)
 VIETNAMESE_SYMBOLS = {
@@ -397,8 +535,8 @@ def fetch_recent_news(
     symbols: Optional[List[str]] = None,
     days_back: int = 7,
     use_cache: bool = True,
-) -> List[Dict[str, Any]]:
-    """Fetch recent news about Vietnamese stock symbols.
+) -> Dict[str, List[Dict[str, Any]]]:
+    """Fetch recent news about Vietnamese stock symbols with smart matching.
 
     Tries multiple sources in order:
     1. Cache (if valid and use_cache=True)
@@ -407,6 +545,10 @@ def fetch_recent_news(
     4. VietStock RSS feed (stock market focus)
     5. VietNamNet RSS feed (business news)
 
+    Then matches articles to symbols using company/brand keywords:
+    - Up to 5 matched articles per symbol (scope="symbol")
+    - If <2 matches, adds 3 market-wide articles as fallback (scope="market")
+
     Args:
         symbols: List of stock symbols to fetch news for.
                 Defaults to common Vietnamese stocks.
@@ -414,8 +556,9 @@ def fetch_recent_news(
         use_cache: Whether to use cached news if available. Defaults to True.
 
     Returns:
-        List of news items with: id, title, source, snippet, published_at, url
-        Returns empty list if all sources fail.
+        Dict mapping symbol -> list of news items with:
+        id, title, source, snippet, published_at, url, scope (symbol|market)
+        Returns empty dict if all sources fail.
     """
     if symbols is None:
         symbols = list(VIETNAMESE_SYMBOLS)
@@ -426,9 +569,11 @@ def fetch_recent_news(
     if use_cache:
         cache = _load_cache()
         if _is_cache_valid(cache):
-            articles = cache.get("articles", [])
-            logger.info(f"Returning {len(articles)} cached articles")
-            return articles
+            symbol_news = cache.get("symbol_news", {})
+            if symbol_news:
+                total_articles = sum(len(articles) for articles in symbol_news.values())
+                logger.info(f"Returning cached news for {len(symbol_news)} symbols ({total_articles} articles)")
+                return symbol_news
 
     articles = []
 
@@ -469,29 +614,47 @@ def fetch_recent_news(
             seen.add(key)
             unique_articles.append(article)
 
-    # Save to cache
-    cache = {
-        "articles": unique_articles,
-        "fetched_at": datetime.now().isoformat(),
-        "symbols": symbols,
-        "days_back": days_back,
-    }
-    _save_cache(cache)
-
     if not unique_articles:
         logger.warning("No news articles fetched from any source")
-        # Return a generic market news item as fallback
-        return [{
+        # Return empty dict with generic market news for each symbol
+        generic_article = {
             "id": hashlib.md5(datetime.now().isoformat().encode()).hexdigest()[:16],
             "title": f"Vietnamese stock market news ({datetime.now().strftime('%Y-%m-%d')})",
             "source": "Default",
             "snippet": "Vietnamese market sentiment updates and general market analysis",
             "published_at": datetime.now().isoformat(),
             "url": None,
-        }]
+            "scope": "market"
+        }
+        return {symbol: [generic_article] for symbol in symbols}
 
     logger.info(f"Fetched {len(unique_articles)} unique news articles total")
-    return unique_articles
+
+    # Load symbol aliases and match articles to symbols
+    symbol_aliases = _load_symbol_aliases()
+    if not symbol_aliases:
+        logger.warning("No symbol aliases loaded, returning generic market news")
+        # Fall back to giving all articles to all symbols as "market" news
+        for article in unique_articles:
+            article['scope'] = 'market'
+        return {symbol: unique_articles[:5] for symbol in symbols}
+
+    # Smart matching: match articles to symbols using keywords
+    symbol_news = _match_news_to_symbols(unique_articles, symbols, symbol_aliases)
+
+    # Save to cache (per-symbol news)
+    cache = {
+        "symbol_news": symbol_news,
+        "fetched_at": datetime.now().isoformat(),
+        "symbols": symbols,
+        "days_back": days_back,
+    }
+    _save_cache(cache)
+
+    total_matched = sum(len(articles) for articles in symbol_news.values())
+    logger.info(f"Matched {total_matched} articles across {len(symbol_news)} symbols")
+
+    return symbol_news
 
 
 def clear_cache() -> None:
