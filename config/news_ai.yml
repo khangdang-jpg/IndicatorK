@@ -1,0 +1,37 @@
+# News AI Configuration for Groq Integration
+# This configuration is for future news sentiment analysis features
+
+enabled: true
+
+# Groq model configuration
+model_extract: llama-3.1-8b-instant      # Fast structured extraction (JSON)
+model_digest: llama-3.3-70b-versatile    # Final English digest composition
+
+# Processing limits
+max_symbols: 20                          # Maximum symbols to analyze per run
+max_articles_per_symbol: 5               # Maximum articles per symbol
+
+# News sources (future implementation)
+sources:
+  - vn_express
+  - cafef
+  - dantri
+  - vneconomy
+  - investing_com
+
+# Sentiment thresholds
+sentiment_thresholds:
+  bullish_min: 0.6                       # Minimum score for bullish sentiment
+  bearish_max: -0.6                      # Maximum score for bearish sentiment
+
+# Cache settings
+cache:
+  enabled: true
+  ttl_hours: 24                          # Time to live for cached analysis
+  max_entries: 1000                      # Maximum cache entries
+
+# Rate limiting
+rate_limit:
+  requests_per_minute: 60                # Groq rate limit
+  backoff_multiplier: 2.0               # Exponential backoff multiplier
+  max_retries: 3                        # Maximum retry attempts

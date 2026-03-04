@@ -124,6 +124,51 @@ def main() -> None:
         else:
             logger.warning("🚨 AI analysis returned empty — continuing without it")
             logger.warning("📊 Weekly plan generated successfully without AI scoring")
+    else:
+        logger.warning("Groq AI not available")
+
+    # News-based buy potential scoring (after AI analysis)
+    try:
+        from src.news_ai import score_buy_potential
+        logger.info("Running news-based buy potential analysis...")
+
+        # For now, use mock news data until news fetching is implemented
+        # In production, this would fetch real news from APIs
+        mock_news = [
+            {
+                "id": "news_1",
+                "title": f"Market analysis for Vietnamese stocks {datetime.now().strftime('%Y-%m-%d')}",
+                "source": "VnExpress",
+                "snippet": "Vietnamese market shows strong momentum with banking and technology sectors leading gains",
+                "published_at": datetime.now().isoformat()
+            }
+        ]
+
+        # Save plan temporarily for buy potential scoring
+        temp_plan_path = "data/weekly_plan_temp.json"
+        plan_dict = plan.to_dict()
+        with open(temp_plan_path, "w") as f:
+            json.dump(plan_dict, f, indent=2)
+
+        # Score buy potential
+        news_scores = score_buy_potential(temp_plan_path, mock_news)
+
+        if news_scores.get("status") == "SUCCESS":
+            logger.info("News analysis complete: %d symbols scored", news_scores.get("analyzed_symbols", 0))
+            # Save news scores
+            Path("data/news_scores.json").write_text(json.dumps(news_scores, indent=2))
+
+            # Add news scores to plan
+            plan.news_analysis = news_scores
+        else:
+            logger.warning("News analysis failed: %s", news_scores.get("status"))
+
+        # Clean up temp file
+        if Path(temp_plan_path).exists():
+            Path(temp_plan_path).unlink()
+
+    except Exception as e:
+        logger.warning("News analysis failed: %s", e)
 
             from types import SimpleNamespace
 
