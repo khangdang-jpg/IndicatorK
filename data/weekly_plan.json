@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-04T03:53:58.774990",
+  "generated_at": "2026-03-04T04:52:22.068264",
   "strategy_id": "trend_momentum_atr_regime_adaptive",
   "strategy_version": "1.0.0",
   "allocation_targets": {
@@ -19,9 +19,9 @@
       "rationale_bullets": [
         "Regime: BULL | RSI\u226550",
         "Trend UP: price 66 > MA10w 61 > MA30w 56",
-        "RSI(14): 67.5",
+        "RSI(14): 67.8",
         "ATR: 5",
-        "Vol: 39,021,400 (0.7x avg)",
+        "Vol: 41,534,300 (0.7x avg)",
         "Entry: pullback mid-zone",
         "Position: 9.0% (base 6.0% \u00d7 1.5x = 9.0%, stop dist 16.7%)"
       ],
@@ -42,7 +42,7 @@
       "position_target_pct": 0.0,
       "rationale_bullets": [
         "Regime: BULL",
-        "Trend WEAKENING: price 86 < MA10w 89",
+        "Trend WEAKENING: price 85 < MA10w 89",
         "Still above MA30w 82",
         "Consider reducing position"
       ],
@@ -61,7 +61,7 @@
   ],
   "ai_analysis": {
     "generated": true,
-    "market_context": "Portfolio is heavily invested in cash with a small position, indicating a cautious market approach.",
+    "market_context": "Portfolio is heavily weighted towards cash with a small position, indicating a cautious market approach.",
     "analysis_date": "2026-03-04",
     "data_sources": "Weekly technical analysis using Groq AI",
     "scores": {
@@ -69,13 +69,13 @@
         "symbol": "STB",
         "score": 8,
         "rationale": "Strong bull regime with price above MA10w and MA30w, and RSI(14) above 50.",
-        "risk_note": "Risk of stop loss at 50 due to relatively close entry point."
+        "risk_note": "Risk of stop-loss at 50 due to relatively tight stop distance of 10."
       },
       "MWG": {
         "symbol": "MWG",
-        "score": 5,
-        "rationale": "Bull regime with price above MA30w, but weakening trend with price below MA10w.",
-        "risk_note": "Risk of stop loss at 70 due to relatively close entry point."
+        "score": 4,
+        "rationale": "Bull regime but weakening trend with price below MA10w, still above MA30w.",
+        "risk_note": "Risk of stop-loss at 70 due to potential for further weakening trend."
       }
     }
   },
