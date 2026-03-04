@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-04T08:36:36.919310",
+  "generated_at": "2026-03-04T08:51:51.196136",
   "strategy_id": "trend_momentum_atr_regime_adaptive",
   "strategy_version": "1.0.0",
   "allocation_targets": {
@@ -61,23 +61,86 @@
   ],
   "ai_analysis": {
     "generated": true,
-    "market_context": "The portfolio is mostly cash with a small position in STB, indicating a cautious market approach.",
+    "market_context": "The portfolio is generally bullish with a total value of 10,000,014 VND and a small unrealized profit of 14.",
     "analysis_date": "2026-03-04",
     "data_sources": "Weekly technical analysis using Groq AI",
     "scores": {
       "STB": {
         "symbol": "STB",
         "score": 8,
-        "rationale": "Bull regime with price above MA10w and MA30w, and RSI above 50.",
-        "risk_note": "Risk of stop loss at 50."
+        "rationale": "Strong bullish setup with price above MA10w and MA30w, and RSI above 50.",
+        "risk_note": "Risk of stop loss at 50 due to relatively close distance to entry point."
       },
       "MWG": {
         "symbol": "MWG",
         "score": 4,
-        "rationale": "Bull regime but trend weakening with price below MA10w.",
-        "risk_note": "Risk of stop loss at 70."
+        "rationale": "Bullish trend weakening with price below MA10w, but still above MA30w.",
+        "risk_note": "Risk of stop loss at 70 due to relatively close distance to entry point."
       }
     }
+  },
+  "news_analysis": {
+    "symbol_scores": [
+      {
+        "symbol": "STB",
+        "buy_potential_score": 20,
+        "risk_score": 80,
+        "confidence": 0.7,
+        "horizon": "1-4w",
+        "key_bull_points": [
+          "Sacombank's new CEO, Nguy\u1ec5n \u0110\u1ee9c Th\u1ee5y, may bring positive changes to the bank (ID: 9d7bb7c27bd9ad51)"
+        ],
+        "key_risks": [
+          "Xung \u0111\u1ed9t Trung \u0110\u00f4ng leo thang khi\u1ebfn nhi\u1ec1u doanh nghi\u1ec7p xu\u1ea5t kh\u1ea9u lo \u0111\u1ee9t g\u00e3y chu\u1ed7i cung \u1ee9ng, c\u01b0\u1edbc v\u1eadn t\u1ea3i t\u0103ng v\u1ecdt v\u00e0 r\u1ee7i ro h\u1ecfng n\u00f4ng s\u1ea3n t\u01b0\u01a1i (ID: 2eb65bcb5f9acd5a)",
+          "\u00c1p l\u1ef1c b\u00e1n th\u00e1o tr\u00ean di\u1ec7n r\u1ed9ng khi\u1ebfn VN-Index m\u1ea5t h\u01a1n 34 \u0111i\u1ec3m (ID: b54b67fb5c3353dc)"
+        ],
+        "evidence": [
+          {
+            "id": "9d7bb7c27bd9ad51",
+            "supports": "bull"
+          },
+          {
+            "id": "2eb65bcb5f9acd5a",
+            "supports": "risk"
+          },
+          {
+            "id": "b54b67fb5c3353dc",
+            "supports": "risk"
+          }
+        ]
+      },
+      {
+        "symbol": "MWG",
+        "buy_potential_score": 20,
+        "risk_score": 60,
+        "confidence": 0.8,
+        "horizon": "1-4w",
+        "key_bull_points": [
+          "VN-Index gi\u1ea3m m\u1ea1nh nh\u1ea5t t\u1eeb \u0111\u1ea7u n\u0103m c\u00f3 th\u1ec3 \u1ea3nh h\u01b0\u1edfng \u0111\u1ebfn MWG nh\u01b0ng kh\u00f4ng r\u00f5 r\u00e0ng (b54b67fb5c3353dc)"
+        ],
+        "key_risks": [
+          "Xung \u0111\u1ed9t Trung \u0110\u00f4ng c\u00f3 th\u1ec3 \u1ea3nh h\u01b0\u1edfng \u0111\u1ebfn chu\u1ed7i cung \u1ee9ng c\u1ee7a MWG (2eb65bcb5f9acd5a)",
+          "\u0110\u1ecbnh gi\u00e1 c\u1ed5 phi\u1ebfu \u0111\u1ea7u kh\u00ed kh\u00f4ng c\u00f2n r\u1ebb, c\u00f3 th\u1ec3 \u1ea3nh h\u01b0\u1edfng \u0111\u1ebfn MWG (cdd34df7bc5f9f8d)"
+        ],
+        "evidence": [
+          {
+            "id": "b54b67fb5c3353dc",
+            "supports": "neutral"
+          },
+          {
+            "id": "2eb65bcb5f9acd5a",
+            "supports": "risk"
+          },
+          {
+            "id": "cdd34df7bc5f9f8d",
+            "supports": "risk"
+          }
+        ]
+      }
+    ],
+    "status": "SUCCESS",
+    "analyzed_symbols": 2,
+    "total_news": 10
   },
   "market_regime": "bull"
 }
