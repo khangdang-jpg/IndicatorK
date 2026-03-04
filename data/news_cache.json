@@ -1,12 +1,81 @@
 {
-  "articles": [],
-  "fetched_at": "2026-03-04T11:41:48.383918",
-  "symbols": [
-    "STB",
-    "VPB",
-    "MWG",
-    "VHM",
-    "VIC"
-  ],
-  "days_back": 7
+  "012c8cfeea5ca1f2": {
+    "scores": {
+      "VHM": [
+        {
+          "symbol": "VHM",
+          "sentiment": "bullish",
+          "impact": 0.7,
+          "confidence": 0.8,
+          "summary": "Strong earnings drive positive sentiment",
+          "source": "VN Express"
+        }
+      ],
+      "VIC": [
+        {
+          "symbol": "VIC",
+          "sentiment": "neutral",
+          "impact": 0.4,
+          "confidence": 0.6,
+          "summary": "Expansion plans show mixed signals",
+          "source": "Cafef"
+        }
+      ]
+    },
+    "overall_sentiment": "bullish",
+    "generated": true,
+    "cache_hit": false,
+    "model": "llama-3.1-8b-instant",
+    "news_hash": "012c8cfeea5ca1f2"
+  },
+  "STB_205187cc74b7": {
+    "symbol_scores": [
+      {
+        "symbol": "STB",
+        "buy_potential_score": 80,
+        "risk_score": 20,
+        "confidence": 1.0,
+        "horizon": "1-4w",
+        "key_bull_points": [
+          "STB reports strong earnings",
+          "Banking sector shows growth with STB leading gains"
+        ],
+        "key_risks": [],
+        "evidence": [
+          {
+            "id": "news_1",
+            "supports": "bull"
+          }
+        ]
+      }
+    ]
+  },
+  "STB_d75171398898": {
+    "symbol_scores": [
+      {
+        "symbol": "STB",
+        "buy_potential_score": 50,
+        "risk_score": 50,
+        "confidence": 0.0,
+        "horizon": "1-4w",
+        "key_bull_points": [],
+        "key_risks": [],
+        "evidence": []
+      }
+    ]
+  },
+  "MWG_d75171398898": {
+    "symbol_scores": [
+      {
+        "symbol": "MWG",
+        "buy_potential_score": 50,
+        "risk_score": 50,
+        "confidence": 0.0,
+        "horizon": "1-4w",
+        "key_bull_points": [],
+        "key_risks": [],
+        "evidence": []
+      }
+    ]
+  }
 }
