@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-04T08:03:37.301665",
+  "generated_at": "2026-03-04T08:29:48.545595",
   "strategy_id": "trend_momentum_atr_regime_adaptive",
   "strategy_version": "1.0.0",
   "allocation_targets": {
@@ -61,21 +61,21 @@
   ],
   "ai_analysis": {
     "generated": true,
-    "market_context": "The portfolio is in a bull market with a total value of 10,000,014 VND and a cash reserve of 99.84%.",
+    "market_context": "The portfolio is heavily invested in cash with a small position in STB, indicating a cautious market approach.",
     "analysis_date": "2026-03-04",
     "data_sources": "Weekly technical analysis using Groq AI",
     "scores": {
       "STB": {
         "symbol": "STB",
         "score": 8,
-        "rationale": "Bull regime with price above MA10w and MA30w, and RSI(14) at 68.1.",
-        "risk_note": "Risk of stop-loss at 50 if price does not pull back to 60."
+        "rationale": "Strong uptrend with RSI above 50 and price above moving averages.",
+        "risk_note": "Risk of pullback to SL at 50."
       },
       "MWG": {
         "symbol": "MWG",
         "score": 5,
-        "rationale": "Bull regime but trend is weakening with price below MA10w.",
-        "risk_note": "Risk of stop-loss at 70 if price does not pull back to 80."
+        "rationale": "Trend weakening with price below MA10w, but still above MA30w.",
+        "risk_note": "Risk of further trend weakening or reversal."
       }
     }
   },
