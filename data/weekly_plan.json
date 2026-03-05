@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-04T09:15:49.027837",
+  "generated_at": "2026-03-05T06:43:37.945268",
   "strategy_id": "trend_momentum_atr_regime_adaptive",
   "strategy_version": "1.0.0",
   "allocation_targets": {
@@ -21,14 +21,38 @@
         "Trend UP: price 67 > MA10w 61 > MA30w 56",
         "RSI(14): 68.1",
         "ATR: 5",
-        "Vol: 48,401,300 (0.8x avg)",
+        "Vol: 55,343,400 (0.9x avg)",
         "Entry: pullback mid-zone",
         "Position: 9.0% (base 6.0% \u00d7 1.5x = 9.0%, stop dist 16.7%)"
       ],
       "entry_type": "pullback",
       "breakout_level": 0.0,
       "entry_price": 60.0,
-      "signal_week_end": "2026-03-04",
+      "signal_week_end": "2026-03-05",
+      "earliest_entry_date": null
+    },
+    {
+      "symbol": "VIC",
+      "asset_class": "stock",
+      "action": "BUY",
+      "buy_zone_low": 140.0,
+      "buy_zone_high": 150.0,
+      "stop_loss": 110.0,
+      "take_profit": 230.0,
+      "position_target_pct": 0.0562,
+      "rationale_bullets": [
+        "Regime: BULL | RSI\u226550",
+        "Trend UP: price 164 > MA10w 159 > MA30w 117",
+        "RSI(14): 64.6",
+        "ATR: 23",
+        "Vol: 20,168,500 (0.7x avg)",
+        "Entry: pullback mid-zone",
+        "Position: 5.6% (base 3.8% \u00d7 1.5x = 5.6%, stop dist 26.7%)"
+      ],
+      "entry_type": "pullback",
+      "breakout_level": 0.0,
+      "entry_price": 150.0,
+      "signal_week_end": "2026-03-05",
       "earliest_entry_date": null
     },
     {
@@ -42,14 +66,14 @@
       "position_target_pct": 0.0,
       "rationale_bullets": [
         "Regime: BULL",
-        "Trend WEAKENING: price 89 < MA10w 89",
+        "Trend WEAKENING: price 86 < MA10w 89",
         "Still above MA30w 82",
         "Consider reducing position"
       ],
       "entry_type": "pullback",
       "breakout_level": 0.0,
       "entry_price": 80.0,
-      "signal_week_end": "2026-03-04",
+      "signal_week_end": "2026-03-05",
       "earliest_entry_date": null
     }
   ],
@@ -61,21 +85,27 @@
   ],
   "ai_analysis": {
     "generated": true,
-    "market_context": "The portfolio is heavily invested in cash with a small unrealized profit, indicating a cautious market approach.",
-    "analysis_date": "2026-03-04",
+    "market_context": "Portfolio is heavily invested in cash, with a small position and a relatively small unrealized loss.",
+    "analysis_date": "2026-03-05",
     "data_sources": "Weekly technical analysis using Groq AI",
     "scores": {
       "STB": {
         "symbol": "STB",
         "score": 8,
-        "rationale": "Strong uptrend with RSI above 50 and price above both MA10w and MA30w.",
-        "risk_note": "Risk of stop-loss at 50 if price falls further."
+        "rationale": "Strong bullish trend with RSI above 50 and price above both MA10w and MA30w.",
+        "risk_note": "Stop loss is relatively close to entry price."
+      },
+      "VIC": {
+        "symbol": "VIC",
+        "score": 9,
+        "rationale": "Bullish trend with price above both MA10w and MA30w, and RSI above 50.",
+        "risk_note": "Stop loss is relatively close to entry price."
       },
       "MWG": {
         "symbol": "MWG",
         "score": 4,
-        "rationale": "Trend weakening with price below MA10w but still above MA30w.",
-        "risk_note": "Risk of stop-loss at 70 if price falls further."
+        "rationale": "Bullish trend weakening with price below MA10w, but still above MA30w.",
+        "risk_note": "Reducing position suggests potential risk of further price decline."
       }
     }
   },
@@ -110,6 +140,16 @@
         ]
       },
       {
+        "symbol": "VIC",
+        "buy_potential_score": 50,
+        "risk_score": 50,
+        "confidence": 0.0,
+        "horizon": "1-4w",
+        "key_bull_points": [],
+        "key_risks": [],
+        "evidence": []
+      },
+      {
         "symbol": "MWG",
         "buy_potential_score": 20,
         "risk_score": 60,
@@ -139,7 +179,7 @@
       }
     ],
     "status": "SUCCESS",
-    "analyzed_symbols": 2,
+    "analyzed_symbols": 3,
     "total_news": 10
   },
   "market_regime": "bull"

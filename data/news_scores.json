@@ -29,6 +29,16 @@
       ]
     },
     {
+      "symbol": "VIC",
+      "buy_potential_score": 50,
+      "risk_score": 50,
+      "confidence": 0.0,
+      "horizon": "1-4w",
+      "key_bull_points": [],
+      "key_risks": [],
+      "evidence": []
+    },
+    {
       "symbol": "MWG",
       "buy_potential_score": 20,
       "risk_score": 60,
@@ -58,6 +68,6 @@
     }
   ],
   "status": "SUCCESS",
-  "analyzed_symbols": 2,
+  "analyzed_symbols": 3,
   "total_news": 10
 }

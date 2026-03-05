@@ -167,5 +167,19 @@
         ]
       }
     ]
+  },
+  "VIC_d75171398898": {
+    "symbol_scores": [
+      {
+        "symbol": "VIC",
+        "buy_potential_score": 50,
+        "risk_score": 50,
+        "confidence": 0.0,
+        "horizon": "1-4w",
+        "key_bull_points": [],
+        "key_risks": [],
+        "evidence": []
+      }
+    ]
   }
 }
