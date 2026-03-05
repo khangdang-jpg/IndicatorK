@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-05T06:43:37.945268",
+  "generated_at": "2026-03-05T07:11:15.957014",
   "strategy_id": "trend_momentum_atr_regime_adaptive",
   "strategy_version": "1.0.0",
   "allocation_targets": {
@@ -18,10 +18,10 @@
       "position_target_pct": 0.09,
       "rationale_bullets": [
         "Regime: BULL | RSI\u226550",
-        "Trend UP: price 67 > MA10w 61 > MA30w 56",
-        "RSI(14): 68.1",
+        "Trend UP: price 66 > MA10w 61 > MA30w 56",
+        "RSI(14): 67.5",
         "ATR: 5",
-        "Vol: 55,343,400 (0.9x avg)",
+        "Vol: 57,433,800 (1.0x avg)",
         "Entry: pullback mid-zone",
         "Position: 9.0% (base 6.0% \u00d7 1.5x = 9.0%, stop dist 16.7%)"
       ],
@@ -42,10 +42,10 @@
       "position_target_pct": 0.0562,
       "rationale_bullets": [
         "Regime: BULL | RSI\u226550",
-        "Trend UP: price 164 > MA10w 159 > MA30w 117",
-        "RSI(14): 64.6",
+        "Trend UP: price 163 > MA10w 159 > MA30w 117",
+        "RSI(14): 64.4",
         "ATR: 23",
-        "Vol: 20,168,500 (0.7x avg)",
+        "Vol: 20,854,100 (0.7x avg)",
         "Entry: pullback mid-zone",
         "Position: 5.6% (base 3.8% \u00d7 1.5x = 5.6%, stop dist 26.7%)"
       ],
@@ -85,27 +85,27 @@
   ],
   "ai_analysis": {
     "generated": true,
-    "market_context": "Portfolio is heavily invested in cash, with a small position and a relatively small unrealized loss.",
+    "market_context": "The portfolio has a total value of 9,999,966 VND, with a cash reserve of 99.98% and a single position, resulting in a net unrealized loss of 0.34%.",
     "analysis_date": "2026-03-05",
     "data_sources": "Weekly technical analysis using Groq AI",
     "scores": {
       "STB": {
         "symbol": "STB",
         "score": 8,
-        "rationale": "Strong bullish trend with RSI above 50 and price above both MA10w and MA30w.",
-        "risk_note": "Stop loss is relatively close to entry price."
+        "rationale": "Trend is up with price above both moving averages and RSI above 50.",
+        "risk_note": "Stop loss is relatively close to the entry price."
       },
       "VIC": {
         "symbol": "VIC",
         "score": 9,
-        "rationale": "Bullish trend with price above both MA10w and MA30w, and RSI above 50.",
-        "risk_note": "Stop loss is relatively close to entry price."
+        "rationale": "Trend is strong with price above both moving averages and RSI above 50.",
+        "risk_note": "Stop loss is relatively close to the entry price."
       },
       "MWG": {
         "symbol": "MWG",
         "score": 4,
-        "rationale": "Bullish trend weakening with price below MA10w, but still above MA30w.",
-        "risk_note": "Reducing position suggests potential risk of further price decline."
+        "rationale": "Trend is weakening with price below the short-term moving average.",
+        "risk_note": "Reducing position indicates some risk of further price drop."
       }
     }
   },
