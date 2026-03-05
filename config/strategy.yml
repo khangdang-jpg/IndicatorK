@@ -45,6 +45,10 @@ trend_momentum_atr_regime_adaptive:
   sideways_atr_stop_mult: 1.5 # Standard stops
   sideways_atr_target_mult: 2.5 # Standard targets
 
+  # ATH-aware TP capping for realistic targets
+  ath_cap_pct: 0.20           # Cap TP at ATH + 20%
+  ath_lookback_days: 252      # 1 year ATH lookback window
+
 rebalance_50_50:
   stock_target: 0.50
   bond_fund_target: 0.50

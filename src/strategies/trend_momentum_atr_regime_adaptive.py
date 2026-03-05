@@ -64,6 +64,10 @@ class TrendMomentumATRRegimeAdaptive(Strategy):
 
         self.current_regime = "sideways"  # Default
 
+        # ATH-aware TP capping for realistic targets
+        self.ath_cap_pct = params.get("ath_cap_pct", 0.20)  # Cap TP at ATH + 20%
+        self.ath_lookback_days = params.get("ath_lookback_days", 252)  # 1 year
+
     @property
     def id(self) -> str:
         return "trend_momentum_atr_regime_adaptive"
@@ -206,6 +210,17 @@ class TrendMomentumATRRegimeAdaptive(Strategy):
 
         return regime
 
+
+    def _get_ath_cap(self, symbol: str, candles: list) -> float:
+        """Get ATH-based TP cap for a symbol."""
+        if not candles:
+            return float("inf")  # No cap if no data
+        
+        # Look back N days for ATH
+        lookback_candles = candles[-self.ath_lookback_days:] if len(candles) > self.ath_lookback_days else candles
+        ath = max(c.high for c in lookback_candles)
+        return ath * (1 + self.ath_cap_pct)
+    
     def generate_weekly_plan(
         self,
         market_data: dict[str, list[OHLCV]],
@@ -335,7 +350,9 @@ class TrendMomentumATRRegimeAdaptive(Strategy):
 
                 # Regime-adaptive SL/TP
                 stop_loss = round_to_step(entry_price - atr_stop_mult * atr, tick)
-                take_profit = round_to_step(entry_price + atr_target_mult * atr, tick)
+                raw_take_profit = round_to_step(entry_price + atr_target_mult * atr, tick)
+                ath_cap = self._get_ath_cap(symbol, weekly)
+                take_profit = min(raw_take_profit, round_to_step(ath_cap, tick))
 
             elif trend_weakening and is_held:
                 action = "REDUCE"
