@@ -37,16 +37,6 @@ def _load_cached_prices(symbols: list[str]) -> dict[str, float]:
         return {}
 
 
-def _ai_score_tag(ai_analysis: AIAnalysis | None, symbol: str) -> str:
-    """Return compact AI score tag like '  AI 8/10' or empty string."""
-    if not ai_analysis or not ai_analysis.generated:
-        return ""
-    ai = ai_analysis.scores.get(symbol)
-    if not ai:
-        return ""
-    return f"  AI {ai.score}/10"
-
-
 def _zone_label(price: float, low: float, high: float) -> str:
     """Return a compact zone-distance label for a given price."""
     if low <= price <= high:
@@ -56,6 +46,113 @@ def _zone_label(price: float, low: float, high: float) -> str:
         return f"⬆ {pct:.1f}% above zone"
     pct = (low - price) / low * 100
     return f"⬇ {pct:.1f}% below zone"
+
+
+def _format_unified_analysis(ai_analysis, plan, recommendations) -> str:
+    """Create unified analysis combining technical AI + news insights."""
+    import re
+
+    lines = ["", "*📊 Market Analysis*"]
+
+    # Get technical analysis scores
+    tech_scores = {}
+    market_context = ""
+    if ai_analysis and ai_analysis.generated:
+        tech_scores = ai_analysis.scores if hasattr(ai_analysis, 'scores') else {}
+        market_context = ai_analysis.market_context if hasattr(ai_analysis, 'market_context') else ""
+
+    # Get news analysis scores
+    news_scores = {}
+    if hasattr(plan, 'news_analysis') and plan.news_analysis and plan.news_analysis.get('symbol_scores'):
+        for score_data in plan.news_analysis.get('symbol_scores', []):
+            symbol = score_data.get('symbol')
+            if symbol:
+                news_scores[symbol] = score_data
+
+    # Show market context if available
+    if market_context:
+        lines.append(f"_{market_context}_")
+        lines.append("")
+
+    # Process each stock with unified scoring
+    for rec in recommendations[:6]:  # Limit to first 6 for readability
+        symbol = rec.symbol if hasattr(rec, 'symbol') else rec.get('symbol')
+        if not symbol:
+            continue
+
+        # Get technical analysis
+        tech_score = tech_scores.get(symbol)
+        tech_rationale = ""
+        tech_risk = ""
+        if tech_score:
+            tech_rationale = getattr(tech_score, 'rationale', '')
+            tech_risk = getattr(tech_score, 'risk_note', '')
+
+        # Get news analysis
+        news_data = news_scores.get(symbol)
+        news_content = []
+
+        # Calculate unified score (favor technical analysis, adjust with news sentiment)
+        base_score = getattr(tech_score, 'score', 5) if tech_score else 5
+
+        # Adjust based on news sentiment if available
+        final_score = base_score
+        if news_data:
+            buy_potential = news_data.get('buy_potential_score', 50)
+            confidence = news_data.get('confidence', 0.5)
+
+            # Convert 0-100 news score to -2 to +2 adjustment
+            news_adjustment = ((buy_potential - 50) / 25) * confidence
+            final_score = max(1, min(10, int(base_score + news_adjustment)))
+
+            # Get news insights (remove IDs and show more text)
+            bull_points = news_data.get('key_bull_points', [])
+            risk_points = news_data.get('key_risks', [])
+
+            # Clean up news content - remove ID references and show full text
+            for point in bull_points[:2]:  # Limit to 2 key points
+                # Remove ID references like "(ID: abc123)"
+                clean_point = re.sub(r'\s*\(ID:\s*[^)]+\)', '', point.strip())
+                if clean_point and len(clean_point) > 10:
+                    news_content.append(f"📈 {clean_point}")
+
+            for point in risk_points[:1]:  # Limit to 1 risk point
+                clean_point = re.sub(r'\s*\(ID:\s*[^)]+\)', '', point.strip())
+                if clean_point and len(clean_point) > 10:
+                    news_content.append(f"⚠ {clean_point}")
+
+        # Score indicator
+        if final_score >= 8:
+            indicator = "🟢"
+        elif final_score >= 6:
+            indicator = "🔵"
+        elif final_score >= 4:
+            indicator = "🟡"
+        else:
+            indicator = "🔴"
+
+        # Format unified analysis for this stock
+        lines.append(f"  `{symbol}` {indicator} {final_score}/10")
+
+        # Technical insights
+        if tech_rationale:
+            lines.append(f"    📊 Technical: {tech_rationale}")
+
+        # News insights (more text, no IDs)
+        for news_line in news_content:
+            lines.append(f"    {news_line}")
+
+        # Combined risk assessment (avoid duplication with news risks)
+        if tech_risk and not any("⚠" in line for line in news_content):
+            lines.append(f"    ⚠ Risk: {tech_risk}")
+
+        lines.append("")  # Space between stocks
+
+    # Remove extra blank line at end
+    if lines and lines[-1] == "":
+        lines.pop()
+
+    return "\n".join(lines)
 
 
 def format_weekly_digest(
@@ -85,8 +182,7 @@ def format_weekly_digest(
             icon = _ENTRY_ICON.get(r.entry_type, "·")
             vnd = _alloc_vnd(r.position_target_pct, total) if r.position_target_pct and total else 0
             alloc_str = f" — {vnd:,.0f} ₫" if vnd else ""
-            ai_tag = _ai_score_tag(ai_analysis, r.symbol)
-            lines.append(f"  📈 `{r.symbol}` {icon} {r.entry_type.capitalize()}{alloc_str}{ai_tag}")
+            lines.append(f"  📈 `{r.symbol}` {icon} {r.entry_type.capitalize()}{alloc_str}")
             lines.append(f"    🎯 Entry: {r.entry_price:,.0f}")
             lines.append(f"    📊 Zone: {r.buy_zone_low:,.0f}–{r.buy_zone_high:,.0f}")
             lines.append(f"    🛡️ SL {r.stop_loss:,.0f} | TP {r.take_profit:,.0f}")
@@ -102,7 +198,6 @@ def format_weekly_digest(
         cached = _load_cached_prices([r.symbol for r in holds])
 
         for r in holds:
-            ai_tag = _ai_score_tag(ai_analysis, r.symbol)
 
             # Show current price + P&L if available
             current = cached.get(r.symbol)
@@ -119,7 +214,7 @@ def format_weekly_digest(
             sl_str = f"SL {r.stop_loss:,.0f}" if r.stop_loss else ""
             exit_levels = " | ".join(filter(None, [sl_str, tp_str]))
 
-            lines.append(f"    🔔 Exit alerts: {exit_levels}{ai_tag}")
+            lines.append(f"    🔔 Exit alerts: {exit_levels}")
             lines.append("")  # Spacing between positions
 
         # Remove extra line at end
@@ -139,77 +234,27 @@ def format_weekly_digest(
         f"Bond {targets.get('bond_fund', 0):.0%}"
     )
 
-    # Only show guardrails when there are actual warnings (not just empty report)
+    # Only show guardrails when there are meaningful warnings
     if guardrails and guardrails.recommendations and len(guardrails.recommendations) > 0:
-        lines.append("")
-        lines.append("*⚠️ Alerts*")
+        # Filter out trivial strategy switch recommendations (e.g., -0.00% differences)
+        meaningful_recs = []
         for rec in guardrails.recommendations:
-            lines.append(f"  {rec}")
+            if "SWITCH_STRATEGY" in rec and "-0.0" in rec:
+                # Skip trivial strategy switch recommendations near zero
+                continue
+            meaningful_recs.append(rec)
 
-    # AI Analysis section
-    if ai_analysis:
-        if ai_analysis.generated:
-            # Normal AI analysis with scores
-            from src.ai.groq_analyzer import format_ai_section
-            ai_section = format_ai_section(
-                ai_analysis,
-                [r.to_dict() for r in plan.recommendations],
-            )
-            if ai_section:
-                lines.append(ai_section)
-        else:
-            # Rate limit or API not configured notice
+        if meaningful_recs:
             lines.append("")
-            lines.append("*🤖 AI Analysis*")
-            if hasattr(ai_analysis, 'market_context') and ai_analysis.market_context:
-                lines.append(f"_{ai_analysis.market_context}_")
+            lines.append("*⚠️ Alerts*")
+            for rec in meaningful_recs:
+                lines.append(f"  {rec}")
 
-            # Show status-specific notice
-            if hasattr(ai_analysis, 'notice') and ai_analysis.notice:
-                lines.append(f"{ai_analysis.notice}")
-
-            lines.append("")
-
-    # News Analysis section
-    if plan.news_analysis and plan.news_analysis.get("status") == "SUCCESS":
-        lines.append("")
-        lines.append("*📰 News Analysis*")
-        total_news = plan.news_analysis.get("total_news", 0)
-        lines.append(f"_Based on {total_news} Vietnamese news articles_")
-        lines.append("")
-
-        symbol_scores = plan.news_analysis.get("symbol_scores", [])
-        for score_data in symbol_scores[:5]:  # Limit to top 5 symbols
-            sym = score_data.get("symbol")
-            buy_score = score_data.get("buy_potential_score", 0)
-            risk_score = score_data.get("risk_score", 0)
-            confidence = score_data.get("confidence", 0)
-
-            # Score visualization
-            if buy_score >= 60:
-                sentiment = "🟢 Bullish"
-            elif buy_score >= 40:
-                sentiment = "🔵 Neutral"
-            else:
-                sentiment = "🔴 Bearish"
-
-            lines.append(f"  `{sym}` {sentiment} {buy_score}/100")
-            lines.append(f"    Risk: {risk_score}/100 | Confidence: {confidence*100:.0f}%")
-
-            # Bull points
-            bull_points = score_data.get("key_bull_points", [])
-            if bull_points:
-                # Truncate long Vietnamese text to fit Telegram message limits
-                bull_text = bull_points[0][:100] + "..." if len(bull_points[0]) > 100 else bull_points[0]
-                lines.append(f"    ✅ {bull_text}")
-
-            # Risk points
-            risks = score_data.get("key_risks", [])
-            if risks:
-                risk_text = risks[0][:100] + "..." if len(risks[0]) > 100 else risks[0]
-                lines.append(f"    ⚠️ {risk_text}")
-
-            lines.append("")
+    # Unified Market Analysis (Technical + News)
+    if ai_analysis or (hasattr(plan, 'news_analysis') and plan.news_analysis):
+        unified_section = _format_unified_analysis(ai_analysis, plan, plan.recommendations)
+        if unified_section:
+            lines.append(unified_section)
 
     return "\n".join(lines)
 
@@ -417,47 +462,6 @@ def format_plan_summary(plan_data: dict, total_value: float = 0.0) -> str:
             # Rate limit or API not configured notice
             if ai_analysis.get("notice"):
                 lines.append(f"{ai_analysis['notice']}")
-            lines.append("")
-
-    # News Analysis section
-    news_analysis = plan_data.get("news_analysis")
-    if news_analysis and news_analysis.get("status") == "SUCCESS":
-        lines.append("")
-        lines.append("*📰 News Analysis*")
-        total_news = news_analysis.get("total_news", 0)
-        lines.append(f"_Based on {total_news} Vietnamese news articles_")
-        lines.append("")
-
-        symbol_scores = news_analysis.get("symbol_scores", [])
-        for score_data in symbol_scores[:5]:  # Limit to top 5
-            sym = score_data.get("symbol")
-            buy_score = score_data.get("buy_potential_score", 0)
-            risk_score = score_data.get("risk_score", 0)
-            confidence = score_data.get("confidence", 0)
-
-            # Score visualization
-            if buy_score >= 60:
-                sentiment = "🟢 Bullish"
-            elif buy_score >= 40:
-                sentiment = "🔵 Neutral"
-            else:
-                sentiment = "🔴 Bearish"
-
-            lines.append(f"  `{sym}` {sentiment} {buy_score}/100")
-            lines.append(f"    Risk: {risk_score}/100 | Confidence: {confidence*100:.0f}%")
-
-            # Bull points with Vietnamese text
-            bull_points = score_data.get("key_bull_points", [])
-            if bull_points:
-                bull_text = bull_points[0][:100] + "..." if len(bull_points[0]) > 100 else bull_points[0]
-                lines.append(f"    ✅ {bull_text}")
-
-            # Risk points
-            risks = score_data.get("key_risks", [])
-            if risks:
-                risk_text = risks[0][:100] + "..." if len(risks[0]) > 100 else risks[0]
-                lines.append(f"    ⚠️ {risk_text}")
-
             lines.append("")
 
     return "\n".join(lines)
