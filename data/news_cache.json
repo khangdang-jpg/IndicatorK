@@ -1,199 +1,308 @@
 {
   "symbol_news": {
-    "STB": [
+    "HPG": [
       {
-        "id": "9d7bb7c27bd9ad51",
-        "title": "\u00d4ng Nguy\u1ec5n \u0110\u1ee9c Th\u1ee5y l\u00e0m T\u1ed5ng gi\u00e1m \u0111\u1ed1c Sacombank",
+        "id": "fff53e6fb9f146e2",
+        "title": "'Nghi\u00ean c\u1ee9u n\u00e2ng tr\u1ea7n thu nh\u1eadp mua nh\u00e0 x\u00e3 h\u1ed9i l\u00ean 25-27 tri\u1ec7u \u0111\u1ed3ng m\u1ed9t th\u00e1ng'",
         "source": "VnExpress",
-        "snippet": "\u00d4ng Nguy\u1ec5n \u0110\u1ee9c Th\u1ee5y l\u00e0m T\u1ed5ng gi\u00e1m \u0111\u1ed1c Sacombank t\u1eeb ng\u00e0y 3/3, sau hai th\u00e1ng gia nh\u1eadp nh\u00e0 b\u0103ng n\u00e0y.",
-        "published_at": "2026-03-04T15:20:01.215187",
-        "url": "https://vnexpress.net/ong-nguyen-duc-thuy-lam-tong-giam-doc-sacombank-5045986.html",
-        "scope": "symbol"
-      },
-      {
-        "id": "b54b67fb5c3353dc",
-        "title": "VN-Index gi\u1ea3m m\u1ea1nh nh\u1ea5t t\u1eeb \u0111\u1ea7u n\u0103m",
-        "source": "VnExpress",
-        "snippet": "\u00c1p l\u1ef1c b\u00e1n th\u00e1o tr\u00ean di\u1ec7n r\u1ed9ng (tr\u1eeb nh\u00f3m d\u1ea7u kh\u00ed) khi\u1ebfn VN-Index m\u1ea5t h\u01a1n 34 \u0111i\u1ec3m, \u0111\u00e1nh d\u1ea5u phi\u00ean gi\u1ea3m s\u00e2u nh\u1ea5t t\u1eeb \u0111\u1ea7u n\u0103m.",
-        "published_at": "2026-03-04T15:20:01.215235",
-        "url": "https://vnexpress.net/vn-index-giam-manh-nhat-tu-dau-nam-5045754.html",
+        "snippet": "Th\u1ee7 t\u01b0\u1edbng giao B\u1ed9 X\u00e2y d\u1ef1ng nghi\u00ean c\u1ee9u n\u00e2ng m\u1ee9c thu nh\u1eadp v\u1edbi c\u00e1 nh\u00e2n mua nh\u00e0 \u1edf x\u00e3 h\u1ed9i l\u00ean t\u1ed1i \u0111a 25-27 tri\u1ec7u m\u1ed9t th\u00e1ng, t\u0103ng so v\u1edbi m\u1ee9c 20 tri\u1ec7u hi\u1ec7n h\u00e0nh.",
+        "published_at": "2026-03-06T08:16:03.284973",
+        "url": "https://vnexpress.net/nghien-cuu-nang-tran-thu-nhap-mua-nha-xa-hoi-len-25-27-trieu-dong-mot-thang-5046630.html",
         "scope": "market"
       },
       {
-        "id": "2eb65bcb5f9acd5a",
-        "title": "Doanh nghi\u1ec7p xu\u1ea5t kh\u1ea9u lo r\u1ee7i ro tr\u01b0\u1edbc xung \u0111\u1ed9t t\u1ea1i Trung \u0110\u00f4ng",
+        "id": "d2e44d7e4454d6af",
+        "title": "B\u1ed9 X\u00e2y d\u1ef1ng: Ngu\u1ed3n cung b\u1ea5t \u0111\u1ed9ng s\u1ea3n s\u1ebd t\u0103ng m\u1ea1nh n\u0103m nay",
         "source": "VnExpress",
-        "snippet": "Xung \u0111\u1ed9t Trung \u0110\u00f4ng leo thang khi\u1ebfn nhi\u1ec1u doanh nghi\u1ec7p xu\u1ea5t kh\u1ea9u lo \u0111\u1ee9t g\u00e3y chu\u1ed7i cung \u1ee9ng, c\u01b0\u1edbc v\u1eadn t\u1ea3i t\u0103ng v\u1ecdt v\u00e0 r\u1ee7i ro h\u1ecfng n\u00f4ng s\u1ea3n t\u01b0\u01a1i.",
-        "published_at": "2026-03-04T15:20:01.215227",
-        "url": "https://vnexpress.net/doanh-nghiep-xuat-khau-lo-rui-ro-truoc-xung-dot-tai-trung-dong-5045739.html",
+        "snippet": "Theo B\u1ed9 X\u00e2y d\u1ef1ng, ngu\u1ed3n cung b\u1ea5t \u0111\u1ed9ng s\u1ea3n n\u0103m 2026 d\u1ef1 ki\u1ebfn t\u0103ng m\u1ea1nh nh\u1edd g\u1ee1 v\u01b0\u1edbng ph\u00e1p l\u00fd, g\u00f3p ph\u1ea7n h\u1ea1 nhi\u1ec7t gi\u00e1 nh\u00e0.",
+        "published_at": "2026-03-06T08:16:03.284962",
+        "url": "https://vnexpress.net/bo-xay-dung-nguon-cung-bat-dong-san-se-tang-manh-nam-nay-5046670.html",
         "scope": "market"
       },
       {
-        "id": "cdd34df7bc5f9f8d",
-        "title": "'C\u1ea7n th\u1eadn tr\u1ecdng khi mua m\u1edbi c\u1ed5 phi\u1ebfu d\u1ea7u kh\u00ed l\u00fac n\u00e0y'",
+        "id": "28fc18dcca8260bb",
+        "title": "Ph\u00f3 th\u1ed1ng \u0111\u1ed1c: T\u1ef7 gi\u00e1 c\u00f3 xu h\u01b0\u1edbng t\u0103ng do c\u0103ng th\u1eb3ng Trung \u0110\u00f4ng",
         "source": "VnExpress",
-        "snippet": "Xung \u0111\u1ed9t Iran \u0111\u01b0\u1ee3c d\u1ef1 \u0111o\u00e1n h\u1ed7 tr\u1ee3 c\u1ed5 phi\u1ebfu d\u1ea7u kh\u00ed, nh\u01b0ng \u0111\u1ecbnh gi\u00e1 nh\u00f3m n\u00e0y kh\u00f4ng c\u00f2n r\u1ebb, nh\u00e0 \u0111\u1ea7u t\u01b0 d\u1ec5 r\u01a1i v\u00e0o tr\u1ea1ng th\u00e1i \"\u0111u \u0111\u1ec9nh\", theo chuy\u00ean gia.",
-        "published_at": "2026-03-04T15:20:01.215219",
-        "url": "https://vnexpress.net/can-than-trong-khi-mua-moi-co-phieu-dau-khi-luc-nay-5045567.html",
+        "snippet": "Tu\u1ea7n n\u00e0y, t\u1ef7 gi\u00e1 c\u00f3 xu h\u01b0\u1edbng nh\u00edch l\u00ean do c\u0103ng th\u1eb3ng t\u1eeb Trung \u0110\u00f4ng, theo Ph\u00f3 th\u1ed1ng \u0111\u1ed1c Ph\u1ea1m Thanh H\u00e0.",
+        "published_at": "2026-03-06T08:16:03.284951",
+        "url": "https://vnexpress.net/pho-thong-doc-ty-gia-co-xu-huong-tang-do-cang-thang-trung-dong-5046679.html",
+        "scope": "market"
+      }
+    ],
+    "VNM": [
+      {
+        "id": "fff53e6fb9f146e2",
+        "title": "'Nghi\u00ean c\u1ee9u n\u00e2ng tr\u1ea7n thu nh\u1eadp mua nh\u00e0 x\u00e3 h\u1ed9i l\u00ean 25-27 tri\u1ec7u \u0111\u1ed3ng m\u1ed9t th\u00e1ng'",
+        "source": "VnExpress",
+        "snippet": "Th\u1ee7 t\u01b0\u1edbng giao B\u1ed9 X\u00e2y d\u1ef1ng nghi\u00ean c\u1ee9u n\u00e2ng m\u1ee9c thu nh\u1eadp v\u1edbi c\u00e1 nh\u00e2n mua nh\u00e0 \u1edf x\u00e3 h\u1ed9i l\u00ean t\u1ed1i \u0111a 25-27 tri\u1ec7u m\u1ed9t th\u00e1ng, t\u0103ng so v\u1edbi m\u1ee9c 20 tri\u1ec7u hi\u1ec7n h\u00e0nh.",
+        "published_at": "2026-03-06T08:16:03.284973",
+        "url": "https://vnexpress.net/nghien-cuu-nang-tran-thu-nhap-mua-nha-xa-hoi-len-25-27-trieu-dong-mot-thang-5046630.html",
+        "scope": "market"
+      },
+      {
+        "id": "d2e44d7e4454d6af",
+        "title": "B\u1ed9 X\u00e2y d\u1ef1ng: Ngu\u1ed3n cung b\u1ea5t \u0111\u1ed9ng s\u1ea3n s\u1ebd t\u0103ng m\u1ea1nh n\u0103m nay",
+        "source": "VnExpress",
+        "snippet": "Theo B\u1ed9 X\u00e2y d\u1ef1ng, ngu\u1ed3n cung b\u1ea5t \u0111\u1ed9ng s\u1ea3n n\u0103m 2026 d\u1ef1 ki\u1ebfn t\u0103ng m\u1ea1nh nh\u1edd g\u1ee1 v\u01b0\u1edbng ph\u00e1p l\u00fd, g\u00f3p ph\u1ea7n h\u1ea1 nhi\u1ec7t gi\u00e1 nh\u00e0.",
+        "published_at": "2026-03-06T08:16:03.284962",
+        "url": "https://vnexpress.net/bo-xay-dung-nguon-cung-bat-dong-san-se-tang-manh-nam-nay-5046670.html",
+        "scope": "market"
+      },
+      {
+        "id": "28fc18dcca8260bb",
+        "title": "Ph\u00f3 th\u1ed1ng \u0111\u1ed1c: T\u1ef7 gi\u00e1 c\u00f3 xu h\u01b0\u1edbng t\u0103ng do c\u0103ng th\u1eb3ng Trung \u0110\u00f4ng",
+        "source": "VnExpress",
+        "snippet": "Tu\u1ea7n n\u00e0y, t\u1ef7 gi\u00e1 c\u00f3 xu h\u01b0\u1edbng nh\u00edch l\u00ean do c\u0103ng th\u1eb3ng t\u1eeb Trung \u0110\u00f4ng, theo Ph\u00f3 th\u1ed1ng \u0111\u1ed1c Ph\u1ea1m Thanh H\u00e0.",
+        "published_at": "2026-03-06T08:16:03.284951",
+        "url": "https://vnexpress.net/pho-thong-doc-ty-gia-co-xu-huong-tang-do-cang-thang-trung-dong-5046679.html",
+        "scope": "market"
+      }
+    ],
+    "FPT": [
+      {
+        "id": "fff53e6fb9f146e2",
+        "title": "'Nghi\u00ean c\u1ee9u n\u00e2ng tr\u1ea7n thu nh\u1eadp mua nh\u00e0 x\u00e3 h\u1ed9i l\u00ean 25-27 tri\u1ec7u \u0111\u1ed3ng m\u1ed9t th\u00e1ng'",
+        "source": "VnExpress",
+        "snippet": "Th\u1ee7 t\u01b0\u1edbng giao B\u1ed9 X\u00e2y d\u1ef1ng nghi\u00ean c\u1ee9u n\u00e2ng m\u1ee9c thu nh\u1eadp v\u1edbi c\u00e1 nh\u00e2n mua nh\u00e0 \u1edf x\u00e3 h\u1ed9i l\u00ean t\u1ed1i \u0111a 25-27 tri\u1ec7u m\u1ed9t th\u00e1ng, t\u0103ng so v\u1edbi m\u1ee9c 20 tri\u1ec7u hi\u1ec7n h\u00e0nh.",
+        "published_at": "2026-03-06T08:16:03.284973",
+        "url": "https://vnexpress.net/nghien-cuu-nang-tran-thu-nhap-mua-nha-xa-hoi-len-25-27-trieu-dong-mot-thang-5046630.html",
+        "scope": "market"
+      },
+      {
+        "id": "d2e44d7e4454d6af",
+        "title": "B\u1ed9 X\u00e2y d\u1ef1ng: Ngu\u1ed3n cung b\u1ea5t \u0111\u1ed9ng s\u1ea3n s\u1ebd t\u0103ng m\u1ea1nh n\u0103m nay",
+        "source": "VnExpress",
+        "snippet": "Theo B\u1ed9 X\u00e2y d\u1ef1ng, ngu\u1ed3n cung b\u1ea5t \u0111\u1ed9ng s\u1ea3n n\u0103m 2026 d\u1ef1 ki\u1ebfn t\u0103ng m\u1ea1nh nh\u1edd g\u1ee1 v\u01b0\u1edbng ph\u00e1p l\u00fd, g\u00f3p ph\u1ea7n h\u1ea1 nhi\u1ec7t gi\u00e1 nh\u00e0.",
+        "published_at": "2026-03-06T08:16:03.284962",
+        "url": "https://vnexpress.net/bo-xay-dung-nguon-cung-bat-dong-san-se-tang-manh-nam-nay-5046670.html",
+        "scope": "market"
+      },
+      {
+        "id": "28fc18dcca8260bb",
+        "title": "Ph\u00f3 th\u1ed1ng \u0111\u1ed1c: T\u1ef7 gi\u00e1 c\u00f3 xu h\u01b0\u1edbng t\u0103ng do c\u0103ng th\u1eb3ng Trung \u0110\u00f4ng",
+        "source": "VnExpress",
+        "snippet": "Tu\u1ea7n n\u00e0y, t\u1ef7 gi\u00e1 c\u00f3 xu h\u01b0\u1edbng nh\u00edch l\u00ean do c\u0103ng th\u1eb3ng t\u1eeb Trung \u0110\u00f4ng, theo Ph\u00f3 th\u1ed1ng \u0111\u1ed1c Ph\u1ea1m Thanh H\u00e0.",
+        "published_at": "2026-03-06T08:16:03.284951",
+        "url": "https://vnexpress.net/pho-thong-doc-ty-gia-co-xu-huong-tang-do-cang-thang-trung-dong-5046679.html",
         "scope": "market"
       }
     ],
     "MWG": [
       {
-        "id": "b54b67fb5c3353dc",
-        "title": "VN-Index gi\u1ea3m m\u1ea1nh nh\u1ea5t t\u1eeb \u0111\u1ea7u n\u0103m",
+        "id": "fff53e6fb9f146e2",
+        "title": "'Nghi\u00ean c\u1ee9u n\u00e2ng tr\u1ea7n thu nh\u1eadp mua nh\u00e0 x\u00e3 h\u1ed9i l\u00ean 25-27 tri\u1ec7u \u0111\u1ed3ng m\u1ed9t th\u00e1ng'",
         "source": "VnExpress",
-        "snippet": "\u00c1p l\u1ef1c b\u00e1n th\u00e1o tr\u00ean di\u1ec7n r\u1ed9ng (tr\u1eeb nh\u00f3m d\u1ea7u kh\u00ed) khi\u1ebfn VN-Index m\u1ea5t h\u01a1n 34 \u0111i\u1ec3m, \u0111\u00e1nh d\u1ea5u phi\u00ean gi\u1ea3m s\u00e2u nh\u1ea5t t\u1eeb \u0111\u1ea7u n\u0103m.",
-        "published_at": "2026-03-04T15:20:01.215235",
-        "url": "https://vnexpress.net/vn-index-giam-manh-nhat-tu-dau-nam-5045754.html",
+        "snippet": "Th\u1ee7 t\u01b0\u1edbng giao B\u1ed9 X\u00e2y d\u1ef1ng nghi\u00ean c\u1ee9u n\u00e2ng m\u1ee9c thu nh\u1eadp v\u1edbi c\u00e1 nh\u00e2n mua nh\u00e0 \u1edf x\u00e3 h\u1ed9i l\u00ean t\u1ed1i \u0111a 25-27 tri\u1ec7u m\u1ed9t th\u00e1ng, t\u0103ng so v\u1edbi m\u1ee9c 20 tri\u1ec7u hi\u1ec7n h\u00e0nh.",
+        "published_at": "2026-03-06T08:16:03.284973",
+        "url": "https://vnexpress.net/nghien-cuu-nang-tran-thu-nhap-mua-nha-xa-hoi-len-25-27-trieu-dong-mot-thang-5046630.html",
         "scope": "market"
       },
       {
-        "id": "2eb65bcb5f9acd5a",
-        "title": "Doanh nghi\u1ec7p xu\u1ea5t kh\u1ea9u lo r\u1ee7i ro tr\u01b0\u1edbc xung \u0111\u1ed9t t\u1ea1i Trung \u0110\u00f4ng",
+        "id": "d2e44d7e4454d6af",
+        "title": "B\u1ed9 X\u00e2y d\u1ef1ng: Ngu\u1ed3n cung b\u1ea5t \u0111\u1ed9ng s\u1ea3n s\u1ebd t\u0103ng m\u1ea1nh n\u0103m nay",
         "source": "VnExpress",
-        "snippet": "Xung \u0111\u1ed9t Trung \u0110\u00f4ng leo thang khi\u1ebfn nhi\u1ec1u doanh nghi\u1ec7p xu\u1ea5t kh\u1ea9u lo \u0111\u1ee9t g\u00e3y chu\u1ed7i cung \u1ee9ng, c\u01b0\u1edbc v\u1eadn t\u1ea3i t\u0103ng v\u1ecdt v\u00e0 r\u1ee7i ro h\u1ecfng n\u00f4ng s\u1ea3n t\u01b0\u01a1i.",
-        "published_at": "2026-03-04T15:20:01.215227",
-        "url": "https://vnexpress.net/doanh-nghiep-xuat-khau-lo-rui-ro-truoc-xung-dot-tai-trung-dong-5045739.html",
+        "snippet": "Theo B\u1ed9 X\u00e2y d\u1ef1ng, ngu\u1ed3n cung b\u1ea5t \u0111\u1ed9ng s\u1ea3n n\u0103m 2026 d\u1ef1 ki\u1ebfn t\u0103ng m\u1ea1nh nh\u1edd g\u1ee1 v\u01b0\u1edbng ph\u00e1p l\u00fd, g\u00f3p ph\u1ea7n h\u1ea1 nhi\u1ec7t gi\u00e1 nh\u00e0.",
+        "published_at": "2026-03-06T08:16:03.284962",
+        "url": "https://vnexpress.net/bo-xay-dung-nguon-cung-bat-dong-san-se-tang-manh-nam-nay-5046670.html",
         "scope": "market"
       },
       {
-        "id": "cdd34df7bc5f9f8d",
-        "title": "'C\u1ea7n th\u1eadn tr\u1ecdng khi mua m\u1edbi c\u1ed5 phi\u1ebfu d\u1ea7u kh\u00ed l\u00fac n\u00e0y'",
+        "id": "28fc18dcca8260bb",
+        "title": "Ph\u00f3 th\u1ed1ng \u0111\u1ed1c: T\u1ef7 gi\u00e1 c\u00f3 xu h\u01b0\u1edbng t\u0103ng do c\u0103ng th\u1eb3ng Trung \u0110\u00f4ng",
         "source": "VnExpress",
-        "snippet": "Xung \u0111\u1ed9t Iran \u0111\u01b0\u1ee3c d\u1ef1 \u0111o\u00e1n h\u1ed7 tr\u1ee3 c\u1ed5 phi\u1ebfu d\u1ea7u kh\u00ed, nh\u01b0ng \u0111\u1ecbnh gi\u00e1 nh\u00f3m n\u00e0y kh\u00f4ng c\u00f2n r\u1ebb, nh\u00e0 \u0111\u1ea7u t\u01b0 d\u1ec5 r\u01a1i v\u00e0o tr\u1ea1ng th\u00e1i \"\u0111u \u0111\u1ec9nh\", theo chuy\u00ean gia.",
-        "published_at": "2026-03-04T15:20:01.215219",
-        "url": "https://vnexpress.net/can-than-trong-khi-mua-moi-co-phieu-dau-khi-luc-nay-5045567.html",
+        "snippet": "Tu\u1ea7n n\u00e0y, t\u1ef7 gi\u00e1 c\u00f3 xu h\u01b0\u1edbng nh\u00edch l\u00ean do c\u0103ng th\u1eb3ng t\u1eeb Trung \u0110\u00f4ng, theo Ph\u00f3 th\u1ed1ng \u0111\u1ed1c Ph\u1ea1m Thanh H\u00e0.",
+        "published_at": "2026-03-06T08:16:03.284951",
+        "url": "https://vnexpress.net/pho-thong-doc-ty-gia-co-xu-huong-tang-do-cang-thang-trung-dong-5046679.html",
         "scope": "market"
       }
     ],
-    "VPB": [
+    "VCB": [
       {
-        "id": "b54b67fb5c3353dc",
-        "title": "VN-Index gi\u1ea3m m\u1ea1nh nh\u1ea5t t\u1eeb \u0111\u1ea7u n\u0103m",
+        "id": "fff53e6fb9f146e2",
+        "title": "'Nghi\u00ean c\u1ee9u n\u00e2ng tr\u1ea7n thu nh\u1eadp mua nh\u00e0 x\u00e3 h\u1ed9i l\u00ean 25-27 tri\u1ec7u \u0111\u1ed3ng m\u1ed9t th\u00e1ng'",
         "source": "VnExpress",
-        "snippet": "\u00c1p l\u1ef1c b\u00e1n th\u00e1o tr\u00ean di\u1ec7n r\u1ed9ng (tr\u1eeb nh\u00f3m d\u1ea7u kh\u00ed) khi\u1ebfn VN-Index m\u1ea5t h\u01a1n 34 \u0111i\u1ec3m, \u0111\u00e1nh d\u1ea5u phi\u00ean gi\u1ea3m s\u00e2u nh\u1ea5t t\u1eeb \u0111\u1ea7u n\u0103m.",
-        "published_at": "2026-03-04T15:20:01.215235",
-        "url": "https://vnexpress.net/vn-index-giam-manh-nhat-tu-dau-nam-5045754.html",
+        "snippet": "Th\u1ee7 t\u01b0\u1edbng giao B\u1ed9 X\u00e2y d\u1ef1ng nghi\u00ean c\u1ee9u n\u00e2ng m\u1ee9c thu nh\u1eadp v\u1edbi c\u00e1 nh\u00e2n mua nh\u00e0 \u1edf x\u00e3 h\u1ed9i l\u00ean t\u1ed1i \u0111a 25-27 tri\u1ec7u m\u1ed9t th\u00e1ng, t\u0103ng so v\u1edbi m\u1ee9c 20 tri\u1ec7u hi\u1ec7n h\u00e0nh.",
+        "published_at": "2026-03-06T08:16:03.284973",
+        "url": "https://vnexpress.net/nghien-cuu-nang-tran-thu-nhap-mua-nha-xa-hoi-len-25-27-trieu-dong-mot-thang-5046630.html",
         "scope": "market"
       },
       {
-        "id": "2eb65bcb5f9acd5a",
-        "title": "Doanh nghi\u1ec7p xu\u1ea5t kh\u1ea9u lo r\u1ee7i ro tr\u01b0\u1edbc xung \u0111\u1ed9t t\u1ea1i Trung \u0110\u00f4ng",
+        "id": "d2e44d7e4454d6af",
+        "title": "B\u1ed9 X\u00e2y d\u1ef1ng: Ngu\u1ed3n cung b\u1ea5t \u0111\u1ed9ng s\u1ea3n s\u1ebd t\u0103ng m\u1ea1nh n\u0103m nay",
         "source": "VnExpress",
-        "snippet": "Xung \u0111\u1ed9t Trung \u0110\u00f4ng leo thang khi\u1ebfn nhi\u1ec1u doanh nghi\u1ec7p xu\u1ea5t kh\u1ea9u lo \u0111\u1ee9t g\u00e3y chu\u1ed7i cung \u1ee9ng, c\u01b0\u1edbc v\u1eadn t\u1ea3i t\u0103ng v\u1ecdt v\u00e0 r\u1ee7i ro h\u1ecfng n\u00f4ng s\u1ea3n t\u01b0\u01a1i.",
-        "published_at": "2026-03-04T15:20:01.215227",
-        "url": "https://vnexpress.net/doanh-nghiep-xuat-khau-lo-rui-ro-truoc-xung-dot-tai-trung-dong-5045739.html",
+        "snippet": "Theo B\u1ed9 X\u00e2y d\u1ef1ng, ngu\u1ed3n cung b\u1ea5t \u0111\u1ed9ng s\u1ea3n n\u0103m 2026 d\u1ef1 ki\u1ebfn t\u0103ng m\u1ea1nh nh\u1edd g\u1ee1 v\u01b0\u1edbng ph\u00e1p l\u00fd, g\u00f3p ph\u1ea7n h\u1ea1 nhi\u1ec7t gi\u00e1 nh\u00e0.",
+        "published_at": "2026-03-06T08:16:03.284962",
+        "url": "https://vnexpress.net/bo-xay-dung-nguon-cung-bat-dong-san-se-tang-manh-nam-nay-5046670.html",
         "scope": "market"
       },
       {
-        "id": "cdd34df7bc5f9f8d",
-        "title": "'C\u1ea7n th\u1eadn tr\u1ecdng khi mua m\u1edbi c\u1ed5 phi\u1ebfu d\u1ea7u kh\u00ed l\u00fac n\u00e0y'",
+        "id": "28fc18dcca8260bb",
+        "title": "Ph\u00f3 th\u1ed1ng \u0111\u1ed1c: T\u1ef7 gi\u00e1 c\u00f3 xu h\u01b0\u1edbng t\u0103ng do c\u0103ng th\u1eb3ng Trung \u0110\u00f4ng",
         "source": "VnExpress",
-        "snippet": "Xung \u0111\u1ed9t Iran \u0111\u01b0\u1ee3c d\u1ef1 \u0111o\u00e1n h\u1ed7 tr\u1ee3 c\u1ed5 phi\u1ebfu d\u1ea7u kh\u00ed, nh\u01b0ng \u0111\u1ecbnh gi\u00e1 nh\u00f3m n\u00e0y kh\u00f4ng c\u00f2n r\u1ebb, nh\u00e0 \u0111\u1ea7u t\u01b0 d\u1ec5 r\u01a1i v\u00e0o tr\u1ea1ng th\u00e1i \"\u0111u \u0111\u1ec9nh\", theo chuy\u00ean gia.",
-        "published_at": "2026-03-04T15:20:01.215219",
-        "url": "https://vnexpress.net/can-than-trong-khi-mua-moi-co-phieu-dau-khi-luc-nay-5045567.html",
+        "snippet": "Tu\u1ea7n n\u00e0y, t\u1ef7 gi\u00e1 c\u00f3 xu h\u01b0\u1edbng nh\u00edch l\u00ean do c\u0103ng th\u1eb3ng t\u1eeb Trung \u0110\u00f4ng, theo Ph\u00f3 th\u1ed1ng \u0111\u1ed1c Ph\u1ea1m Thanh H\u00e0.",
+        "published_at": "2026-03-06T08:16:03.284951",
+        "url": "https://vnexpress.net/pho-thong-doc-ty-gia-co-xu-huong-tang-do-cang-thang-trung-dong-5046679.html",
         "scope": "market"
+      }
+    ],
+    "TCB": [
+      {
+        "id": "fff53e6fb9f146e2",
+        "title": "'Nghi\u00ean c\u1ee9u n\u00e2ng tr\u1ea7n thu nh\u1eadp mua nh\u00e0 x\u00e3 h\u1ed9i l\u00ean 25-27 tri\u1ec7u \u0111\u1ed3ng m\u1ed9t th\u00e1ng'",
+        "source": "VnExpress",
+        "snippet": "Th\u1ee7 t\u01b0\u1edbng giao B\u1ed9 X\u00e2y d\u1ef1ng nghi\u00ean c\u1ee9u n\u00e2ng m\u1ee9c thu nh\u1eadp v\u1edbi c\u00e1 nh\u00e2n mua nh\u00e0 \u1edf x\u00e3 h\u1ed9i l\u00ean t\u1ed1i \u0111a 25-27 tri\u1ec7u m\u1ed9t th\u00e1ng, t\u0103ng so v\u1edbi m\u1ee9c 20 tri\u1ec7u hi\u1ec7n h\u00e0nh.",
+        "published_at": "2026-03-06T08:16:03.284973",
+        "url": "https://vnexpress.net/nghien-cuu-nang-tran-thu-nhap-mua-nha-xa-hoi-len-25-27-trieu-dong-mot-thang-5046630.html",
+        "scope": "market"
+      },
+      {
+        "id": "d2e44d7e4454d6af",
+        "title": "B\u1ed9 X\u00e2y d\u1ef1ng: Ngu\u1ed3n cung b\u1ea5t \u0111\u1ed9ng s\u1ea3n s\u1ebd t\u0103ng m\u1ea1nh n\u0103m nay",
+        "source": "VnExpress",
+        "snippet": "Theo B\u1ed9 X\u00e2y d\u1ef1ng, ngu\u1ed3n cung b\u1ea5t \u0111\u1ed9ng s\u1ea3n n\u0103m 2026 d\u1ef1 ki\u1ebfn t\u0103ng m\u1ea1nh nh\u1edd g\u1ee1 v\u01b0\u1edbng ph\u00e1p l\u00fd, g\u00f3p ph\u1ea7n h\u1ea1 nhi\u1ec7t gi\u00e1 nh\u00e0.",
+        "published_at": "2026-03-06T08:16:03.284962",
+        "url": "https://vnexpress.net/bo-xay-dung-nguon-cung-bat-dong-san-se-tang-manh-nam-nay-5046670.html",
+        "scope": "market"
+      },
+      {
+        "id": "28fc18dcca8260bb",
+        "title": "Ph\u00f3 th\u1ed1ng \u0111\u1ed1c: T\u1ef7 gi\u00e1 c\u00f3 xu h\u01b0\u1edbng t\u0103ng do c\u0103ng th\u1eb3ng Trung \u0110\u00f4ng",
+        "source": "VnExpress",
+        "snippet": "Tu\u1ea7n n\u00e0y, t\u1ef7 gi\u00e1 c\u00f3 xu h\u01b0\u1edbng nh\u00edch l\u00ean do c\u0103ng th\u1eb3ng t\u1eeb Trung \u0110\u00f4ng, theo Ph\u00f3 th\u1ed1ng \u0111\u1ed1c Ph\u1ea1m Thanh H\u00e0.",
+        "published_at": "2026-03-06T08:16:03.284951",
+        "url": "https://vnexpress.net/pho-thong-doc-ty-gia-co-xu-huong-tang-do-cang-thang-trung-dong-5046679.html",
+        "scope": "market"
+      }
+    ],
+    "MBB": [
+      {
+        "id": "fff53e6fb9f146e2",
+        "title": "'Nghi\u00ean c\u1ee9u n\u00e2ng tr\u1ea7n thu nh\u1eadp mua nh\u00e0 x\u00e3 h\u1ed9i l\u00ean 25-27 tri\u1ec7u \u0111\u1ed3ng m\u1ed9t th\u00e1ng'",
+        "source": "VnExpress",
+        "snippet": "Th\u1ee7 t\u01b0\u1edbng giao B\u1ed9 X\u00e2y d\u1ef1ng nghi\u00ean c\u1ee9u n\u00e2ng m\u1ee9c thu nh\u1eadp v\u1edbi c\u00e1 nh\u00e2n mua nh\u00e0 \u1edf x\u00e3 h\u1ed9i l\u00ean t\u1ed1i \u0111a 25-27 tri\u1ec7u m\u1ed9t th\u00e1ng, t\u0103ng so v\u1edbi m\u1ee9c 20 tri\u1ec7u hi\u1ec7n h\u00e0nh.",
+        "published_at": "2026-03-06T08:16:03.284973",
+        "url": "https://vnexpress.net/nghien-cuu-nang-tran-thu-nhap-mua-nha-xa-hoi-len-25-27-trieu-dong-mot-thang-5046630.html",
+        "scope": "market"
+      },
+      {
+        "id": "d2e44d7e4454d6af",
+        "title": "B\u1ed9 X\u00e2y d\u1ef1ng: Ngu\u1ed3n cung b\u1ea5t \u0111\u1ed9ng s\u1ea3n s\u1ebd t\u0103ng m\u1ea1nh n\u0103m nay",
+        "source": "VnExpress",
+        "snippet": "Theo B\u1ed9 X\u00e2y d\u1ef1ng, ngu\u1ed3n cung b\u1ea5t \u0111\u1ed9ng s\u1ea3n n\u0103m 2026 d\u1ef1 ki\u1ebfn t\u0103ng m\u1ea1nh nh\u1edd g\u1ee1 v\u01b0\u1edbng ph\u00e1p l\u00fd, g\u00f3p ph\u1ea7n h\u1ea1 nhi\u1ec7t gi\u00e1 nh\u00e0.",
+        "published_at": "2026-03-06T08:16:03.284962",
+        "url": "https://vnexpress.net/bo-xay-dung-nguon-cung-bat-dong-san-se-tang-manh-nam-nay-5046670.html",
+        "scope": "market"
+      },
+      {
+        "id": "28fc18dcca8260bb",
+        "title": "Ph\u00f3 th\u1ed1ng \u0111\u1ed1c: T\u1ef7 gi\u00e1 c\u00f3 xu h\u01b0\u1edbng t\u0103ng do c\u0103ng th\u1eb3ng Trung \u0110\u00f4ng",
+        "source": "VnExpress",
+        "snippet": "Tu\u1ea7n n\u00e0y, t\u1ef7 gi\u00e1 c\u00f3 xu h\u01b0\u1edbng nh\u00edch l\u00ean do c\u0103ng th\u1eb3ng t\u1eeb Trung \u0110\u00f4ng, theo Ph\u00f3 th\u1ed1ng \u0111\u1ed1c Ph\u1ea1m Thanh H\u00e0.",
+        "published_at": "2026-03-06T08:16:03.284951",
+        "url": "https://vnexpress.net/pho-thong-doc-ty-gia-co-xu-huong-tang-do-cang-thang-trung-dong-5046679.html",
+        "scope": "market"
+      }
+    ],
+    "ACB": [
+      {
+        "id": "fff53e6fb9f146e2",
+        "title": "'Nghi\u00ean c\u1ee9u n\u00e2ng tr\u1ea7n thu nh\u1eadp mua nh\u00e0 x\u00e3 h\u1ed9i l\u00ean 25-27 tri\u1ec7u \u0111\u1ed3ng m\u1ed9t th\u00e1ng'",
+        "source": "VnExpress",
+        "snippet": "Th\u1ee7 t\u01b0\u1edbng giao B\u1ed9 X\u00e2y d\u1ef1ng nghi\u00ean c\u1ee9u n\u00e2ng m\u1ee9c thu nh\u1eadp v\u1edbi c\u00e1 nh\u00e2n mua nh\u00e0 \u1edf x\u00e3 h\u1ed9i l\u00ean t\u1ed1i \u0111a 25-27 tri\u1ec7u m\u1ed9t th\u00e1ng, t\u0103ng so v\u1edbi m\u1ee9c 20 tri\u1ec7u hi\u1ec7n h\u00e0nh.",
+        "published_at": "2026-03-06T08:16:03.284973",
+        "url": "https://vnexpress.net/nghien-cuu-nang-tran-thu-nhap-mua-nha-xa-hoi-len-25-27-trieu-dong-mot-thang-5046630.html",
+        "scope": "market"
+      },
+      {
+        "id": "d2e44d7e4454d6af",
+        "title": "B\u1ed9 X\u00e2y d\u1ef1ng: Ngu\u1ed3n cung b\u1ea5t \u0111\u1ed9ng s\u1ea3n s\u1ebd t\u0103ng m\u1ea1nh n\u0103m nay",
+        "source": "VnExpress",
+        "snippet": "Theo B\u1ed9 X\u00e2y d\u1ef1ng, ngu\u1ed3n cung b\u1ea5t \u0111\u1ed9ng s\u1ea3n n\u0103m 2026 d\u1ef1 ki\u1ebfn t\u0103ng m\u1ea1nh nh\u1edd g\u1ee1 v\u01b0\u1edbng ph\u00e1p l\u00fd, g\u00f3p ph\u1ea7n h\u1ea1 nhi\u1ec7t gi\u00e1 nh\u00e0.",
+        "published_at": "2026-03-06T08:16:03.284962",
+        "url": "https://vnexpress.net/bo-xay-dung-nguon-cung-bat-dong-san-se-tang-manh-nam-nay-5046670.html",
+        "scope": "market"
+      },
+      {
+        "id": "28fc18dcca8260bb",
+        "title": "Ph\u00f3 th\u1ed1ng \u0111\u1ed1c: T\u1ef7 gi\u00e1 c\u00f3 xu h\u01b0\u1edbng t\u0103ng do c\u0103ng th\u1eb3ng Trung \u0110\u00f4ng",
+        "source": "VnExpress",
+        "snippet": "Tu\u1ea7n n\u00e0y, t\u1ef7 gi\u00e1 c\u00f3 xu h\u01b0\u1edbng nh\u00edch l\u00ean do c\u0103ng th\u1eb3ng t\u1eeb Trung \u0110\u00f4ng, theo Ph\u00f3 th\u1ed1ng \u0111\u1ed1c Ph\u1ea1m Thanh H\u00e0.",
+        "published_at": "2026-03-06T08:16:03.284951",
+        "url": "https://vnexpress.net/pho-thong-doc-ty-gia-co-xu-huong-tang-do-cang-thang-trung-dong-5046679.html",
+        "scope": "market"
+      }
+    ],
+    "BID": [
+      {
+        "id": "fff53e6fb9f146e2",
+        "title": "'Nghi\u00ean c\u1ee9u n\u00e2ng tr\u1ea7n thu nh\u1eadp mua nh\u00e0 x\u00e3 h\u1ed9i l\u00ean 25-27 tri\u1ec7u \u0111\u1ed3ng m\u1ed9t th\u00e1ng'",
+        "source": "VnExpress",
+        "snippet": "Th\u1ee7 t\u01b0\u1edbng giao B\u1ed9 X\u00e2y d\u1ef1ng nghi\u00ean c\u1ee9u n\u00e2ng m\u1ee9c thu nh\u1eadp v\u1edbi c\u00e1 nh\u00e2n mua nh\u00e0 \u1edf x\u00e3 h\u1ed9i l\u00ean t\u1ed1i \u0111a 25-27 tri\u1ec7u m\u1ed9t th\u00e1ng, t\u0103ng so v\u1edbi m\u1ee9c 20 tri\u1ec7u hi\u1ec7n h\u00e0nh.",
+        "published_at": "2026-03-06T08:16:03.284973",
+        "url": "https://vnexpress.net/nghien-cuu-nang-tran-thu-nhap-mua-nha-xa-hoi-len-25-27-trieu-dong-mot-thang-5046630.html",
+        "scope": "market"
+      },
+      {
+        "id": "d2e44d7e4454d6af",
+        "title": "B\u1ed9 X\u00e2y d\u1ef1ng: Ngu\u1ed3n cung b\u1ea5t \u0111\u1ed9ng s\u1ea3n s\u1ebd t\u0103ng m\u1ea1nh n\u0103m nay",
+        "source": "VnExpress",
+        "snippet": "Theo B\u1ed9 X\u00e2y d\u1ef1ng, ngu\u1ed3n cung b\u1ea5t \u0111\u1ed9ng s\u1ea3n n\u0103m 2026 d\u1ef1 ki\u1ebfn t\u0103ng m\u1ea1nh nh\u1edd g\u1ee1 v\u01b0\u1edbng ph\u00e1p l\u00fd, g\u00f3p ph\u1ea7n h\u1ea1 nhi\u1ec7t gi\u00e1 nh\u00e0.",
+        "published_at": "2026-03-06T08:16:03.284962",
+        "url": "https://vnexpress.net/bo-xay-dung-nguon-cung-bat-dong-san-se-tang-manh-nam-nay-5046670.html",
+        "scope": "market"
+      },
+      {
+        "id": "28fc18dcca8260bb",
+        "title": "Ph\u00f3 th\u1ed1ng \u0111\u1ed1c: T\u1ef7 gi\u00e1 c\u00f3 xu h\u01b0\u1edbng t\u0103ng do c\u0103ng th\u1eb3ng Trung \u0110\u00f4ng",
+        "source": "VnExpress",
+        "snippet": "Tu\u1ea7n n\u00e0y, t\u1ef7 gi\u00e1 c\u00f3 xu h\u01b0\u1edbng nh\u00edch l\u00ean do c\u0103ng th\u1eb3ng t\u1eeb Trung \u0110\u00f4ng, theo Ph\u00f3 th\u1ed1ng \u0111\u1ed1c Ph\u1ea1m Thanh H\u00e0.",
+        "published_at": "2026-03-06T08:16:03.284951",
+        "url": "https://vnexpress.net/pho-thong-doc-ty-gia-co-xu-huong-tang-do-cang-thang-trung-dong-5046679.html",
+        "scope": "market"
+      }
+    ],
+    "CTG": [
+      {
+        "id": "d86e563f56110ca1",
+        "title": "VietinBank c\u00f3 th\u1ec3 b\u00e1n t\u00f2a th\u00e1p t\u1ea1i Ciputra trong n\u1eeda \u0111\u1ea7u n\u0103m nay",
+        "source": "VnExpress",
+        "snippet": "Ch\u1ee9ng kho\u00e1n R\u1ed3ng Vi\u1ec7t (VDSC) d\u1ef1 b\u00e1o, Ng\u00e2n h\u00e0ng VietinBank c\u00f3 th\u1ec3 b\u00e1n xong t\u00f2a th\u00e1p t\u1ea1i Ciputra trong n\u1eeda \u0111\u1ea7u n\u0103m ho\u1eb7c s\u1edbm nh\u1ea5t trong qu\u00fd I.",
+        "published_at": "2026-03-06T08:16:03.284929",
+        "url": "https://vnexpress.net/vietinbank-co-the-ban-toa-thap-tai-ciputra-trong-nua-dau-nam-nay-5046699.html",
+        "scope": "symbol"
+      },
+      {
+        "id": "5aa799137ab7093f",
+        "title": "Gi\u00e1 x\u0103ng t\u0103ng h\u01a1n 2.000 \u0111\u1ed3ng m\u1ed9t l\u00edt",
+        "source": "VnExpress",
+        "snippet": "Gi\u00e1 x\u0103ng, d\u1ea7u c\u00f9ng t\u0103ng 1.810-7.140 \u0111\u1ed3ng m\u1ed9t l\u00edt, kg l\u00ean t\u01b0\u01a1ng \u1ee9ng 22.340 \u0111\u1ed3ng v\u00e0 26.600 \u0111\u1ed3ng t\u1eeb 15h h\u00f4m nay, sau \u0111i\u1ec1u ch\u1ec9nh c\u1ee7a li\u00ean B\u1ed9 C\u00f4ng Th\u01b0\u01a1ng - T\u00e0i ch\u00ednh.",
+        "published_at": "2026-03-06T08:16:03.284819",
+        "url": "https://vnexpress.net/gia-xang-dau-moi-nhat-hom-nay-5046964.html",
+        "scope": "symbol"
+      },
+      {
+        "id": "67b114a3d0f859ce",
+        "title": "B\u1ed9 C\u00f4ng Th\u01b0\u01a1ng: Ngu\u1ed3n cung x\u0103ng d\u1ea7u th\u00e1ng 3 \u0111\u01b0\u1ee3c b\u1ea3o \u0111\u1ea3m",
+        "source": "VnExpress",
+        "snippet": "Theo B\u1ed9 C\u00f4ng Th\u01b0\u01a1ng, ngu\u1ed3n cung x\u0103ng d\u1ea7u trong n\u01b0\u1edbc th\u00e1ng 3 \"c\u01a1 b\u1ea3n \u0111\u01b0\u1ee3c b\u1ea3o \u0111\u1ea3m\", nh\u1edd k\u1ebft h\u1ee3p ngu\u1ed3n d\u1ef1 tr\u1eef, s\u1ea3n xu\u1ea5t trong n\u01b0\u1edbc v\u00e0 nh\u1eadp kh\u1ea9u.",
+        "published_at": "2026-03-06T08:16:03.284466",
+        "url": "https://vnexpress.net/bo-cong-thuong-nguon-cung-xang-dau-thang-3-duoc-bao-dam-5047368.html",
+        "scope": "symbol"
       }
     ]
   },
-  "fetched_at": "2026-03-04T15:20:01.334053",
+  "fetched_at": "2026-03-06T08:16:04.077990",
   "symbols": [
-    "STB",
+    "HPG",
+    "VNM",
+    "FPT",
     "MWG",
-    "VPB"
+    "VCB",
+    "TCB",
+    "MBB",
+    "ACB",
+    "BID",
+    "CTG"
   ],
-  "days_back": 7,
-  "STB_fb5c1e5752fd": {
-    "symbol_scores": [
-      {
-        "symbol": "STB",
-        "buy_potential_score": 20,
-        "risk_score": 80,
-        "confidence": 0.7,
-        "horizon": "1-4w",
-        "key_bull_points": [
-          "Sacombank's new CEO, Nguy\u1ec5n \u0110\u1ee9c Th\u1ee5y, may bring positive changes to the bank (ID: 9d7bb7c27bd9ad51)"
-        ],
-        "key_risks": [
-          "Xung \u0111\u1ed9t Trung \u0110\u00f4ng leo thang khi\u1ebfn nhi\u1ec1u doanh nghi\u1ec7p xu\u1ea5t kh\u1ea9u lo \u0111\u1ee9t g\u00e3y chu\u1ed7i cung \u1ee9ng, c\u01b0\u1edbc v\u1eadn t\u1ea3i t\u0103ng v\u1ecdt v\u00e0 r\u1ee7i ro h\u1ecfng n\u00f4ng s\u1ea3n t\u01b0\u01a1i (ID: 2eb65bcb5f9acd5a)",
-          "\u00c1p l\u1ef1c b\u00e1n th\u00e1o tr\u00ean di\u1ec7n r\u1ed9ng khi\u1ebfn VN-Index m\u1ea5t h\u01a1n 34 \u0111i\u1ec3m (ID: b54b67fb5c3353dc)"
-        ],
-        "evidence": [
-          {
-            "id": "9d7bb7c27bd9ad51",
-            "supports": "bull"
-          },
-          {
-            "id": "2eb65bcb5f9acd5a",
-            "supports": "risk"
-          },
-          {
-            "id": "b54b67fb5c3353dc",
-            "supports": "risk"
-          }
-        ]
-      }
-    ]
-  },
-  "MWG_5bd64ecbb4cd": {
-    "symbol_scores": [
-      {
-        "symbol": "MWG",
-        "buy_potential_score": 20,
-        "risk_score": 60,
-        "confidence": 0.8,
-        "horizon": "1-4w",
-        "key_bull_points": [
-          "VN-Index gi\u1ea3m m\u1ea1nh nh\u1ea5t t\u1eeb \u0111\u1ea7u n\u0103m c\u00f3 th\u1ec3 \u1ea3nh h\u01b0\u1edfng \u0111\u1ebfn MWG nh\u01b0ng kh\u00f4ng r\u00f5 r\u00e0ng (b54b67fb5c3353dc)"
-        ],
-        "key_risks": [
-          "Xung \u0111\u1ed9t Trung \u0110\u00f4ng c\u00f3 th\u1ec3 \u1ea3nh h\u01b0\u1edfng \u0111\u1ebfn chu\u1ed7i cung \u1ee9ng c\u1ee7a MWG (2eb65bcb5f9acd5a)",
-          "\u0110\u1ecbnh gi\u00e1 c\u1ed5 phi\u1ebfu \u0111\u1ea7u kh\u00ed kh\u00f4ng c\u00f2n r\u1ebb, c\u00f3 th\u1ec3 \u1ea3nh h\u01b0\u1edfng \u0111\u1ebfn MWG (cdd34df7bc5f9f8d)"
-        ],
-        "evidence": [
-          {
-            "id": "b54b67fb5c3353dc",
-            "supports": "neutral"
-          },
-          {
-            "id": "2eb65bcb5f9acd5a",
-            "supports": "risk"
-          },
-          {
-            "id": "cdd34df7bc5f9f8d",
-            "supports": "risk"
-          }
-        ]
-      }
-    ]
-  },
-  "VIC_d75171398898": {
-    "symbol_scores": [
-      {
-        "symbol": "VIC",
-        "buy_potential_score": 50,
-        "risk_score": 50,
-        "confidence": 0.0,
-        "horizon": "1-4w",
-        "key_bull_points": [],
-        "key_risks": [],
-        "evidence": []
-      }
-    ]
-  },
-  "MBB_d75171398898": {
-    "symbol_scores": [
-      {
-        "symbol": "MBB",
-        "buy_potential_score": 50,
-        "risk_score": 50,
-        "confidence": 0.0,
-        "horizon": "1-4w",
-        "key_bull_points": [],
-        "key_risks": [],
-        "evidence": []
-      }
-    ]
-  }
+  "days_back": 7
 }
