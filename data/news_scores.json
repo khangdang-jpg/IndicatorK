@@ -1,47 +1,9 @@
 {
   "symbol_scores": [
     {
-      "symbol": "MBB",
-      "buy_potential_score": 50,
-      "risk_score": 50,
-      "confidence": 0.0,
-      "horizon": "1-4w",
-      "key_bull_points": [],
-      "key_risks": [],
-      "evidence": []
-    },
-    {
       "symbol": "STB",
-      "buy_potential_score": 20,
-      "risk_score": 80,
-      "confidence": 0.7,
-      "horizon": "1-4w",
-      "key_bull_points": [
-        "Sacombank's new CEO, Nguy\u1ec5n \u0110\u1ee9c Th\u1ee5y, may bring positive changes to the bank (ID: 9d7bb7c27bd9ad51)"
-      ],
-      "key_risks": [
-        "Xung \u0111\u1ed9t Trung \u0110\u00f4ng leo thang khi\u1ebfn nhi\u1ec1u doanh nghi\u1ec7p xu\u1ea5t kh\u1ea9u lo \u0111\u1ee9t g\u00e3y chu\u1ed7i cung \u1ee9ng, c\u01b0\u1edbc v\u1eadn t\u1ea3i t\u0103ng v\u1ecdt v\u00e0 r\u1ee7i ro h\u1ecfng n\u00f4ng s\u1ea3n t\u01b0\u01a1i (ID: 2eb65bcb5f9acd5a)",
-        "\u00c1p l\u1ef1c b\u00e1n th\u00e1o tr\u00ean di\u1ec7n r\u1ed9ng khi\u1ebfn VN-Index m\u1ea5t h\u01a1n 34 \u0111i\u1ec3m (ID: b54b67fb5c3353dc)"
-      ],
-      "evidence": [
-        {
-          "id": "9d7bb7c27bd9ad51",
-          "supports": "bull"
-        },
-        {
-          "id": "2eb65bcb5f9acd5a",
-          "supports": "risk"
-        },
-        {
-          "id": "b54b67fb5c3353dc",
-          "supports": "risk"
-        }
-      ]
-    },
-    {
-      "symbol": "VIC",
-      "buy_potential_score": 50,
-      "risk_score": 50,
+      "buy_potential_score": 0,
+      "risk_score": 0,
       "confidence": 0.0,
       "horizon": "1-4w",
       "key_bull_points": [],
@@ -50,34 +12,16 @@
     },
     {
       "symbol": "MWG",
-      "buy_potential_score": 20,
-      "risk_score": 60,
-      "confidence": 0.8,
+      "buy_potential_score": 0,
+      "risk_score": 0,
+      "confidence": 0.0,
       "horizon": "1-4w",
-      "key_bull_points": [
-        "VN-Index gi\u1ea3m m\u1ea1nh nh\u1ea5t t\u1eeb \u0111\u1ea7u n\u0103m c\u00f3 th\u1ec3 \u1ea3nh h\u01b0\u1edfng \u0111\u1ebfn MWG nh\u01b0ng kh\u00f4ng r\u00f5 r\u00e0ng (b54b67fb5c3353dc)"
-      ],
-      "key_risks": [
-        "Xung \u0111\u1ed9t Trung \u0110\u00f4ng c\u00f3 th\u1ec3 \u1ea3nh h\u01b0\u1edfng \u0111\u1ebfn chu\u1ed7i cung \u1ee9ng c\u1ee7a MWG (2eb65bcb5f9acd5a)",
-        "\u0110\u1ecbnh gi\u00e1 c\u1ed5 phi\u1ebfu \u0111\u1ea7u kh\u00ed kh\u00f4ng c\u00f2n r\u1ebb, c\u00f3 th\u1ec3 \u1ea3nh h\u01b0\u1edfng \u0111\u1ebfn MWG (cdd34df7bc5f9f8d)"
-      ],
-      "evidence": [
-        {
-          "id": "b54b67fb5c3353dc",
-          "supports": "neutral"
-        },
-        {
-          "id": "2eb65bcb5f9acd5a",
-          "supports": "risk"
-        },
-        {
-          "id": "cdd34df7bc5f9f8d",
-          "supports": "risk"
-        }
-      ]
+      "key_bull_points": [],
+      "key_risks": [],
+      "evidence": []
     }
   ],
   "status": "SUCCESS",
-  "analyzed_symbols": 4,
-  "total_news": 10
+  "analyzed_symbols": 2,
+  "total_news": 30
 }
