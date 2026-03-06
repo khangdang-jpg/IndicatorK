@@ -304,5 +304,33 @@
     "BID",
     "CTG"
   ],
-  "days_back": 7
+  "days_back": 7,
+  "STB_d75171398898": {
+    "symbol_scores": [
+      {
+        "symbol": "STB",
+        "buy_potential_score": 0,
+        "risk_score": 0,
+        "confidence": 0.0,
+        "horizon": "1-4w",
+        "key_bull_points": [],
+        "key_risks": [],
+        "evidence": []
+      }
+    ]
+  },
+  "MWG_d75171398898": {
+    "symbol_scores": [
+      {
+        "symbol": "MWG",
+        "buy_potential_score": 0,
+        "risk_score": 0,
+        "confidence": 0.0,
+        "horizon": "1-4w",
+        "key_bull_points": [],
+        "key_risks": [],
+        "evidence": []
+      }
+    ]
+  }
 }
