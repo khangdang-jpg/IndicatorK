@@ -205,6 +205,8 @@ def format_weekly_digest(
             vnd = _alloc_vnd(r.position_target_pct, total) if r.position_target_pct and total else 0
             alloc_str = f" — {vnd:,.0f} ₫" if vnd else ""
             lines.append(f"  📈 `{r.symbol}` {icon} {r.entry_type.capitalize()}{alloc_str}")
+
+
             lines.append(f"    🎯 Entry: {r.entry_price:,.0f}")
             lines.append(f"    📊 Zone: {_smart_format(r.buy_zone_low)}–{_smart_format(r.buy_zone_high)}")
             lines.append(f"    🛡️ SL {_smart_format(r.stop_loss)} | TP {_smart_format(r.take_profit)}")
@@ -241,6 +243,7 @@ def format_weekly_digest(
             lines.append(status_line)
 
             # Clean exit alert format
+
             tp_str = f"TP {_smart_format(r.take_profit)}" if r.take_profit else ""
             sl_str = f"SL {_smart_format(r.stop_loss)}" if r.stop_loss else ""
             exit_levels = " | ".join(filter(None, [sl_str, tp_str]))
