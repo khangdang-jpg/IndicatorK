@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-06T14:05:54.425751",
+  "generated_at": "2026-03-08T04:45:39.350676",
   "strategy_id": "trend_momentum_atr_regime_adaptive",
   "strategy_version": "1.0.0",
   "allocation_targets": {
@@ -61,21 +61,21 @@
   ],
   "ai_analysis": {
     "generated": true,
-    "market_context": "The portfolio is heavily cashed up, with only 1 position and a relatively small unrealized loss, indicating a conservative market context.",
-    "analysis_date": "2026-03-06",
+    "market_context": "The portfolio is heavily cashed up with a total value of 9,999,905 VND and only one position, indicating a cautious market approach.",
+    "analysis_date": "2026-03-08",
     "data_sources": "Weekly technical analysis using Groq AI",
     "scores": {
       "STB": {
         "symbol": "STB",
         "score": 8,
-        "rationale": "STB has a strong technical setup with price above MA10w and MA30w, and RSI(14) above 55, indicating a potential trend up.",
-        "risk_note": "The position size is 6.0% of the portfolio, which may be relatively large given the current portfolio size."
+        "rationale": "STB has a strong upward trend with price above MA10w and MA30w, and a suitable risk-reward ratio.",
+        "risk_note": "The stop-loss is relatively close to the entry price, increasing the risk of a stop-loss hit."
       },
       "MWG": {
         "symbol": "MWG",
         "score": 4,
-        "rationale": "MWG has a weakening trend with price below MA10w, but still above MA30w, indicating a potential reversal.",
-        "risk_note": "The risk of a larger loss is evident due to the relatively tight stop-loss of 10 points."
+        "rationale": "MWG has a weakening trend with price below MA10w, but still above MA30w.",
+        "risk_note": "The position is being reduced, indicating a decrease in confidence in the stock's upward momentum."
       }
     }
   },
@@ -104,7 +104,7 @@
     ],
     "status": "SUCCESS",
     "analyzed_symbols": 2,
-    "total_news": 30
+    "total_news": 31
   },
   "market_regime": "sideways"
 }
