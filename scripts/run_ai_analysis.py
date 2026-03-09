@@ -32,7 +32,7 @@ def main() -> None:
     setup_logging()
 
     # Toggle: skip if explicitly disabled
-    enabled = os.environ.get("AI_ANALYSIS_ENABLED", "true").strip().lower()
+    enabled = os.environ.get("AI_ANALYSIS_ENABLED", "false").strip().lower()
     if enabled == "false":
         logger.info("AI_ANALYSIS_ENABLED=false — skipping AI analysis message")
         return
