@@ -165,13 +165,10 @@ def main() -> None:
             json.dump(plan_dict, f, indent=2)
 
         # Score buy potential with per-symbol news
-        # Fix Bug #2: Flatten symbol_news dict to list for API compatibility
-        all_news_items = []
-        for articles in symbol_news.values():
-            all_news_items.extend(articles)
-        logger.info(f"Flattened {len(all_news_items)} news articles for scoring")
+        # Pass symbol_news dict directly with symbol-to-articles mapping preserved
+        logger.info(f"Scoring {len(symbol_news)} symbols with pre-matched news articles")
 
-        news_scores = score_buy_potential(temp_plan_path, all_news_items)
+        news_scores = score_buy_potential(temp_plan_path, symbol_news)
 
         if news_scores.get("status") == "SUCCESS":
             logger.info("News analysis complete: %d symbols scored", news_scores.get("analyzed_symbols", 0))

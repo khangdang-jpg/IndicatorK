@@ -349,7 +349,7 @@ class TrendMomentumATRRegimeAdaptive(Strategy):
                     atr_displacement = _ensure_meaningful_atr(atr, tick)
                     buy_zone_low = round_to_step(current - 1.0 * atr_displacement, tick)
                     buy_zone_high = round_to_step(current - 0.5 * atr_displacement, tick)
-                    # Ensure buy zones are different
+                    # Ensure buy zones are different - FIXED: now captures the returned tuple
                     buy_zone_low, buy_zone_high = _ensure_different_zones(buy_zone_low, buy_zone_high, tick)
                     entry_price = round_to_step((buy_zone_low + buy_zone_high) / 2.0, tick)
                     breakout_level = 0.0
@@ -547,12 +547,15 @@ def _ensure_different_zones(low: float, high: float, tick: float, fallback_pct: 
         fallback_pct: Fallback percentage difference if tick adjustment isn't enough
 
     Returns:
-        Tuple of (adjusted_low, high) ensuring they're different
+        Tuple of (adjusted_low, adjusted_high) ensuring they're different
     """
     if low == high:
-        # Try adjusting by one tick first
-        adjusted_low = max(high - tick, high * (1 - fallback_pct))
-        return round_to_step(adjusted_low, tick), high
+        # Adjust high upward by at least 2 ticks to ensure difference after rounding
+        adjusted_high = round_to_step(high + tick * 2, tick)
+        # If still identical (edge case), use percentage-based adjustment
+        if low == adjusted_high:
+            adjusted_high = round_to_step(high * (1 + fallback_pct), tick)
+        return low, adjusted_high
     return low, high
 
 

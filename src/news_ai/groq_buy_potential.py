@@ -261,16 +261,23 @@ def _score_symbol(symbol: str, news_items: List[Dict], cache: Dict[str, Any]) ->
     return stage_b_result
 
 
-def score_buy_potential(weekly_plan_path: str, news_items: List[Dict]) -> Dict[str, Any]:
+def score_buy_potential(weekly_plan_path: str, symbol_news_mapping: Dict[str, List[Dict]]) -> Dict[str, Any]:
     """
     Score buy potential for symbols using news analysis.
 
     Args:
         weekly_plan_path: Path to weekly_plan.json
-        news_items: List of news items with id, title, source, snippet
+        symbol_news_mapping: Dict mapping symbol -> list of news items (pre-matched)
+                            Each news item has: id, title, source, snippet, published_at, url
 
     Returns:
-        Combined analysis results for all symbols
+        Combined analysis results for all symbols with structure:
+        {
+            "symbol_scores": [{"symbol": str, "buy_potential_score": int, ...}],
+            "status": str,
+            "analyzed_symbols": int,
+            "total_news": int
+        }
     """
     if not _is_available():
         logger.warning("🚨 GROQ_API_KEY not configured — News analysis disabled")
@@ -290,21 +297,19 @@ def score_buy_potential(weekly_plan_path: str, news_items: List[Dict]) -> Dict[s
         logger.info("No symbols to analyze")
         return {"symbol_scores": [], "status": "NO_SYMBOLS"}
 
-    # Group news by symbol (simple keyword matching for now)
-    symbol_news = {}
-    for symbol in symbols:
-        symbol_news[symbol] = [
-            item for item in news_items
-            if symbol.lower() in (item.get("title", "") + " " + item.get("snippet", "")).lower()
-        ]
+    # Use pre-matched symbol_news_mapping (avoids fragile keyword matching)
+    # If a symbol isn't in the mapping, it gets an empty list
+    logger.info(f"Using pre-matched news for {len(symbol_news_mapping)} symbols")
 
     # Load cache
     cache = _load_cache()
     all_scores = []
+    total_news_count = sum(len(articles) for articles in symbol_news_mapping.values())
 
     try:
         for symbol in symbols:
-            news_for_symbol = symbol_news.get(symbol, [])
+            news_for_symbol = symbol_news_mapping.get(symbol, [])
+            logger.info(f"Scoring {symbol} with {len(news_for_symbol)} news articles")
 
             result = _score_symbol(symbol, news_for_symbol, cache)
             if result and "symbol_scores" in result:
@@ -317,7 +322,7 @@ def score_buy_potential(weekly_plan_path: str, news_items: List[Dict]) -> Dict[s
             "symbol_scores": all_scores,
             "status": "SUCCESS",
             "analyzed_symbols": len(all_scores),
-            "total_news": len(news_items)
+            "total_news": total_news_count
         }
 
     except Exception as e:
