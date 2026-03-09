@@ -90,13 +90,14 @@ def is_trading_hours(now: datetime | None = None) -> bool:
 def vnd_tick_size(price: float) -> float:
     """Return the proper VND tick size based on HOSE price bands.
 
-    HOSE tick sizes:
-      price < 10,000   -> tick = 10 VND
-      10,000 <= price < 50,000 -> tick = 50 VND
-      price >= 50,000   -> tick = 100 VND
+    Prices are expected in thousands of VND (as returned by vnstock).
+    HOSE tick sizes per HSX regulations:
+      price < 10  (< 10,000 VND actual)          -> tick = 0.01 (10 VND)
+      10 <= price < 50  (10,000–49,999 VND)       -> tick = 0.05 (50 VND)
+      price >= 50  (>= 50,000 VND)                -> tick = 0.1  (100 VND)
     """
-    if price < 10_000:
-        return 10.0
-    if price < 50_000:
-        return 50.0
-    return 100.0
+    if price < 10:
+        return 0.01
+    if price < 50:
+        return 0.05
+    return 0.1

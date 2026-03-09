@@ -13,7 +13,7 @@ trend_momentum_atr:
   atr_target_mult: 3.0     # take_profit = entry_price + 3.0 * ATR
   rsi_breakout_min: 55     # RSI >= this to use breakout path (stronger trends)
   entry_buffer_pct: 0.001  # entry_price = breakout_level * (1 + buffer)
-  price_tick: 10           # VN price step (VND); all output prices rounded to this
+  # price_tick: auto       # Uses vnd_tick_size() — 0.01/0.05/0.1 per HOSE price band
 
 trend_momentum_atr_regime_adaptive:
   ma_short: 10
@@ -21,7 +21,7 @@ trend_momentum_atr_regime_adaptive:
   rsi_period: 14
   atr_period: 14
   entry_buffer_pct: 0.001
-  price_tick: 10
+  # price_tick: auto       # Uses vnd_tick_size() — 0.01/0.05/0.1 per HOSE price band
 
   # Market regime detection
   regime_lookback: 60        # Days to analyze for regime detection

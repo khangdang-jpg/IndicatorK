@@ -434,19 +434,20 @@ class TrendMomentumATRRegimeAdaptive(Strategy):
                 atr_displacement = _ensure_meaningful_atr(atr, tick)
                 buy_zone_low = round_to_step(current - 1.5 * atr_displacement, tick)
                 buy_zone_high = round_to_step(current - 1.0 * atr_displacement, tick)
-                # Ensure buy zones are different
                 buy_zone_low, buy_zone_high = _ensure_different_zones(buy_zone_low, buy_zone_high, tick, 0.03)
                 entry_price = round_to_step((buy_zone_low + buy_zone_high) / 2.0, tick)
 
-                # Enhanced stop loss calculation with minimum distance
+                # SL: floor down so rounding never pushes SL into the zone
                 stop_distance = max(2.0 * atr_displacement, tick * 2)
-                stop_loss = round_to_step(entry_price - stop_distance, tick)
+                stop_loss = floor_to_step(entry_price - stop_distance, tick)
+                if stop_loss >= buy_zone_low:
+                    stop_loss = floor_to_step(buy_zone_low - tick, tick)
                 if stop_loss >= entry_price:
-                    stop_loss = round_to_step(entry_price - tick * 2, tick)
+                    stop_loss = floor_to_step(entry_price - tick * 2, tick)
 
-                # Enhanced take profit calculation
+                # TP: ceil up so rounding never reduces the reward
                 target_distance = max(1.5 * atr_displacement, tick * 2)
-                take_profit = round_to_step(entry_price + target_distance, tick)
+                take_profit = ceil_to_step(entry_price + target_distance, tick)
                 breakout_level = 0.0
                 entry_type = "pullback"
                 earliest_entry_date = None
