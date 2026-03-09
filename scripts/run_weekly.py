@@ -14,9 +14,42 @@ Steps:
 import json
 import logging
 import os
+import re
 import sys
 from datetime import date, timedelta
 from pathlib import Path
+
+
+def _json_2dp(obj: dict) -> str:
+    """Serialize to JSON ensuring every float value has exactly 2 decimal places.
+
+    Python's json module outputs 70.0 for round(70.0, 2) and 0 for integer
+    zeros — both wrong for price fields.  This post-processes the raw JSON
+    string while correctly skipping float literals inside quoted strings.
+    """
+    raw = json.dumps(obj, indent=2)
+    _single_dp = re.compile(r"-?\d+\.\d(?!\d)")
+    result: list[str] = []
+    in_string = False
+    i = 0
+    while i < len(raw):
+        c = raw[i]
+        if c == '"' and (i == 0 or raw[i - 1] != "\\"):
+            in_string = not in_string
+            result.append(c)
+            i += 1
+        elif not in_string:
+            m = _single_dp.match(raw, i)
+            if m:
+                result.append(m.group(0) + "0")
+                i = m.end()
+            else:
+                result.append(c)
+                i += 1
+        else:
+            result.append(c)
+            i += 1
+    return "".join(result)
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
@@ -189,8 +222,7 @@ def main() -> None:
     # Write weekly plan (now includes AI analysis if available)
     plan_path = Path("data/weekly_plan.json")
     plan_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(plan_path, "w") as f:
-        json.dump(plan.to_dict(), f, indent=2)
+    plan_path.write_text(_json_2dp(plan.to_dict()))
 
     # Run guardrails
     snapshots = load_portfolio_snapshots()
