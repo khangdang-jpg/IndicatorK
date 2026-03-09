@@ -1,15 +1,27 @@
 {
   "symbol_scores": [
     {
-      "symbol": "MWG",
-      "buy_potential_score": 60,
+      "symbol": "STB",
+      "buy_potential_score": 0,
       "risk_score": 0,
+      "confidence": 0.0,
+      "horizon": "1-4w",
+      "key_bull_points": [],
+      "key_risks": [],
+      "evidence": []
+    },
+    {
+      "symbol": "MWG",
+      "buy_potential_score": 50,
+      "risk_score": 60,
       "confidence": 0.4,
       "horizon": "1-4w",
       "key_bull_points": [
-        "Masan High-Tech Materials' revenue is expected to increase due to high demand for tungsten"
+        "Lower production costs due to optimized supply chain management"
       ],
-      "key_risks": [],
+      "key_risks": [
+        "Potential logistics and transportation costs may impact profitability"
+      ],
       "evidence": [
         {
           "id": "news1",
@@ -17,16 +29,16 @@
         },
         {
           "id": "news2",
-          "supports": "bull"
+          "supports": "risk"
         },
         {
           "id": "news3",
-          "supports": "bull"
+          "supports": "neutral"
         }
       ]
     }
   ],
   "status": "SUCCESS",
-  "analyzed_symbols": 1,
+  "analyzed_symbols": 2,
   "total_news": 31
 }
