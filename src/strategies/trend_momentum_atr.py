@@ -34,6 +34,7 @@ from datetime import date, datetime, timedelta
 
 from src.models import OHLCV, PortfolioState, Recommendation, WeeklyPlan
 from src.strategies.base import Strategy
+from src.utils.price_utils import round_to_step
 from src.utils.trading_hours import vnd_tick_size
 
 logger = logging.getLogger(__name__)
@@ -265,19 +266,6 @@ class TrendMomentumATRStrategy(Strategy):
         )
 
 
-def round_to_step(price: float, step: float = 10.0) -> float:
-    """Round price to the nearest step size (round-half-up).
-
-    Default step = 10 VND (configurable via price_tick in strategy params).
-
-    Examples (step=10):
-        10_014 → 10_010
-        10_015 → 10_020   (round half up)
-        10_055 → 10_060
-    """
-    if step <= 0:
-        return price
-    return float(math.floor(price / step + 0.5) * step)
 
 
 def _next_monday(d: date) -> date:

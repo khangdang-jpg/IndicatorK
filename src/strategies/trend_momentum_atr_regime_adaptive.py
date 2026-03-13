@@ -30,6 +30,7 @@ from datetime import date, datetime, timedelta
 
 from src.models import OHLCV, PortfolioState, Recommendation, WeeklyPlan
 from src.strategies.base import Strategy
+from src.utils.price_utils import ceil_to_step, floor_to_step, round_to_step
 from src.utils.trading_hours import vnd_tick_size
 
 logger = logging.getLogger(__name__)
@@ -562,37 +563,6 @@ def _ensure_different_zones(low: float, high: float, tick: float, fallback_pct: 
             adjusted_high = round_to_step(high * (1 + fallback_pct), tick)
         return low, adjusted_high
     return low, high
-
-
-def round_to_step(price: float, step: float = 10.0) -> float:
-    """Round price to the nearest step size (round-half-up)."""
-    if step <= 0:
-        return price
-    if step < price * 0.0001:
-        return round(price, 2)
-    return float(math.floor(price / step + 0.5) * step)
-
-
-def floor_to_step(price: float, step: float = 10.0) -> float:
-    """Floor price DOWN to the nearest step — always used for stop losses.
-
-    Ensures the SL is at or below the intended level, never rounding up.
-    Example: floor_to_step(55, 10) = 50  (round_to_step would give 60)
-    """
-    if step <= 0:
-        return price
-    return float(math.floor(price / step) * step)
-
-
-def ceil_to_step(price: float, step: float = 10.0) -> float:
-    """Ceil price UP to the nearest step — always used for take profits.
-
-    Ensures the TP is at or above the intended level, never rounding down.
-    Example: ceil_to_step(75, 10) = 80
-    """
-    if step <= 0:
-        return price
-    return float(math.ceil(price / step) * step)
 
 
 def _next_monday(d: date) -> date:
