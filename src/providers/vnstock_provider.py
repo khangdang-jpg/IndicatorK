@@ -11,8 +11,8 @@ from src.providers.base import PriceProvider
 
 logger = logging.getLogger(__name__)
 
-_CHUNK_SIZE = 5
-_CHUNK_DELAY_S = 1.0
+_CHUNK_SIZE = 3  # Smaller chunks for guest API limits
+_CHUNK_DELAY_S = 10.0  # Longer delays to respect 20 requests/minute limit
 
 
 class VnstockProvider(PriceProvider):
@@ -63,12 +63,22 @@ class VnstockProvider(PriceProvider):
                     return []
                 return self._parse_dataframe(df)
             except Exception as e:
-                logger.warning(
-                    "vnstock: attempt %d/%d failed for %s: %s",
-                    attempt + 1, max_retries, symbol, e,
-                )
-                if attempt < max_retries - 1:
-                    _time.sleep(2 ** attempt)
+                error_msg = str(e).lower()
+                if "rate limit" in error_msg or "giới hạn api" in error_msg:
+                    # Rate limit hit - wait longer
+                    wait_time = 30 + (attempt * 10)  # 30, 40, 50 seconds
+                    logger.warning(
+                        "vnstock: rate limit hit for %s, waiting %ds (attempt %d/%d)",
+                        symbol, wait_time, attempt + 1, max_retries
+                    )
+                    _time.sleep(wait_time)
+                else:
+                    logger.warning(
+                        "vnstock: attempt %d/%d failed for %s: %s",
+                        attempt + 1, max_retries, symbol, e,
+                    )
+                    if attempt < max_retries - 1:
+                        _time.sleep(2 ** attempt)
         return []
 
     def _fetch(self, symbol: str, start: date, end: date):
