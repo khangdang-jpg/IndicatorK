@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-15T06:14:09.213651",
+  "generated_at": "2026-03-16T10:49:58.734399",
   "strategy_id": "trend_momentum_atr_regime_adaptive",
   "strategy_version": "1.0.0",
   "allocation_targets": {
@@ -13,18 +13,18 @@
       "action": "SELL",
       "buy_zone_low": 0.00,
       "buy_zone_high": 0.00,
-      "stop_loss": 75.50,
+      "stop_loss": 74485.71,
       "take_profit": 0.00,
       "position_target_pct": 0.00,
       "rationale_bullets": [
         "Regime: SIDEWAYS",
-        "Trend DOWN: price 82 < MA30w 82",
+        "Trend DOWN: price 80600 < MA30w 82720",
         "Exit position"
       ],
       "entry_type": "pullback",
       "breakout_level": 0.00,
       "entry_price": 0.00,
-      "signal_week_end": "2026-03-13",
+      "signal_week_end": "2026-03-16",
       "earliest_entry_date": null
     }
   ],
@@ -36,15 +36,15 @@
   ],
   "ai_analysis": {
     "generated": true,
-    "market_context": "The portfolio is heavily invested in cash, with a total value of 9,999,892 VND and only one position.",
-    "analysis_date": "2026-03-15",
+    "market_context": "The portfolio has a total value of 11,449,216 VND, with a cash reserve of 9,998,416 VND, indicating a relatively high liquidity.",
+    "analysis_date": "2026-03-16",
     "data_sources": "Weekly technical analysis using Groq AI",
     "scores": {
       "MWG": {
         "symbol": "MWG",
         "score": 6,
         "rationale": "Price is below its 30-week moving average, indicating a downtrend.",
-        "risk_note": "The stop loss is relatively close to the entry point, indicating a relatively high risk."
+        "risk_note": "The stop loss is set at 74,486, which is a relatively high percentage of the entry price, indicating a significant risk of loss."
       }
     }
   },
@@ -52,20 +52,20 @@
     "symbol_scores": [
       {
         "symbol": "MWG",
-        "buy_potential_score": 40,
-        "risk_score": 60,
-        "confidence": 0.20,
+        "buy_potential_score": 70,
+        "risk_score": 30,
+        "confidence": 0.60,
         "horizon": "1-4w",
         "key_bull_points": [
-          "Potential for increased demand due to market trends"
+          "GS25 Vietnam reports strong performance after one year of operation in Hanoi, indicating growth potential for the retail industry in Vietnam"
         ],
         "key_risks": [
-          "High market volatility and lack of concrete evidence supporting MWG's growth"
+          "Vietnam's steel prices have increased by 130%, potentially affecting the construction industry and having a negative impact on MWG"
         ],
         "evidence": [
           {
             "id": "news1",
-            "supports": "bull"
+            "supports": "bull_point"
           },
           {
             "id": "news2",
@@ -73,14 +73,14 @@
           },
           {
             "id": "news3",
-            "supports": "neutral"
+            "supports": "bull_point"
           }
         ]
       }
     ],
     "status": "SUCCESS",
     "analyzed_symbols": 1,
-    "total_news": 33
+    "total_news": 32
   },
   "market_regime": "sideways"
 }

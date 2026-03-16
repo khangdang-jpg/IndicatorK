@@ -2,20 +2,20 @@
   "symbol_scores": [
     {
       "symbol": "MWG",
-      "buy_potential_score": 40,
-      "risk_score": 60,
-      "confidence": 0.2,
+      "buy_potential_score": 70,
+      "risk_score": 30,
+      "confidence": 0.6,
       "horizon": "1-4w",
       "key_bull_points": [
-        "Potential for increased demand due to market trends"
+        "GS25 Vietnam reports strong performance after one year of operation in Hanoi, indicating growth potential for the retail industry in Vietnam"
       ],
       "key_risks": [
-        "High market volatility and lack of concrete evidence supporting MWG's growth"
+        "Vietnam's steel prices have increased by 130%, potentially affecting the construction industry and having a negative impact on MWG"
       ],
       "evidence": [
         {
           "id": "news1",
-          "supports": "bull"
+          "supports": "bull_point"
         },
         {
           "id": "news2",
@@ -23,12 +23,12 @@
         },
         {
           "id": "news3",
-          "supports": "neutral"
+          "supports": "bull_point"
         }
       ]
     }
   ],
   "status": "SUCCESS",
   "analyzed_symbols": 1,
-  "total_news": 33
+  "total_news": 32
 }

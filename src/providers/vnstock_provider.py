@@ -11,8 +11,8 @@ from src.providers.base import PriceProvider
 
 logger = logging.getLogger(__name__)
 
-_CHUNK_SIZE = 3  # Smaller chunks for guest API limits
-_CHUNK_DELAY_S = 10.0  # Longer delays to respect 20 requests/minute limit
+_CHUNK_SIZE = 8  # Larger batches with API key (60 requests/minute)
+_CHUNK_DELAY_S = 2.0  # Faster processing with API key
 
 
 class VnstockProvider(PriceProvider):
