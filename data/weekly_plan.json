@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-16T11:23:52.212128",
+  "generated_at": "2026-03-22T06:08:50.819024",
   "strategy_id": "trend_momentum_atr_regime_adaptive",
   "strategy_version": "1.0.0",
   "allocation_targets": {
@@ -8,23 +8,47 @@
   },
   "recommendations": [
     {
+      "symbol": "STB",
+      "asset_class": "stock",
+      "action": "BUY",
+      "buy_zone_low": 57.20,
+      "buy_zone_high": 60.30,
+      "stop_loss": 49.50,
+      "take_profit": 74.30,
+      "position_target_pct": 0.0632,
+      "rationale_bullets": [
+        "Regime: SIDEWAYS | RSI\u226555",
+        "Trend UP: price 63 > MA10w 62 > MA30w 56",
+        "RSI(14): 66.1",
+        "ATR: 6",
+        "Vol: 74,371,600 (1.1x avg)",
+        "Entry: pullback mid-zone",
+        "Position: 6.3% (base 6.3% \u00d7 1.0x = 6.3%, stop dist 15.8%)"
+      ],
+      "entry_type": "pullback",
+      "breakout_level": 0.00,
+      "entry_price": 58.80,
+      "signal_week_end": "2026-03-20",
+      "earliest_entry_date": null
+    },
+    {
       "symbol": "MWG",
       "asset_class": "stock",
       "action": "SELL",
       "buy_zone_low": 0.00,
       "buy_zone_high": 0.00,
-      "stop_loss": 74.50,
+      "stop_loss": 73.40,
       "take_profit": 0.00,
       "position_target_pct": 0.00,
       "rationale_bullets": [
         "Regime: SIDEWAYS",
-        "Trend DOWN: price 81 < MA30w 83",
+        "Trend DOWN: price 80 < MA30w 83",
         "Exit position"
       ],
       "entry_type": "pullback",
       "breakout_level": 0.00,
       "entry_price": 0.00,
-      "signal_week_end": "2026-03-16",
+      "signal_week_end": "2026-03-20",
       "earliest_entry_date": null
     }
   ],
@@ -36,51 +60,69 @@
   ],
   "ai_analysis": {
     "generated": true,
-    "market_context": "The portfolio has a total value of 9,999,867 VND, with a cash balance of 9,998,416 VND and a single open position.",
-    "analysis_date": "2026-03-16",
+    "market_context": "The portfolio is heavily invested in cash, indicating a cautious market sentiment, with a total portfolio value of 9,999,851 VND.",
+    "analysis_date": "2026-03-22",
     "data_sources": "Weekly technical analysis using Groq AI",
     "scores": {
+      "STB": {
+        "symbol": "STB",
+        "score": 8,
+        "rationale": "STB's price is above its moving averages and has a moderate RSI value, indicating a potential uptrend.",
+        "risk_note": "The stop loss is relatively close to the entry price, which may increase the risk of a stop loss hit."
+      },
       "MWG": {
         "symbol": "MWG",
-        "score": 5,
-        "rationale": "Price is below the 30-week moving average, indicating a downtrend.",
-        "risk_note": "The stop loss is relatively close to the entry price, which may result in a quick loss if the trade does not work out."
+        "score": 2,
+        "rationale": "MWG's price is below its moving averages and has a moderate RSI value, indicating a potential downtrend.",
+        "risk_note": "The entry price is set to 0, which is likely an error and may indicate a problem with the strategy."
       }
     }
   },
   "news_analysis": {
     "symbol_scores": [
       {
+        "symbol": "STB",
+        "buy_potential_score": 50,
+        "risk_score": 50,
+        "confidence": 0.00,
+        "horizon": "1-4w",
+        "key_bull_points": [],
+        "key_risks": [],
+        "evidence": []
+      },
+      {
         "symbol": "MWG",
-        "buy_potential_score": 70,
-        "risk_score": 30,
+        "buy_potential_score": 50,
+        "risk_score": 20,
         "confidence": 0.60,
         "horizon": "1-4w",
         "key_bull_points": [
-          "GS25 Vietnam reports strong performance after one year of operation in Hanoi, indicating growth potential for the retail industry in Vietnam"
+          "Strong quarterly earnings",
+          "Increasing market share"
         ],
         "key_risks": [
-          "Vietnam's steel prices have increased by 130%, potentially affecting the construction industry and having a negative impact on MWG"
+          "Dependence on single product line",
+          "Intense competition"
         ],
         "evidence": [
           {
             "id": "news1",
-            "supports": "bull_point"
+            "supports": "bull"
           },
           {
             "id": "news2",
-            "supports": "risk"
+            "supports": "bull"
           },
           {
             "id": "news3",
-            "supports": "bull_point"
+            "supports": "risk"
           }
         ]
       }
     ],
     "status": "SUCCESS",
-    "analyzed_symbols": 1,
-    "total_news": 32
+    "analyzed_symbols": 2,
+    "total_news": 30
   },
   "market_regime": "sideways"
 }
