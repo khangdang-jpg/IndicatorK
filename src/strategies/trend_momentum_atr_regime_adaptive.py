@@ -23,10 +23,12 @@ Fixed Issues (v1.0.0):
 
 from __future__ import annotations
 
+import json
 import logging
 import math
 from collections import defaultdict
 from datetime import date, datetime, timedelta
+from pathlib import Path
 
 from src.models import OHLCV, PortfolioState, Recommendation, WeeklyPlan
 from src.strategies.base import Strategy
@@ -131,6 +133,20 @@ class TrendMomentumATRRegimeAdaptive(Strategy):
         )
 
         return regime
+
+    def _load_previous_weekly_plan(self) -> WeeklyPlan | None:
+        """Load the previous weekly plan to preserve original stop losses for held positions."""
+        plan_path = Path("data/weekly_plan.json")
+        if not plan_path.exists():
+            return None
+
+        try:
+            with open(plan_path, 'r') as f:
+                plan_dict = json.load(f)
+            return WeeklyPlan.from_dict(plan_dict)
+        except (json.JSONDecodeError, KeyError, Exception) as e:
+            logger.warning("Failed to load previous weekly plan: %s", e)
+            return None
 
     def get_regime_params(self, regime: str) -> dict:
         """Get parameters for the current market regime."""
@@ -238,6 +254,12 @@ class TrendMomentumATRRegimeAdaptive(Strategy):
         recommendations = []
         held_symbols = set(portfolio_state.positions.keys())
         stock_target = config.get("position", {}).get("max_stock_allocation", 0.60)
+
+        # Load previous weekly plan to preserve original stop losses for held positions
+        previous_plan = self._load_previous_weekly_plan()
+        previous_recommendations = {}
+        if previous_plan:
+            previous_recommendations = {rec.symbol: rec for rec in previous_plan.recommendations}
 
         # Detect market regime using VN-Index
         vnindex_candles = market_data.get("VNINDEX") or market_data.get("VNI") or market_data.get("^VNINDEX")
@@ -419,7 +441,19 @@ class TrendMomentumATRRegimeAdaptive(Strategy):
                 buy_zone_low = 0
                 buy_zone_high = 0
                 entry_price = 0.0
-                stop_loss = round_to_step(current - 1.0 * atr, tick)
+
+                # Preserve original stop loss from previous plan, don't recalculate
+                prev_rec = previous_recommendations.get(symbol)
+                if prev_rec and prev_rec.stop_loss > 0:
+                    stop_loss = prev_rec.stop_loss
+                    logger.debug("Preserved original stop loss %.2f for SELL position %s", stop_loss, symbol)
+                    preserved_sl_note = f"Original SL: {stop_loss:.0f} (preserved from signal)"
+                else:
+                    # Fallback: use current calculation only if no previous stop loss available
+                    stop_loss = round_to_step(current - 1.0 * atr, tick)
+                    logger.debug("No previous stop loss found for %s, using calculated %.2f", symbol, stop_loss)
+                    preserved_sl_note = f"SL: {stop_loss:.0f} (calculated, no previous signal)"
+
                 take_profit = 0
                 breakout_level = 0.0
                 entry_type = "pullback"
@@ -428,6 +462,7 @@ class TrendMomentumATRRegimeAdaptive(Strategy):
                     f"Regime: {self.current_regime.upper()}",
                     f"Trend DOWN: price {current:.0f} < MA{self.ma_long}w {ma_long_val:.0f}",
                     "Exit position",
+                    preserved_sl_note,
                 ]
 
             elif trend_up and rsi_overbought and is_held:
