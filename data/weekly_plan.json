@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-23T04:37:54.495240",
+  "generated_at": "2026-03-29T14:20:25.777496",
   "strategy_id": "trend_momentum_atr_regime_adaptive",
   "strategy_version": "1.0.0",
   "allocation_targets": {
@@ -18,13 +18,14 @@
       "position_target_pct": 0.00,
       "rationale_bullets": [
         "Regime: SIDEWAYS",
-        "Trend DOWN: price 76 < MA30w 83",
-        "Exit position"
+        "Trend DOWN: price 81 < MA30w 83",
+        "Exit position",
+        "Original SL: 70 (preserved from signal)"
       ],
       "entry_type": "pullback",
       "breakout_level": 0.00,
       "entry_price": 0.00,
-      "signal_week_end": "2026-03-23",
+      "signal_week_end": "2026-03-27",
       "earliest_entry_date": null
     }
   ],
@@ -36,15 +37,15 @@
   ],
   "ai_analysis": {
     "generated": true,
-    "market_context": "The portfolio is heavily invested in cash, with only one position held, indicating a cautious approach to the market.",
-    "analysis_date": "2026-03-23",
+    "market_context": "The portfolio is heavily invested in cash, with a total value of 9,999,874 VND and only one position, indicating a cautious market approach.",
+    "analysis_date": "2026-03-29",
     "data_sources": "Weekly technical analysis using Groq AI",
     "scores": {
       "MWG": {
         "symbol": "MWG",
         "score": 6,
-        "rationale": "The stock is in a downtrend with price below its 30-week moving average.",
-        "risk_note": "The stop loss is relatively tight at 70, which may result in a quick exit if the stock moves against the position."
+        "rationale": "The stock is in a sideways regime with a downward trend, as the current price is below the 30-week moving average.",
+        "risk_note": "The stop loss is relatively close to the entry price, indicating a relatively high risk."
       }
     }
   },
@@ -52,17 +53,15 @@
     "symbol_scores": [
       {
         "symbol": "MWG",
-        "buy_potential_score": 50,
-        "risk_score": 20,
-        "confidence": 0.60,
+        "buy_potential_score": 40,
+        "risk_score": 60,
+        "confidence": 0.40,
         "horizon": "1-4w",
         "key_bull_points": [
-          "Strong quarterly earnings",
-          "Increasing market share"
+          "Potential benefits from Vietnam's shift in trade due to the US-China conflict"
         ],
         "key_risks": [
-          "Dependence on single product line",
-          "Intense competition"
+          "Potential negative impact on MWG's profits due to Vietnam's carbon tax, estimated at around $500 million"
         ],
         "evidence": [
           {
@@ -71,11 +70,11 @@
           },
           {
             "id": "news2",
-            "supports": "bull"
+            "supports": "risk"
           },
           {
             "id": "news3",
-            "supports": "risk"
+            "supports": "bull"
           }
         ]
       }

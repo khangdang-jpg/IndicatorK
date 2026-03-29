@@ -2,17 +2,15 @@
   "symbol_scores": [
     {
       "symbol": "MWG",
-      "buy_potential_score": 50,
-      "risk_score": 20,
-      "confidence": 0.6,
+      "buy_potential_score": 40,
+      "risk_score": 60,
+      "confidence": 0.4,
       "horizon": "1-4w",
       "key_bull_points": [
-        "Strong quarterly earnings",
-        "Increasing market share"
+        "Potential benefits from Vietnam's shift in trade due to the US-China conflict"
       ],
       "key_risks": [
-        "Dependence on single product line",
-        "Intense competition"
+        "Potential negative impact on MWG's profits due to Vietnam's carbon tax, estimated at around $500 million"
       ],
       "evidence": [
         {
@@ -21,11 +19,11 @@
         },
         {
           "id": "news2",
-          "supports": "bull"
+          "supports": "risk"
         },
         {
           "id": "news3",
-          "supports": "risk"
+          "supports": "bull"
         }
       ]
     }
