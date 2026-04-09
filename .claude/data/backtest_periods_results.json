@@ -1,0 +1,53 @@
+{
+  "Bear": {
+    "metrics": {
+      "total_return_pct": -8.244515350000002,
+      "cagr_pct": -13.03,
+      "sharpe_ratio": 0,
+      "max_drawdown_pct": 11.24,
+      "win_rate_pct": 7.6899999999999995,
+      "profit_factor": 0.1288,
+      "total_trades": 13,
+      "trading_days": 0
+    },
+    "period_info": {
+      "start": "2022-04-04",
+      "end": "2022-11-15",
+      "description": "Vietnamese market crash"
+    }
+  },
+  "Sideway": {
+    "metrics": {
+      "total_return_pct": 5.500303499999997,
+      "cagr_pct": 11.600000000000001,
+      "sharpe_ratio": 0,
+      "max_drawdown_pct": 6.279999999999999,
+      "win_rate_pct": 53.849999999999994,
+      "profit_factor": 2.4988,
+      "total_trades": 13,
+      "trading_days": 0
+    },
+    "period_info": {
+      "start": "2024-01-02",
+      "end": "2024-06-28",
+      "description": "Consolidation period"
+    }
+  },
+  "Bull": {
+    "metrics": {
+      "total_return_pct": 14.409082300000003,
+      "cagr_pct": 31.59,
+      "sharpe_ratio": 0,
+      "max_drawdown_pct": 8.85,
+      "win_rate_pct": 57.89,
+      "profit_factor": 2.8816,
+      "total_trades": 19,
+      "trading_days": 0
+    },
+    "period_info": {
+      "start": "2025-01-02",
+      "end": "2025-06-30",
+      "description": "Growth period"
+    }
+  }
+}

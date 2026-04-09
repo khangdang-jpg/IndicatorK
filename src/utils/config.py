@@ -106,6 +106,8 @@ def get_strategy(config_path: str = "config/strategy.yml"):
     from src.strategies.rebalance_50_50 import Rebalance5050Strategy
     from src.strategies.trend_momentum_atr import TrendMomentumATRStrategy
     from src.strategies.trend_momentum_atr_regime_adaptive import TrendMomentumATRRegimeAdaptive
+    from src.strategies.institutional_intraweek_enhanced import InstitutionalIntraweekEnhanced
+    from src.strategies.dual_stream_combined import DualStreamCombined
 
     cfg = load_yaml(config_path)
     active = cfg.get("active", "trend_momentum_atr")
@@ -114,6 +116,8 @@ def get_strategy(config_path: str = "config/strategy.yml"):
     strategy_map = {
         "trend_momentum_atr": lambda: TrendMomentumATRStrategy(params=params),
         "trend_momentum_atr_regime_adaptive": lambda: TrendMomentumATRRegimeAdaptive(params=params),
+        "institutional_intraweek_enhanced": lambda: InstitutionalIntraweekEnhanced(params=params),
+        "dual_stream_combined": lambda: DualStreamCombined(params=params),
         "rebalance_50_50": lambda: Rebalance5050Strategy(params=params),
     }
 

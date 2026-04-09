@@ -1,8 +1,8 @@
 # Strategy configuration
 # Change 'active' to switch strategies without code edits.
-# Available: trend_momentum_atr | trend_momentum_atr_regime_adaptive | rebalance_50_50
+# Available: trend_momentum_atr | trend_momentum_atr_regime_adaptive | institutional_intraweek_enhanced | dual_stream_combined | rebalance_50_50
 
-active: trend_momentum_atr_regime_adaptive
+active: dual_stream_combined
 
 trend_momentum_atr:
   ma_short: 10             # 10-week moving average
@@ -48,6 +48,149 @@ trend_momentum_atr_regime_adaptive:
   # ATH-aware TP capping for realistic targets
   ath_cap_pct: 0.20           # Cap TP at ATH + 20%
   ath_lookback_days: 252      # 1 year ATH lookback window
+
+institutional_intraweek_enhanced:
+  # Base technical parameters (enhanced for intraweek)
+  ma_short: 8                 # Shorter for intraweek responsiveness
+  ma_long: 25                 # Shorter for intraweek responsiveness
+  rsi_period: 12              # More responsive
+  atr_period: 12
+  adx_period: 12
+  bb_period: 18               # Tighter bands
+  bb_std_mult: 1.8            # More sensitive
+  entry_buffer_pct: 0.0015    # Slightly wider
+
+  # BULL-ENHANCED regime detection (better bull capture)
+  regime_lookback: 45         # Shorter for responsiveness
+  trend_threshold: 0.025      # ENHANCED: Better bull detection (0.015 → 0.025)
+  volatility_threshold: 0.35  # ENHANCED: Allow more bull volatility (0.30 → 0.35)
+  adx_trending_threshold: 18  # ENHANCED: More selective trends (12 → 18)
+
+  # BULL-ENHANCED momentum strategy parameters
+  momentum_rsi_min: 52        # ENHANCED: Higher quality signals (45 → 52)
+  momentum_atr_stop: 1.6      # Maintain tight stops
+  momentum_atr_target: 5.2    # ENHANCED: Higher bull targets (4.0 → 5.2)
+  momentum_position_mult: 1.8 # ENHANCED: More aggressive (1.4 → 1.8)
+
+  # Enhanced mean reversion strategy parameters
+  mean_revert_rsi_oversold: 25    # More extreme
+  mean_revert_rsi_overbought: 75
+  mean_revert_atr_stop: 1.0       # Very tight
+  mean_revert_atr_target: 2.5     # Higher
+  mean_revert_position_mult: 1.0  # Balanced
+
+  # Bear market parameters (defensive but opportunistic)
+  bear_rsi_threshold: 70      # Very selective
+  bear_position_mult: 0.7
+  bear_atr_stop: 0.8          # Very tight
+  bear_atr_target: 3.0        # Quick scalps
+
+  # Institutional Kelly Criterion
+  use_kelly_sizing: true
+  kelly_fraction: 0.35        # Aggressive
+  conviction_multiplier: true
+
+  # Sector rotation and correlation
+  use_sector_rotation: true
+  correlation_lookback: 30    # 30 days
+  sector_strength_lookback: 20
+
+  # Market efficiency and liquidity detection
+  efficiency_lookback: 15
+  volume_surge_threshold: 2.0 # 2x avg volume
+  liquidity_threshold: 1.5    # Minimum liquidity
+
+  # Duration modeling
+  optimal_entry_window: 3     # 3-day entry window
+  momentum_hold_target: 8     # 8 days average
+  mean_revert_hold_target: 4  # 4 days average
+
+  # ATH capping (tighter for intraweek)
+  ath_cap_pct: 0.12          # 12% cap
+  ath_lookback_days: 90      # 3 months
+
+dual_stream_combined:
+  # Signal weighting (new)
+  weekly_weight: 0.60
+  intraweek_weight: 0.40
+  max_combined_position: 0.25
+
+  # INHERIT: All weekly strategy parameters
+  weekly:
+    ma_short: 10
+    ma_long: 30
+    rsi_period: 14
+    atr_period: 14
+    regime_lookback: 60
+    trend_threshold: 0.05
+    # Bear market parameters
+    bear_rsi_threshold: 65
+    bear_position_multiplier: 0.7
+    bear_atr_stop_mult: 1.2
+    bear_atr_target_mult: 2.0
+    # Bull market parameters
+    bull_rsi_threshold: 45
+    bull_position_multiplier: 1.5
+    bull_atr_stop_mult: 1.8
+    bull_atr_target_mult: 4.0
+    # Sideways parameters
+    sideways_rsi_threshold: 55
+    sideways_position_multiplier: 1.0
+    sideways_atr_stop_mult: 1.5
+    sideways_atr_target_mult: 2.5
+    # ATH capping
+    ath_cap_pct: 0.20
+    ath_lookback_days: 252
+
+  # INHERIT: All enhanced intraweek strategy parameters
+  intraweek:
+    # Technical parameters
+    ma_short: 8
+    ma_long: 25
+    rsi_period: 12
+    atr_period: 12
+    adx_period: 12
+    bb_period: 18
+    bb_std_mult: 1.8
+    entry_buffer_pct: 0.0015
+    # Enhanced regime detection
+    regime_lookback: 45
+    trend_threshold: 0.025
+    volatility_threshold: 0.35
+    adx_trending_threshold: 18
+    # Enhanced momentum parameters
+    momentum_rsi_min: 52
+    momentum_atr_stop: 1.6
+    momentum_atr_target: 5.2
+    momentum_position_mult: 1.8
+    # Mean reversion parameters
+    mean_revert_rsi_oversold: 25
+    mean_revert_rsi_overbought: 75
+    mean_revert_atr_stop: 1.0
+    mean_revert_atr_target: 2.5
+    mean_revert_position_mult: 1.0
+    # Bear market parameters
+    bear_rsi_threshold: 70
+    bear_position_mult: 0.7
+    bear_atr_stop: 0.8
+    bear_atr_target: 3.0
+    # Institutional features
+    use_kelly_sizing: true
+    kelly_fraction: 0.35
+    conviction_multiplier: true
+    use_sector_rotation: true
+    correlation_lookback: 30
+    sector_strength_lookback: 20
+    efficiency_lookback: 15
+    volume_surge_threshold: 2.0
+    liquidity_threshold: 1.5
+    # Duration modeling
+    optimal_entry_window: 3
+    momentum_hold_target: 8
+    mean_revert_hold_target: 4
+    # ATH capping
+    ath_cap_pct: 0.12
+    ath_lookback_days: 90
 
 rebalance_50_50:
   stock_target: 0.50
