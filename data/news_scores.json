@@ -1,6 +1,26 @@
 {
   "symbol_scores": [
     {
+      "symbol": "STB",
+      "buy_potential_score": 0,
+      "risk_score": 0,
+      "confidence": 0.0,
+      "horizon": "1-4w",
+      "key_bull_points": [],
+      "key_risks": [],
+      "evidence": []
+    },
+    {
+      "symbol": "VIC",
+      "buy_potential_score": 0,
+      "risk_score": 0,
+      "confidence": 0.0,
+      "horizon": "1-4w",
+      "key_bull_points": [],
+      "key_risks": [],
+      "evidence": []
+    },
+    {
       "symbol": "MWG",
       "buy_potential_score": 50,
       "risk_score": 60,
@@ -26,26 +46,6 @@
           "supports": "bull"
         }
       ]
-    },
-    {
-      "symbol": "VIC",
-      "buy_potential_score": 0,
-      "risk_score": 0,
-      "confidence": 0.0,
-      "horizon": "1-4w",
-      "key_bull_points": [],
-      "key_risks": [],
-      "evidence": []
-    },
-    {
-      "symbol": "STB",
-      "buy_potential_score": 0,
-      "risk_score": 0,
-      "confidence": 0.0,
-      "horizon": "1-4w",
-      "key_bull_points": [],
-      "key_risks": [],
-      "evidence": []
     }
   ],
   "status": "SUCCESS",

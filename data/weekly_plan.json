@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-12T05:27:06.587714",
+  "generated_at": "2026-04-12T11:10:36.439744",
   "strategy_id": "dual_stream_combined",
   "strategy_version": "1.0.0",
   "allocation_targets": {
@@ -8,26 +8,28 @@
   },
   "recommendations": [
     {
-      "symbol": "MWG",
+      "symbol": "STB",
       "asset_class": "stock",
-      "action": "SELL",
-      "buy_zone_low": 0.00,
-      "buy_zone_high": 0.00,
-      "stop_loss": 70.40,
-      "take_profit": 0.00,
-      "position_target_pct": 0.00,
+      "action": "BUY",
+      "buy_zone_low": 60.60,
+      "buy_zone_high": 63.70,
+      "stop_loss": 54.60,
+      "take_profit": 74.90,
+      "position_target_pct": 0.0982,
       "rationale_bullets": [
-        "Regime: BEAR",
-        "Trend DOWN: price 82 < MA30w 83",
-        "Exit position",
-        "Original SL: 70 (preserved from signal)",
-        "\ud83d\udd12 Preserved original SL: 70",
-        "\ud83d\udcca Primary signal: WEEKLY"
+        "\ud83d\udcc8 WEEKLY: Regime: BEAR | RSI\u226565",
+        "\ud83d\udcc8 WEEKLY: Trend UP: price 67 > MA10w 63 > MA30w 57",
+        "\ud83d\udcc8 WEEKLY: RSI(14): 61.8",
+        "\ud83d\udcc8 WEEKLY: ATR: 6",
+        "\ud83d\udcc8 WEEKLY: Vol: 38,630,500 (0.6x avg)",
+        "\ud83d\udcc8 WEEKLY: Entry: pullback mid-zone",
+        "\ud83d\udcc8 WEEKLY: Position: 5.7% (base 8.2% \u00d7 0.7x = 5.7%, stop dist 12.2%)",
+        "\ud83d\udcc8 WEEKLY ONLY: 9.8% position"
       ],
       "entry_type": "pullback",
       "breakout_level": 0.00,
-      "entry_price": 0.00,
-      "signal_week_end": null,
+      "entry_price": 62.20,
+      "signal_week_end": "2026-04-10",
       "earliest_entry_date": null
     },
     {
@@ -56,28 +58,26 @@
       "earliest_entry_date": null
     },
     {
-      "symbol": "STB",
+      "symbol": "MWG",
       "asset_class": "stock",
-      "action": "BUY",
-      "buy_zone_low": 60.60,
-      "buy_zone_high": 63.70,
-      "stop_loss": 54.60,
-      "take_profit": 74.90,
-      "position_target_pct": 0.0982,
+      "action": "SELL",
+      "buy_zone_low": 0.00,
+      "buy_zone_high": 0.00,
+      "stop_loss": 70.40,
+      "take_profit": 0.00,
+      "position_target_pct": 0.00,
       "rationale_bullets": [
-        "\ud83d\udcc8 WEEKLY: Regime: BEAR | RSI\u226565",
-        "\ud83d\udcc8 WEEKLY: Trend UP: price 67 > MA10w 63 > MA30w 57",
-        "\ud83d\udcc8 WEEKLY: RSI(14): 61.8",
-        "\ud83d\udcc8 WEEKLY: ATR: 6",
-        "\ud83d\udcc8 WEEKLY: Vol: 38,630,500 (0.6x avg)",
-        "\ud83d\udcc8 WEEKLY: Entry: pullback mid-zone",
-        "\ud83d\udcc8 WEEKLY: Position: 5.7% (base 8.2% \u00d7 0.7x = 5.7%, stop dist 12.2%)",
-        "\ud83d\udcc8 WEEKLY ONLY: 9.8% position"
+        "Regime: BEAR",
+        "Trend DOWN: price 82 < MA30w 83",
+        "Exit position",
+        "Original SL: 70 (preserved from signal)",
+        "\ud83d\udd12 Preserved original SL: 70",
+        "\ud83d\udcca Primary signal: WEEKLY"
       ],
       "entry_type": "pullback",
       "breakout_level": 0.00,
-      "entry_price": 62.20,
-      "signal_week_end": "2026-04-10",
+      "entry_price": 0.00,
+      "signal_week_end": null,
       "earliest_entry_date": null
     }
   ],
@@ -112,32 +112,52 @@
   ],
   "ai_analysis": {
     "generated": true,
-    "market_context": "The portfolio is heavily invested in cash with a small position in MWG and potential new positions in VIC and STB.",
+    "market_context": "The portfolio is heavily cashed up with a total value of 9,999,883 VND and only one position, indicating a cautious market approach.",
     "analysis_date": "2026-04-12",
     "data_sources": "Weekly technical analysis using Groq AI",
     "scores": {
-      "MWG": {
-        "symbol": "MWG",
-        "score": 4,
-        "rationale": "Price is below MA30w and in a bear regime.",
-        "risk_note": "The stop loss is relatively close to the entry price."
-      },
-      "VIC": {
-        "symbol": "VIC",
-        "score": 9,
-        "rationale": "Price is above MA10w and MA30w with RSI\u226565 in a bear regime.",
-        "risk_note": ""
-      },
       "STB": {
         "symbol": "STB",
         "score": 8,
-        "rationale": "Price is above MA10w and MA30w with RSI\u226565 in a bear regime.",
-        "risk_note": ""
+        "rationale": "Weekly trend is up with price above MA10w and MA30w, and RSI(14) is 61.8.",
+        "risk_note": "Stop loss is relatively close to entry price."
+      },
+      "VIC": {
+        "symbol": "VIC",
+        "score": 6,
+        "rationale": "Weekly trend is up with price above MA10w and MA30w, but RSI(14) is relatively low at 49.1.",
+        "risk_note": "Stop loss is relatively close to entry price."
+      },
+      "MWG": {
+        "symbol": "MWG",
+        "score": 1,
+        "rationale": "Weekly trend is down with price below MA30w, indicating a bearish regime.",
+        "risk_note": "Sell signal with no target price, indicating a potential loss if the position is not closed."
       }
     }
   },
   "news_analysis": {
     "symbol_scores": [
+      {
+        "symbol": "STB",
+        "buy_potential_score": 0,
+        "risk_score": 0,
+        "confidence": 0.00,
+        "horizon": "1-4w",
+        "key_bull_points": [],
+        "key_risks": [],
+        "evidence": []
+      },
+      {
+        "symbol": "VIC",
+        "buy_potential_score": 0,
+        "risk_score": 0,
+        "confidence": 0.00,
+        "horizon": "1-4w",
+        "key_bull_points": [],
+        "key_risks": [],
+        "evidence": []
+      },
       {
         "symbol": "MWG",
         "buy_potential_score": 50,
@@ -164,26 +184,6 @@
             "supports": "bull"
           }
         ]
-      },
-      {
-        "symbol": "VIC",
-        "buy_potential_score": 0,
-        "risk_score": 0,
-        "confidence": 0.00,
-        "horizon": "1-4w",
-        "key_bull_points": [],
-        "key_risks": [],
-        "evidence": []
-      },
-      {
-        "symbol": "STB",
-        "buy_potential_score": 0,
-        "risk_score": 0,
-        "confidence": 0.00,
-        "horizon": "1-4w",
-        "key_bull_points": [],
-        "key_risks": [],
-        "evidence": []
       }
     ],
     "status": "SUCCESS",
