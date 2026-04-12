@@ -12,6 +12,7 @@ guardrails:
 
 position:
   max_single_position_pct: 0.15   # Max 15% in any single position
+  max_single_position_pct_bear: 0.10  # ADDED: Max 10% per position in bear markets
   max_stock_allocation: 0.60      # Max 60% in stocks total
 
 allocation:
@@ -23,4 +24,4 @@ allocation:
 regime:
   bull_mult: 1.5                   # BULL regime multiplier (aggressive)
   sideways_mult: 1.0               # SIDEWAYS regime multiplier (balanced)
-  bear_mult: 0.7                   # BEAR regime multiplier (defensive)
+  bear_mult: 0.6                   # FIXED: More defensive bear multiplier (was 0.7)

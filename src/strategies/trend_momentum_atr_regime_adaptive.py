@@ -523,8 +523,8 @@ class TrendMomentumATRRegimeAdaptive(Strategy):
 
             # Regime-adaptive position sizing: risk-based + regime multiplier
             if action == "BUY":
-                # 1. Calculate base allocation using stop-distance (risk-based)
-                base_alloc = _compute_alloc_pct(config, entry_price, stop_loss)
+                # 1. Calculate base allocation using stop-distance (risk-based) with bear caps
+                base_alloc = _compute_alloc_pct(config, entry_price, stop_loss, self.current_regime)
 
                 # 2. Get regime multiplier from config
                 regime_cfg = config.get("regime", {})
@@ -535,8 +535,8 @@ class TrendMomentumATRRegimeAdaptive(Strategy):
                 }
                 regime_multiplier = regime_mult_map.get(self.current_regime, 1.0)
 
-                # 3. Apply regime multiplier and clamp
-                position_target_pct = _apply_regime_multiplier(base_alloc, regime_multiplier, config)
+                # 3. Apply regime multiplier and clamp (with bear market position caps)
+                position_target_pct = _apply_regime_multiplier(base_alloc, regime_multiplier, config, self.current_regime)
 
                 # 4. Add sizing debug info to rationale
                 stop_distance_pct = abs(entry_price - stop_loss) / entry_price if entry_price > 0 else 0.0
@@ -699,16 +699,22 @@ def _std(values: list[float]) -> float:
     return variance ** 0.5
 
 
-def _compute_alloc_pct(config: dict, entry_price: float, sl: float) -> float:
-    """Compute base position allocation using risk-based sizing (stop-distance).
+def _compute_alloc_pct(config: dict, entry_price: float, sl: float, regime: str = "sideways") -> float:
+    """Compute base position allocation using risk-based sizing (stop-distance) with bear market caps.
 
     Formula: base_alloc_pct = risk_per_trade_pct / stop_distance_pct
-    Then clamp to [min_alloc_pct, max_alloc_pct]
+    Then clamp to [min_alloc_pct, max_alloc_pct] with bear market position limits
     """
     alloc_cfg = config.get("allocation", {})
+    position_cfg = config.get("position", {})
     risk_per_trade = alloc_cfg.get("risk_per_trade_pct", 0.01)
     lo = alloc_cfg.get("min_alloc_pct", 0.03)
     hi = alloc_cfg.get("max_alloc_pct", 0.15)
+
+    # FIXED: Apply bear market position caps
+    if regime == "bear":
+        bear_max = position_cfg.get("max_single_position_pct_bear", 0.10)
+        hi = min(hi, bear_max)
 
     # Calculate stop distance percentage
     if entry_price > 0 and sl > 0:
@@ -727,11 +733,18 @@ def _compute_alloc_pct(config: dict, entry_price: float, sl: float) -> float:
     return round(max(lo, min(hi, raw)), 4)
 
 
-def _apply_regime_multiplier(base_alloc: float, multiplier: float, config: dict) -> float:
-    """Apply regime multiplier to base allocation and clamp to min/max."""
+def _apply_regime_multiplier(base_alloc: float, multiplier: float, config: dict, regime: str = "sideways") -> float:
+    """Apply regime multiplier to base allocation and clamp to min/max with bear market position caps."""
     alloc_cfg = config.get("allocation", {})
+    position_cfg = config.get("position", {})
+
     lo = alloc_cfg.get("min_alloc_pct", 0.03)
     hi = alloc_cfg.get("max_alloc_pct", 0.15)
+
+    # FIXED: Apply bear market position caps
+    if regime == "bear":
+        bear_max = position_cfg.get("max_single_position_pct_bear", 0.10)
+        hi = min(hi, bear_max)  # Use stricter limit in bear markets
 
     adjusted = base_alloc * multiplier
     return round(max(lo, min(hi, adjusted)), 4)

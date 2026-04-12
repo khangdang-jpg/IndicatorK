@@ -1,0 +1,14 @@
+{
+  "from_date": "2022-04-04",
+  "to_date": "2022-11-15",
+  "initial_cash": 20000000,
+  "final_value": 18750362.96,
+  "cagr": -0.0994,
+  "max_drawdown": 0.089,
+  "win_rate": 0.1111,
+  "avg_hold_days": 29.0,
+  "num_trades": 9,
+  "profit_factor": 0.1203,
+  "avg_invested_pct": 0.1061,
+  "tie_breaker": "worst"
+}

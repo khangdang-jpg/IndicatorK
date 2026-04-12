@@ -1,0 +1,14 @@
+{
+  "from_date": "2025-01-02",
+  "to_date": "2025-06-30",
+  "initial_cash": 20000000,
+  "final_value": 22412643.84,
+  "cagr": 0.2614,
+  "max_drawdown": 0.1002,
+  "win_rate": 0.5625,
+  "avg_hold_days": 29.5,
+  "num_trades": 16,
+  "profit_factor": 2.3905,
+  "avg_invested_pct": 0.4217,
+  "tie_breaker": "worst"
+}

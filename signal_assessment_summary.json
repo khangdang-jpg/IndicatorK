@@ -1,0 +1,134 @@
+{
+  "assessment_date": "2026-04-09",
+  "strategy": "dual_stream_combined",
+  "market_regime": "BEAR+SIDEWAYS_QUIET",
+  "overall_rating": "MODERATE RISK - REQUIRES ADJUSTMENTS",
+  "signals": {
+    "VIC": {
+      "action": "BUY",
+      "current_price": 149200,
+      "buy_zone": [
+        127500,
+        138300
+      ],
+      "entry_target": 132900,
+      "stop_loss": 106800,
+      "take_profit": 176400,
+      "position_size_pct": 6.1,
+      "portfolio_risk_pct": 1.2,
+      "pullback_required_pct": [
+        7.3,
+        14.6
+      ],
+      "pullback_feasibility_score": 64,
+      "atr_14": 6886,
+      "atr_pct": 4.6,
+      "risk_reward_ratio": 1.67,
+      "stop_loss_rating": "APPROPRIATE",
+      "take_profit_rating": "APPROPRIATE",
+      "position_sizing_rating": "CORRECT",
+      "expected_win_rate_pct": 52.5,
+      "expected_fill_rate_pct": 64,
+      "combined_success_pct": 35.2,
+      "recommendation": "ADJUST REQUIRED",
+      "recommended_buy_zone": [
+        140000,
+        145000
+      ],
+      "recommended_entry": 142500,
+      "recommended_position_size_pct": 4.5,
+      "recommended_fill_probability_pct": 80
+    },
+    "STB": {
+      "action": "BUY",
+      "current_price": 66300,
+      "buy_zone": [
+        60000,
+        63100
+      ],
+      "entry_target": 61500,
+      "stop_loss": 53900,
+      "take_profit": 74200,
+      "position_size_pct": 9.7,
+      "portfolio_risk_pct": 1.2,
+      "pullback_required_pct": [
+        4.8,
+        9.5
+      ],
+      "pullback_feasibility_score": 44,
+      "atr_14": 2343,
+      "atr_pct": 3.5,
+      "risk_reward_ratio": 1.67,
+      "stop_loss_rating": "APPROPRIATE",
+      "take_profit_rating": "APPROPRIATE",
+      "position_sizing_rating": "CORRECT",
+      "expected_win_rate_pct": 47.5,
+      "expected_fill_rate_pct": 44,
+      "combined_success_pct": 22.0,
+      "recommendation": "ADJUST REQUIRED",
+      "recommended_buy_zone": [
+        63000,
+        65000
+      ],
+      "recommended_entry": 64000,
+      "recommended_position_size_pct": 7.5,
+      "recommended_fill_probability_pct": 85
+    },
+    "MWG": {
+      "action": "SELL",
+      "current_price": 81000,
+      "stop_loss": 70400,
+      "recommendation": "EXECUTE IMMEDIATELY",
+      "rationale": "Trend breakdown confirmed (price < MA30w), BEAR regime exit"
+    }
+  },
+  "key_findings": [
+    "Both BUY signals (VIC, STB) have current prices ABOVE buy zones - require 5-15% pullbacks",
+    "VIC pullback feasibility: 64% (MODERATE) - stock showed 16 instances of 10%+ pullbacks in 30 days",
+    "STB pullback feasibility: 44% (LOW) - recent 8% surge suggests consolidation, not pullback",
+    "Position sizing formula working correctly - both signals target 1.20% portfolio risk",
+    "Risk/reward ratios excellent (1.67:1) with appropriate ATR-based stops and targets",
+    "Entry strategy conflict: pullback logic in BEAR regime = reduced win rates (45-55% vs 66.67% baseline)",
+    "Combined success probability: VIC 35%, STB 22% (significantly below acceptable threshold)"
+  ],
+  "recommended_actions": [
+    {
+      "priority": "CRITICAL",
+      "action": "Raise buy zones",
+      "detail": "VIC: 140-145k VND (+8-10%), STB: 63-65k VND (+5-8%)",
+      "impact": "Increases fill probability from 44-64% to 75-85%"
+    },
+    {
+      "priority": "CRITICAL",
+      "action": "Reduce position sizes",
+      "detail": "VIC: 6.1% \u2192 4.5%, STB: 9.7% \u2192 7.5%",
+      "impact": "Maintains 1% portfolio risk with wider stop distances from raised entries"
+    },
+    {
+      "priority": "MODERATE",
+      "action": "Add volume confirmation",
+      "detail": "Only enter if volume > 1.5x average",
+      "impact": "Reduces false breakout entries by 20-30%"
+    },
+    {
+      "priority": "LOW",
+      "action": "Implement 5-day signal expiration",
+      "detail": "Cancel unfilled signals after 1 week",
+      "impact": "Prevents stale signal execution at poor prices"
+    },
+    {
+      "priority": "IMMEDIATE",
+      "action": "Execute MWG SELL signal",
+      "detail": "Exit at 81k VND, stop at 70.4k VND",
+      "impact": "Protects against 13% further downside in BEAR regime"
+    }
+  ],
+  "strategy_health": {
+    "technical_quality": "EXCELLENT",
+    "execution_timing": "NEEDS IMPROVEMENT",
+    "risk_management": "CORRECT",
+    "regime_adaptation": "PARTIAL",
+    "overall": "CAUTION - Entry timing optimization required for BEAR regimes"
+  },
+  "next_review": "2026-04-16 or upon signal fill"
+}

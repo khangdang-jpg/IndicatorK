@@ -84,11 +84,13 @@ class DualStreamCombined(Strategy):
 
         # STEP 3: Merge signals with risk-based position sizing
         logger.info("Merging signals with unified asset tracking...")
+        market_regime = weekly_plan.market_regime or "unknown"
         combined_recommendations = self._merge_signals_with_unified_tracking(
             weekly_plan.recommendations,
             intraweek_plan.recommendations,
             held_symbols,
-            config
+            config,
+            market_regime
         )
 
         # STEP 4: Create unified plan (inherit existing structure)
@@ -163,7 +165,8 @@ class DualStreamCombined(Strategy):
         weekly_recs: list[Recommendation],
         intraweek_recs: list[Recommendation],
         held_symbols: set[str],
-        config: dict
+        config: dict,
+        market_regime: str = "unknown"
     ) -> list[Recommendation]:
         """Merge signals with unified asset tracking and position preservation.
 
@@ -200,7 +203,7 @@ class DualStreamCombined(Strategy):
                     logger.info(f"Preserved position for {symbol}: {merged_rec.action}")
             else:
                 # New position - combine signals
-                merged_rec = self._combine_new_position_signals(weekly_rec, intraweek_rec, config)
+                merged_rec = self._combine_new_position_signals(weekly_rec, intraweek_rec, config, market_regime)
                 if merged_rec:
                     logger.info(f"Combined new signal for {symbol}: {merged_rec.action} {merged_rec.position_target_pct:.1%}")
 
@@ -262,7 +265,8 @@ class DualStreamCombined(Strategy):
         self,
         weekly_rec: Recommendation | None,
         intraweek_rec: Recommendation | None,
-        config: dict
+        config: dict,
+        market_regime: str = "unknown"
     ) -> Recommendation | None:
         """Combine signals for new positions with risk-based position sizing.
 
@@ -272,8 +276,8 @@ class DualStreamCombined(Strategy):
             # Both strategies want to buy - create combined position
 
             # INHERIT: Risk-based sizing for both components
-            weekly_position = self._calculate_risk_based_position_size(weekly_rec, config)
-            intraweek_position = self._calculate_risk_based_position_size(intraweek_rec, config)
+            weekly_position = self._calculate_risk_based_position_size(weekly_rec, config, market_regime)
+            intraweek_position = self._calculate_risk_based_position_size(intraweek_rec, config, market_regime)
 
             # Weight positions and combine
             combined_position = min(
@@ -303,7 +307,7 @@ class DualStreamCombined(Strategy):
 
         elif weekly_rec and weekly_rec.action == "BUY":
             # Weekly signal only - apply weekly weighting
-            weekly_position = self._calculate_risk_based_position_size(weekly_rec, config) * self.weekly_weight
+            weekly_position = self._calculate_risk_based_position_size(weekly_rec, config, market_regime) * self.weekly_weight
             weekly_rec.position_target_pct = weekly_position
             weekly_rec.rationale_bullets = [f"📈 WEEKLY: {r}" for r in weekly_rec.rationale_bullets]
             weekly_rec.rationale_bullets.append(f"📈 WEEKLY ONLY: {weekly_position:.1%} position")
@@ -311,7 +315,7 @@ class DualStreamCombined(Strategy):
 
         elif intraweek_rec and intraweek_rec.action == "BUY":
             # Intraweek signal only - apply intraweek weighting
-            intraweek_position = self._calculate_risk_based_position_size(intraweek_rec, config) * self.intraweek_weight
+            intraweek_position = self._calculate_risk_based_position_size(intraweek_rec, config, market_regime) * self.intraweek_weight
             intraweek_rec.position_target_pct = intraweek_position
             intraweek_rec.rationale_bullets = [f"⚡ TACTICAL: {r}" for r in intraweek_rec.rationale_bullets]
             intraweek_rec.rationale_bullets.append(f"⚡ INTRAWEEK ONLY: {intraweek_position:.1%} position")
@@ -329,7 +333,7 @@ class DualStreamCombined(Strategy):
 
         return None
 
-    def _calculate_risk_based_position_size(self, recommendation: Recommendation, config: dict) -> float:
+    def _calculate_risk_based_position_size(self, recommendation: Recommendation, config: dict, market_regime: str = "unknown") -> float:
         """Calculate risk-based position size using stop-loss distance.
 
         INHERITED: Existing risk-based position sizing formula from weekly strategy.
@@ -350,8 +354,15 @@ class DualStreamCombined(Strategy):
         regime_multiplier = 1.0  # Balanced approach for dual-stream
         final_position = position_pct * regime_multiplier
 
-        # Cap position size
-        max_position = config.get("position", {}).get("max_position_pct", 0.25)
+        # Cap position size with bear market limits
+        position_cfg = config.get("position", {})
+        max_position = position_cfg.get("max_position_pct", 0.25)
+
+        # FIXED: Apply bear market position caps if in bear regime
+        if 'bear' in market_regime.lower():
+            bear_max = position_cfg.get("max_single_position_pct_bear", 0.10)
+            max_position = min(max_position, bear_max)
+
         return min(final_position, max_position)
 
     def _create_dual_stream_notes(self, weekly_plan: WeeklyPlan, intraweek_plan: WeeklyPlan) -> list[str]:
