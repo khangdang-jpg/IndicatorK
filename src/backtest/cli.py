@@ -15,10 +15,32 @@ from __future__ import annotations
 import argparse
 import logging
 import sys
+from collections import Counter
 from datetime import date, timedelta
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
+
+_SIGNAL_DAY_ALIASES = {
+    "mon": 0,
+    "monday": 0,
+    "tue": 1,
+    "tues": 1,
+    "tuesday": 1,
+    "wed": 2,
+    "weds": 2,
+    "wednesday": 2,
+    "thu": 3,
+    "thur": 3,
+    "thurs": 3,
+    "thursday": 3,
+    "fri": 4,
+    "friday": 4,
+    "sat": 5,
+    "saturday": 5,
+    "sun": 6,
+    "sunday": 6,
+}
 
 
 # ---------------------------------------------------------------------------
@@ -40,6 +62,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
                    help="[DEPRECATED] Fixed VND per trade. Omit to use alloc_mode from config/risk.yml.")
     p.add_argument("--trades-per-week", type=int, default=4,
                    help="Max new positions to open each week (default: 4)")
+    p.add_argument("--signal-days", default="sun",
+                   help="Comma-separated signal generation days, e.g. sun or sun,tue,thu (default: sun)")
     p.add_argument("--universe", default="data/watchlist.txt",
                    help="Path to watchlist file (default: data/watchlist.txt)")
     p.add_argument("--entry", default="mid_zone", choices=["mid_zone"],
@@ -73,6 +97,38 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 # Core simulation
 # ---------------------------------------------------------------------------
 
+def _buy_priority_key(rec) -> tuple[float, float, str]:
+    """Stable buy ranking for weekly entry selection."""
+    risk = max(rec.entry_price - rec.stop_loss, 0.0)
+    reward = max(rec.take_profit - rec.entry_price, 0.0)
+    reward_risk = (reward / risk) if risk > 0 else 0.0
+    return (-rec.position_target_pct, -reward_risk, rec.symbol)
+
+
+def _parse_signal_days(value: str) -> list[int]:
+    """Parse comma-separated weekday names into Python weekday ints."""
+    tokens = [token.strip().lower() for token in value.split(",") if token.strip()]
+    if not tokens:
+        raise ValueError("At least one signal day must be provided")
+
+    weekdays: list[int] = []
+    for token in tokens:
+        if token not in _SIGNAL_DAY_ALIASES:
+            raise ValueError(f"Unknown signal day: {token}")
+        weekdays.append(_SIGNAL_DAY_ALIASES[token])
+    return sorted(set(weekdays))
+
+
+def _get_execution_config(risk_config: dict) -> dict[str, float]:
+    """Read execution realism settings from risk.yml."""
+    execution_cfg = risk_config.get("execution", {})
+    return {
+        "buy_fee_pct": float(execution_cfg.get("buy_fee_pct", 0.0)),
+        "sell_fee_pct": float(execution_cfg.get("sell_fee_pct", 0.0)),
+        "sell_tax_pct": float(execution_cfg.get("sell_tax_pct", 0.0)),
+        "slippage_pct": float(execution_cfg.get("slippage_pct", 0.0)),
+    }
+
 def _run_single(
     from_date: date,
     to_date: date,
@@ -87,14 +143,17 @@ def _run_single(
     strategy,
     risk_config: dict,
     symbols: list[str],
+    universe: str | None = None,
+    signal_days: list[int] | None = None,
 ):
     """Run one backtest with a specific tie-breaker; return the engine."""
     from src.backtest.engine import BacktestEngine
     from src.backtest.weekly_generator import (
         generate_plan_from_data,
-        get_week_starts,
+        get_signal_dates,
         load_plan_from_file,
     )
+    from src.utils.config import load_watchlist
 
     # ------------------------------------------------------------------
     # 1. Pre-fetch all daily history (from_date - 52 weeks → to_date)
@@ -130,6 +189,7 @@ def _run_single(
         order_size=order_size if order_size else None,  # None = pct-based sizing
         tie_breaker=tie_breaker,
         exit_mode=exit_mode,
+        **_get_execution_config(risk_config),
     )
 
     # ------------------------------------------------------------------
@@ -143,39 +203,30 @@ def _run_single(
     # ------------------------------------------------------------------
     # 4. Week-by-week iteration
     # ------------------------------------------------------------------
-    week_starts = get_week_starts(from_date, to_date)
+    signal_days = signal_days or [6]
+    signal_dates = get_signal_dates(from_date, to_date, signal_days)
     logger.info(
-        "Simulating %d weeks (%s → %s) tie_breaker=%s",
-        len(week_starts), from_date, to_date, tie_breaker,
+        "Simulating %d signal windows (%s → %s) tie_breaker=%s signal_days=%s",
+        len(signal_dates), from_date, to_date, tie_breaker, signal_days,
     )
 
-    # pending_entries: {symbol: (entry_price, sl, tp, position_target_pct, entry_type, earliest_entry_date)}
+    # pending_entries:
+    #   {symbol: (entry_price, sl, tp, position_target_pct, entry_type,
+    #             earliest_entry_date, expiry_date)}
     # earliest_entry_date: None for pullback; Monday of T+1 for breakout (T+1 enforcement).
-    # Cleared at the end of each week (entries expire if not filled).
+    # expiry_date: last calendar day the order may remain active.
     pending_entries: dict[str, tuple] = {}
 
-    for week_idx, week_start in enumerate(week_starts):
-        week_end = week_start + timedelta(days=4)  # Friday
+    for signal_idx, signal_date in enumerate(signal_dates):
+        next_signal_date = signal_dates[signal_idx + 1] if signal_idx + 1 < len(signal_dates) else (to_date + timedelta(days=1))
+        window_end = next_signal_date - timedelta(days=1)
 
         # ------------------------------------------------------------------
-        # 4a. Generate (or reuse) the weekly plan
+        # 4a. Generate (or reuse) the current signal-window plan
         # ------------------------------------------------------------------
         if static_plan is not None:
             plan = static_plan
         else:
-            # Slice only candles before week_start (strict no-lookahead)
-            week_market_data = {
-                sym: [c for c in candles if c.date < week_start]
-                for sym, candles in all_history_list.items()
-                if any(c.date < week_start for c in candles)
-            }
-            if not week_market_data:
-                logger.warning("No market data before %s, skipping week", week_start)
-                pending_entries.clear()
-                continue
-
-            # Build open_positions dict for portfolio-awareness
-            # Format: {symbol: {"qty": float, "entry_price": float}}
             open_positions = {
                 trade.symbol: {
                     "qty": trade.qty,
@@ -183,21 +234,35 @@ def _run_single(
                 }
                 for trade in engine.open_trades
             }
+            active_symbols = set(load_watchlist(universe, as_of=signal_date)) if universe else set(symbols)
+            active_symbols |= set(open_positions.keys())
+
+            # Slice only candles before signal_date (strict no-lookahead)
+            signal_market_data = {
+                sym: [c for c in candles if c.date < signal_date]
+                for sym, candles in all_history_list.items()
+                if sym in active_symbols
+                if any(c.date < signal_date for c in candles)
+            }
+            if not signal_market_data:
+                logger.warning("No market data before %s, skipping signal window", signal_date)
+                pending_entries.clear()
+                continue
 
             try:
                 plan = generate_plan_from_data(
-                    week_market_data,
+                    signal_market_data,
                     strategy,
                     risk_config,
                     open_positions=open_positions,
                 )
                 logger.debug(
-                    "Week %d (%s): %d recommendations (open positions: %d)",
-                    week_idx + 1, week_start, len(plan.recommendations), len(open_positions),
+                    "Signal %d (%s): %d recommendations (open positions: %d)",
+                    signal_idx + 1, signal_date, len(plan.recommendations), len(open_positions),
                 )
             except Exception as exc:
                 logger.warning(
-                    "Plan generation failed for week %s: %s", week_start, exc
+                    "Plan generation failed for signal date %s: %s", signal_date, exc
                 )
                 pending_entries.clear()
                 continue
@@ -205,35 +270,49 @@ def _run_single(
         # ------------------------------------------------------------------
         # 4b. Queue new pending entries from BUY recommendations
         # ------------------------------------------------------------------
-        open_symbols = {t.symbol for t in engine.open_trades}
+        if getattr(plan, "market_regime", None) == "bear" or bool(getattr(plan, "clear_pending_entries", False)):
+            pending_entries.clear()
+
+        open_trade_counts = Counter(t.symbol for t in engine.open_trades)
+        allow_symbol_add_ons = bool(getattr(plan, "allow_symbol_add_ons", False))
+        max_open_trades_per_symbol = max(int(getattr(plan, "max_open_trades_per_symbol", 1)), 1)
         buys = [
             r
             for r in plan.recommendations
             if r.action == "BUY"
-            and r.symbol not in open_symbols
-            and r.symbol not in pending_entries
             and r.symbol in all_history_map          # must have data
             and r.buy_zone_low > 0                   # sanity check
             and r.stop_loss > 0
             and r.take_profit > 0
-        ][:trades_per_week]
+            and open_trade_counts.get(r.symbol, 0) < max_open_trades_per_symbol
+            and (
+                open_trade_counts.get(r.symbol, 0) == 0
+                or allow_symbol_add_ons
+            )
+        ]
+        weekly_trade_cap = plan.max_new_positions if getattr(plan, "max_new_positions", None) is not None else trades_per_week
+        buys = sorted(buys, key=_buy_priority_key)[:weekly_trade_cap]
 
         for rec in buys:
             # entry_price is explicit on the Recommendation; fall back to zone
             # midpoint for backward compat with old weekly_plan.json (entry_price=0.0).
             ep = rec.entry_price if rec.entry_price > 0 else (rec.buy_zone_low + rec.buy_zone_high) / 2.0
+            valid_days = max(int(getattr(rec, "entry_valid_for_days", 7)), 1)
+            expiry_date = signal_date + timedelta(days=valid_days - 1)
             pending_entries[rec.symbol] = (
                 ep, rec.stop_loss, rec.take_profit,
                 rec.position_target_pct, rec.entry_type,
                 rec.earliest_entry_date,
+                expiry_date,
             )
 
         # ------------------------------------------------------------------
-        # 4c. Daily simulation through Mon–Fri of this week
+        # 4c. Daily simulation through this signal window
         # ------------------------------------------------------------------
-        sim_start = max(week_start, from_date)
-        sim_end = min(week_end, to_date)
+        sim_start = max(signal_date, from_date)
+        sim_end = min(window_end, to_date)
         current_day = sim_start
+        executed_signal_actions: set[tuple[str, str]] = set()
 
         while current_day <= sim_end:
             # Skip weekends (VN market is Mon–Fri)
@@ -254,7 +333,15 @@ def _run_single(
 
             # Try to fill pending entries
             filled: list[str] = []
-            for sym, (entry, sl, tp, pct, etype, eed) in list(pending_entries.items()):
+            expired: list[str] = []
+            ordered_pending_entries = sorted(
+                pending_entries.items(),
+                key=lambda item: item[0],
+            )
+            for sym, (entry, sl, tp, pct, etype, eed, expiry_date) in ordered_pending_entries:
+                if current_day > expiry_date:
+                    expired.append(sym)
+                    continue
                 candle = candles_today.get(sym)
                 if candle and engine.try_enter(
                     sym, entry, sl, tp, candle,
@@ -266,32 +353,40 @@ def _run_single(
                         "  ENTER %s @ %.2f (%.0f%% equity) on %s", sym, entry, pct * 100, current_day
                     )
                     filled.append(sym)
+            for sym in expired:
+                del pending_entries[sym]
             for sym in filled:
                 del pending_entries[sym]
 
-            # Process REDUCE/SELL signals (only in manual exit modes)
+            # Process explicit SELL/REDUCE signals.
+            # In tpsl_only mode we only honor automatic TP/SL exits.
             if exit_mode in ("3action", "4action"):
                 open_symbol_set = {t.symbol for t in engine.open_trades}
                 for rec in plan.recommendations:
                     if rec.symbol in open_symbol_set and rec.symbol in candles_today:
+                        action_key = (rec.symbol, rec.action)
+                        if action_key in executed_signal_actions:
+                            continue
                         candle = candles_today[rec.symbol]
                         market_price = candle.close  # Use closing price for manual exits
 
                         if rec.action == "SELL" and exit_mode in ("3action", "4action"):
                             if engine.force_exit_at_market(rec.symbol, current_day, market_price, "SELL"):
                                 logger.debug("  SELL %s @ %.2f on %s", rec.symbol, market_price, current_day)
+                                executed_signal_actions.add(action_key)
 
                         elif rec.action == "REDUCE" and exit_mode == "4action":
                             if engine.reduce_position(rec.symbol, current_day, market_price, 0.5, "REDUCE"):
                                 logger.debug("  REDUCE %s @ %.2f (50%%) on %s", rec.symbol, market_price, current_day)
+                                executed_signal_actions.add(action_key)
 
             # Check SL/TP on existing open trades (automatic exits in tpsl_only mode)
             engine.process_day(candles_today, current_day)
 
             current_day += timedelta(days=1)
 
-        # Pending entries expire at week-end; fresh plan next Monday
-        pending_entries.clear()
+        # Selected pending entries may remain active across refreshes until their
+        # individual expiry dates or until the router moves to a bear regime.
 
     return engine
 
@@ -381,6 +476,7 @@ def run_backtest(
     strategy=None,
     risk_config: dict | None = None,
     symbols: list[str] | None = None,
+    signal_days: list[int] | None = None,
 ) -> Path:
     """Orchestrate a full backtest and write all reports.
 
@@ -433,6 +529,8 @@ def run_backtest(
             strategy=strategy,
             risk_config=risk_config,
             symbols=symbols,
+            universe=universe,
+            signal_days=signal_days,
         )
         metrics = engine.compute_summary(from_date, to_date)
         metrics["tie_breaker"] = tb          # tag which scenario this is
@@ -475,6 +573,7 @@ def main(argv: list[str] | None = None) -> None:
         mode=args.mode,
         plan_file=args.plan_file,
         run_range=args.run_range,
+        signal_days=_parse_signal_days(args.signal_days),
     )
 
     print(f"Backtest complete. Results written to: {output_dir}")

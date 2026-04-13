@@ -12,8 +12,8 @@ Single run (--tie-breaker worst|best):
     "tie_breaker": "worst",
     "from_date": "2025-05-01", "to_date": "2026-02-25",
     "initial_cash": 10000000, "final_value": ...,
-    "cagr": ..., "max_drawdown": ..., "win_rate": ...,
-    "avg_hold_days": ..., "num_trades": ..., "profit_factor": ...
+    "cagr": ..., "max_drawdown": ..., "sharpe_ratio": ..., "calmar_ratio": ...,
+    "win_rate": ..., "avg_hold_days": ..., "num_trades": ..., "profit_factor": ...
   }
 
 Range run (--run-range):
@@ -40,11 +40,14 @@ _NUMERIC_DIFF_KEYS = [
     "final_value",
     "cagr",
     "max_drawdown",
+    "sharpe_ratio",
+    "calmar_ratio",
     "win_rate",
     "avg_hold_days",
     "num_trades",
     "profit_factor",
     "avg_invested_pct",
+    "total_fees_paid",
 ]
 
 
@@ -125,6 +128,7 @@ def write_trades(
         "reason",
         "return_pct",
         "pnl_vnd",
+        "fees_vnd",
     ]
     with open(path, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -140,6 +144,7 @@ def write_trades(
                     "reason": t.reason,
                     "return_pct": t.return_pct,
                     "pnl_vnd": t.pnl_vnd,
+                    "fees_vnd": t.fees_vnd,
                 }
             )
     logger.info("Wrote %s (%d trades)", path, len(closed_trades))

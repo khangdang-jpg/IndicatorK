@@ -1,8 +1,8 @@
 # Strategy configuration
 # Change 'active' to switch strategies without code edits.
-# Available: trend_momentum_atr | trend_momentum_atr_regime_adaptive | institutional_intraweek_enhanced | dual_stream_combined | rebalance_50_50
+# Available: trend_momentum_atr | trend_momentum_atr_regime_adaptive | institutional_intraweek_enhanced | dual_stream_combined | regime_router_foundation | rebalance_50_50
 
-active: dual_stream_combined
+active: regime_router_foundation
 
 trend_momentum_atr:
   ma_short: 10             # 10-week moving average
@@ -102,13 +102,70 @@ institutional_intraweek_enhanced:
   liquidity_threshold: 1.5    # Minimum liquidity
 
   # Duration modeling
-  optimal_entry_window: 3     # 3-day entry window
   momentum_hold_target: 8     # 8 days average
   mean_revert_hold_target: 4  # 4 days average
 
   # ATH capping (tighter for intraweek)
   ath_cap_pct: 0.12          # 12% cap
   ath_lookback_days: 90      # 3 months
+
+regime_router_foundation:
+  bear_proxy_ret_60: -0.10
+  bear_breadth_20: 0.30
+  bear_breadth_50: 0.30
+  bear_proxy_ret_20_cap: 0.03
+  sideway_proxy_ret_20_abs: 0.03
+  sideway_proxy_ret_60_abs: 0.06
+  sideway_breadth_20_min: 0.35
+  sideway_breadth_20_max: 0.75
+  bull_hysteresis_proxy_ret_20: -0.03
+  bear_hysteresis_proxy_ret_60: -0.03
+  bear_hysteresis_breadth_50: 0.45
+  bear_max_new_positions: 0
+  sideway_max_new_positions: 6
+  bull_max_new_positions: 4
+  bull_transition_max_new_positions: 5
+  strong_bull_proxy_ret_20: 0.05
+  strong_bull_breadth_20: 0.70
+  strong_bull_breadth_50: 0.65
+  bull_caution_proxy_ret_20_max: 0.015
+  bull_caution_breadth_20_max: 0.25
+  bull_caution_breadth_50_max: 0.75
+  bull_caution_max_new_positions: 1
+  bull_caution_ret_lookback: 5
+  bull_caution_ma_short: 10
+  bull_caution_ma_long: 20
+  bull_allow_add_ons: false
+  bull_max_open_trades_per_symbol: 1
+  bull_max_symbols_per_sector: 99
+  bull_add_on_size_scale: 0.20
+  bull_add_on_min_conviction: 0.85
+  bull_low_vol_threshold: 0.020
+  bull_high_vol_threshold: 0.035
+  bull_low_vol_stock_target: 1.00
+  bull_high_vol_stock_target: 0.88
+  bull_max_deployment_scale: 2.40
+  bull_position_target_cap: 0.45
+
+  bull_momentum_rsi_min: 46
+  bull_momentum_atr_stop: 1.6
+  bull_momentum_stop_floor_pct: 0.92
+  bull_volume_surge_threshold: 1.1
+  bull_kelly_fraction: 0.60
+  bull_momentum_atr_target: 6.0
+  bull_breakout_min_conviction: 1.50
+  bull_breakout_volume_relax: 1.50
+  sideway_rsi_oversold: 30
+  sideway_atr_target: 3.0
+  sideway_bb_std_mult: 1.6
+  sideway_kelly_fraction: 0.4
+
+  sideway_low_vol_threshold: 0.012
+  sideway_high_vol_threshold: 0.024
+  sideway_low_vol_stock_target: 0.84
+  sideway_high_vol_stock_target: 0.66
+  sideway_max_deployment_scale: 1.30
+  sideway_position_target_cap: 0.18
 
 dual_stream_combined:
   # Signal weighting (new)
@@ -187,7 +244,6 @@ dual_stream_combined:
     volume_surge_threshold: 2.0
     liquidity_threshold: 1.5
     # Duration modeling
-    optimal_entry_window: 3
     momentum_hold_target: 8
     mean_revert_hold_target: 4
     # ATH capping

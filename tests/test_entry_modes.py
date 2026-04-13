@@ -162,6 +162,7 @@ class TestEntryTriggers:
         filled = engine.try_enter("HPG", 10_050, 9_000, 11_000, c,
                                   position_target_pct=0.10, entry_type="breakout")
         assert filled is True
+        assert engine.open_trades[0].entry_price == c.open
 
     def test_breakout_does_not_fill_when_high_below_entry(self):
         engine = BacktestEngine(initial_cash=10_000_000)

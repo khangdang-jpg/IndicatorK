@@ -28,7 +28,7 @@ class OpenTrade:
     stop_loss: float
     take_profit: float
     qty: float
-    cost_vnd: float  # entry_price * qty
+    cost_vnd: float  # total cash outlay including entry fees
 
 
 @dataclass
@@ -43,6 +43,7 @@ class ClosedTrade:
     return_pct: float    # (exit - entry) / entry * 100
     pnl_vnd: float
     hold_days: int
+    fees_vnd: float = 0.0
 
 
 # ---------------------------------------------------------------------------
@@ -105,6 +106,15 @@ def resolve_same_day(
     return "SL", sl  # default: worst
 
 
+def _daily_return_std(returns: list[float]) -> float:
+    """Sample standard deviation for daily returns."""
+    if len(returns) < 2:
+        return 0.0
+    mean = sum(returns) / len(returns)
+    variance = sum((r - mean) ** 2 for r in returns) / (len(returns) - 1)
+    return variance ** 0.5
+
+
 # ---------------------------------------------------------------------------
 # Backtest engine
 # ---------------------------------------------------------------------------
@@ -132,6 +142,10 @@ class BacktestEngine:
         order_size: float | None = None,
         tie_breaker: str = "worst",
         exit_mode: str = "tpsl_only",
+        buy_fee_pct: float = 0.0,
+        sell_fee_pct: float = 0.0,
+        sell_tax_pct: float = 0.0,
+        slippage_pct: float = 0.0,
     ) -> None:
         if tie_breaker not in ("worst", "best"):
             raise ValueError(f"tie_breaker must be 'worst' or 'best', got {tie_breaker!r}")
@@ -141,11 +155,16 @@ class BacktestEngine:
         self.order_size = order_size  # None = use position_target_pct sizing
         self.tie_breaker = tie_breaker
         self.exit_mode = exit_mode
+        self.buy_fee_pct = max(float(buy_fee_pct), 0.0)
+        self.sell_fee_pct = max(float(sell_fee_pct), 0.0)
+        self.sell_tax_pct = max(float(sell_tax_pct), 0.0)
+        self.slippage_pct = max(float(slippage_pct), 0.0)
         self.cash = float(initial_cash)
         self.open_trades: list[OpenTrade] = []
         self.closed_trades: list[ClosedTrade] = []
         self.equity_curve: list[dict] = []
         self._last_price: dict[str, float] = {}  # latest close seen per symbol
+        self.total_fees_paid = 0.0
 
     def _current_equity(self) -> float:
         """Current portfolio value: cash + open positions marked to last price."""
@@ -158,6 +177,55 @@ class BacktestEngine:
     # ------------------------------------------------------------------
     # Entry
     # ------------------------------------------------------------------
+
+    def _resolve_entry_fill_price(
+        self,
+        candle: OHLCV,
+        entry: float,
+        entry_type: str,
+    ) -> float:
+        """Return a more realistic buy fill price.
+
+        Breakouts gap above the stop-buy level fill at the open, not the trigger.
+        Pullback limit buys can improve to the open when the market gaps down
+        through the limit price.
+        """
+        if entry_type == "breakout":
+            raw_fill = max(entry, candle.open)
+        else:
+            raw_fill = candle.open if candle.open <= entry else entry
+        return raw_fill * (1.0 + self.slippage_pct)
+
+    def _resolve_exit_signal(
+        self,
+        candle: OHLCV,
+        trade: OpenTrade,
+    ) -> tuple[str, float] | None:
+        """Return the raw exit reason/price before fees when an exit is triggered."""
+        if candle.open <= trade.stop_loss:
+            return "SL", candle.open
+        if candle.open >= trade.take_profit:
+            return "TP", candle.open
+
+        hit_sl = sl_touched(candle, trade.stop_loss)
+        hit_tp = tp_touched(candle, trade.take_profit)
+
+        if hit_sl and hit_tp:
+            return resolve_same_day(
+                self.tie_breaker, trade.stop_loss, trade.take_profit
+            )
+        if hit_tp:
+            return "TP", trade.take_profit
+        if hit_sl:
+            return "SL", trade.stop_loss
+        return None
+
+    def _apply_sell_costs(self, raw_exit_price: float, qty: float) -> tuple[float, float]:
+        """Apply sell-side slippage, fees, and taxes to an exit."""
+        slipped_price = raw_exit_price * (1.0 - self.slippage_pct)
+        gross_proceeds = qty * slipped_price
+        fees = gross_proceeds * (self.sell_fee_pct + self.sell_tax_pct)
+        return gross_proceeds - fees, fees
 
     def try_enter(
         self,
@@ -213,24 +281,29 @@ class BacktestEngine:
         else:
             return False
 
-        qty = math.floor(trade_value / entry)
+        fill_price = self._resolve_entry_fill_price(candle, entry, entry_type)
+        effective_share_cost = fill_price * (1.0 + self.buy_fee_pct)
+        qty = math.floor(trade_value / effective_share_cost)
         if qty <= 0:
             return False
 
-        cost = qty * entry
-        if cost > self.cash:
+        notional_cost = qty * fill_price
+        buy_fee = notional_cost * self.buy_fee_pct
+        total_cash_outlay = notional_cost + buy_fee
+        if total_cash_outlay > self.cash:
             return False
 
-        self.cash -= cost
+        self.cash -= total_cash_outlay
+        self.total_fees_paid += buy_fee
         self.open_trades.append(
             OpenTrade(
                 symbol=symbol,
                 entry_date=candle.date,
-                entry_price=entry,
+                entry_price=fill_price,
                 stop_loss=sl,
                 take_profit=tp,
                 qty=qty,
-                cost_vnd=cost,
+                cost_vnd=total_cash_outlay,
             )
         )
         return True
@@ -253,10 +326,12 @@ class BacktestEngine:
         for i, trade in enumerate(self.open_trades):
             if trade.symbol == symbol:
                 # Close the trade at market price
-                proceeds = trade.qty * market_price
-                self.cash += proceeds
-                pnl = proceeds - trade.cost_vnd
-                return_pct = (market_price - trade.entry_price) / trade.entry_price * 100
+                net_proceeds, exit_fees = self._apply_sell_costs(market_price, trade.qty)
+                self.cash += net_proceeds
+                self.total_fees_paid += exit_fees
+                pnl = net_proceeds - trade.cost_vnd
+                effective_exit_price = net_proceeds / trade.qty if trade.qty > 0 else 0.0
+                return_pct = (effective_exit_price - trade.entry_price) / trade.entry_price * 100
                 hold_days = (current_date - trade.entry_date).days
 
                 self.closed_trades.append(
@@ -265,12 +340,13 @@ class BacktestEngine:
                         entry_date=trade.entry_date,
                         entry_price=trade.entry_price,
                         exit_date=current_date,
-                        exit_price=market_price,
+                        exit_price=effective_exit_price,
                         reason=reason,
                         qty=trade.qty,
                         return_pct=round(return_pct, 4),
                         pnl_vnd=round(pnl, 2),
                         hold_days=hold_days,
+                        fees_vnd=round(exit_fees, 2),
                     )
                 )
 
@@ -302,13 +378,15 @@ class BacktestEngine:
                     return False
 
                 # Execute the partial sale
-                proceeds = qty_to_sell * market_price
-                self.cash += proceeds
+                net_proceeds, exit_fees = self._apply_sell_costs(market_price, qty_to_sell)
+                self.cash += net_proceeds
+                self.total_fees_paid += exit_fees
 
                 # Calculate PnL on the sold portion
                 cost_of_sold = (trade.cost_vnd / trade.qty) * qty_to_sell
-                pnl = proceeds - cost_of_sold
-                return_pct = (market_price - trade.entry_price) / trade.entry_price * 100
+                pnl = net_proceeds - cost_of_sold
+                effective_exit_price = net_proceeds / qty_to_sell if qty_to_sell > 0 else 0.0
+                return_pct = (effective_exit_price - trade.entry_price) / trade.entry_price * 100
                 hold_days = (current_date - trade.entry_date).days
 
                 self.closed_trades.append(
@@ -317,12 +395,13 @@ class BacktestEngine:
                         entry_date=trade.entry_date,
                         entry_price=trade.entry_price,
                         exit_date=current_date,
-                        exit_price=market_price,
+                        exit_price=effective_exit_price,
                         reason=reason,
                         qty=qty_to_sell,
                         return_pct=round(return_pct, 4),
                         pnl_vnd=round(pnl, 2),
                         hold_days=hold_days,
+                        fees_vnd=round(exit_fees, 2),
                     )
                 )
 
@@ -366,26 +445,19 @@ class BacktestEngine:
                     still_open.append(trade)
                     continue
 
-                hit_sl = sl_touched(candle, trade.stop_loss)
-                hit_tp = tp_touched(candle, trade.take_profit)
-
-                if hit_sl and hit_tp:
-                    reason, exit_price = resolve_same_day(
-                        self.tie_breaker, trade.stop_loss, trade.take_profit
-                    )
-                elif hit_tp:
-                    reason, exit_price = "TP", trade.take_profit
-                elif hit_sl:
-                    reason, exit_price = "SL", trade.stop_loss
-                else:
+                exit_signal = self._resolve_exit_signal(candle, trade)
+                if exit_signal is None:
                     still_open.append(trade)
                     continue
+                reason, raw_exit_price = exit_signal
 
                 # Close the trade
-                proceeds = trade.qty * exit_price
-                self.cash += proceeds
-                pnl = proceeds - trade.cost_vnd
-                return_pct = (exit_price - trade.entry_price) / trade.entry_price * 100
+                net_proceeds, exit_fees = self._apply_sell_costs(raw_exit_price, trade.qty)
+                self.cash += net_proceeds
+                self.total_fees_paid += exit_fees
+                pnl = net_proceeds - trade.cost_vnd
+                effective_exit_price = net_proceeds / trade.qty if trade.qty > 0 else 0.0
+                return_pct = (effective_exit_price - trade.entry_price) / trade.entry_price * 100
                 hold_days = (current_date - trade.entry_date).days
 
                 self.closed_trades.append(
@@ -394,12 +466,13 @@ class BacktestEngine:
                         entry_date=trade.entry_date,
                         entry_price=trade.entry_price,
                         exit_date=current_date,
-                        exit_price=exit_price,
+                        exit_price=effective_exit_price,
                         reason=reason,
                         qty=trade.qty,
                         return_pct=round(return_pct, 4),
                         pnl_vnd=round(pnl, 2),
                         hold_days=hold_days,
+                        fees_vnd=round(exit_fees, 2),
                     )
                 )
 
@@ -485,6 +558,26 @@ class BacktestEngine:
         else:
             avg_invested_pct = 0.0
 
+        daily_returns = []
+        for prev, cur in zip(self.equity_curve, self.equity_curve[1:]):
+            prev_value = prev["total_value"]
+            cur_value = cur["total_value"]
+            if prev_value > 0:
+                daily_returns.append((cur_value / prev_value) - 1.0)
+
+        if daily_returns:
+            avg_daily_return = sum(daily_returns) / len(daily_returns)
+            daily_std = _daily_return_std(daily_returns)
+            sharpe_ratio = (
+                (avg_daily_return / daily_std) * math.sqrt(252.0)
+                if daily_std > 0
+                else 0.0
+            )
+        else:
+            sharpe_ratio = 0.0
+
+        calmar_ratio = (cagr / max_dd) if max_dd > 0 else 0.0
+
         return {
             "from_date": from_date.isoformat(),
             "to_date": to_date.isoformat(),
@@ -492,6 +585,8 @@ class BacktestEngine:
             "final_value": round(final_value, 2),
             "cagr": round(cagr, 4),
             "max_drawdown": round(max_dd, 4),
+            "sharpe_ratio": round(sharpe_ratio, 4),
+            "calmar_ratio": round(calmar_ratio, 4),
             "win_rate": round(win_rate, 4),
             "avg_hold_days": round(avg_hold, 2),
             "num_trades": num_trades,
@@ -499,4 +594,5 @@ class BacktestEngine:
                 round(profit_factor, 4) if profit_factor is not None else None
             ),
             "avg_invested_pct": avg_invested_pct,
+            "total_fees_paid": round(self.total_fees_paid, 2),
         }

@@ -5,8 +5,8 @@ intraweek strategy to capture complementary signal streams while preserving all
 existing system features:
 
 Architecture:
-- Weekly Engine: Large trends, bigger positions, longer holds (26.14% bull CAGR)
-- Intraweek Engine: Tactical entries, smaller positions, frequent signals (19.6% bull CAGR)
+- Weekly Engine: Large trends, bigger positions, longer holds
+- Intraweek Engine: Tactical entries, smaller positions, frequent signals
 - Combined Output: 60% weekly + 40% intraweek weighted signals
 
 Critical System Inheritance:
@@ -16,11 +16,8 @@ Critical System Inheritance:
 ✅ Unified asset tracking (single portfolio state management)
 ✅ All existing risk controls and guardrails
 
-Expected Performance:
-- Bull Markets: ~23% CAGR (60% × 26.14% + 40% × 19.6%)
-- Overall Average: ~10-12% CAGR with enhanced opportunity capture
-- Signal Frequency: 16-20 trades/period (vs 10-12 weekly, 6-8 intraweek)
-- Risk Control: Maintained through inherited position sizing and stop-loss logic
+Performance note:
+- Historical idea-level estimates existed during research, but live expectations must be revalidated with the current backtest engine and execution-cost model.
 """
 
 from __future__ import annotations
@@ -36,6 +33,20 @@ from src.strategies.trend_momentum_atr_regime_adaptive import TrendMomentumATRRe
 from src.strategies.institutional_intraweek_enhanced import InstitutionalIntraweekEnhanced
 
 logger = logging.getLogger(__name__)
+
+
+def _recommendation_sort_key(rec: Recommendation) -> tuple[int, float, float, str]:
+    """Stable ordering for merged recommendations."""
+    action_order = {"BUY": 0, "HOLD": 1, "REDUCE": 2, "SELL": 3}
+    risk = max(rec.entry_price - rec.stop_loss, 0.0)
+    reward = max(rec.take_profit - rec.entry_price, 0.0)
+    reward_risk = (reward / risk) if risk > 0 else 0.0
+    return (
+        action_order.get(rec.action, 99),
+        -rec.position_target_pct,
+        -reward_risk,
+        rec.symbol,
+    )
 
 
 class DualStreamCombined(Strategy):
@@ -185,7 +196,7 @@ class DualStreamCombined(Strategy):
         # Collect all symbols from both strategies
         weekly_symbols = {rec.symbol: rec for rec in weekly_recs}
         intraweek_symbols = {rec.symbol: rec for rec in intraweek_recs}
-        all_symbols = set(weekly_symbols.keys()) | set(intraweek_symbols.keys())
+        all_symbols = sorted(set(weekly_symbols.keys()) | set(intraweek_symbols.keys()))
 
         logger.info(f"Processing {len(all_symbols)} unique symbols across both strategies")
         logger.info(f"Weekly signals: {len(weekly_symbols)}, Intraweek signals: {len(intraweek_symbols)}")
@@ -210,7 +221,7 @@ class DualStreamCombined(Strategy):
             if merged_rec:
                 combined_recommendations.append(merged_rec)
 
-        return combined_recommendations
+        return sorted(combined_recommendations, key=_recommendation_sort_key)
 
     def _handle_existing_position(
         self,
@@ -338,7 +349,9 @@ class DualStreamCombined(Strategy):
 
         INHERITED: Existing risk-based position sizing formula from weekly strategy.
         """
-        risk_per_trade_pct = config.get("position", {}).get("risk_per_trade_pct", 0.02)
+        alloc_cfg = config.get("allocation", {})
+        position_cfg = config.get("position", {})
+        risk_per_trade_pct = alloc_cfg.get("risk_per_trade_pct", 0.01)
 
         # Calculate stop distance as percentage
         if recommendation.stop_loss > 0 and recommendation.entry_price > 0:
@@ -348,15 +361,18 @@ class DualStreamCombined(Strategy):
             position_pct = risk_per_trade_pct / stop_distance_pct if stop_distance_pct > 0 else 0.0
         else:
             # Fallback to fixed percentage
-            position_pct = config.get("position", {}).get("base_position_pct", 0.10)
+            position_pct = alloc_cfg.get("min_alloc_pct", 0.03)
 
         # Apply regime multipliers (use generic multiplier for combined strategy)
         regime_multiplier = 1.0  # Balanced approach for dual-stream
         final_position = position_pct * regime_multiplier
 
         # Cap position size with bear market limits
-        position_cfg = config.get("position", {})
-        max_position = position_cfg.get("max_position_pct", 0.25)
+        max_position = min(
+            alloc_cfg.get("max_alloc_pct", 0.15),
+            position_cfg.get("max_single_position_pct", self.max_combined_position),
+            self.max_combined_position,
+        )
 
         # FIXED: Apply bear market position caps if in bear regime
         if 'bear' in market_regime.lower():

@@ -61,6 +61,8 @@ class Recommendation:
     signal_week_end: Optional[date] = None
     # earliest_entry_date: first allowed fill date (Monday of T+1 for breakout)
     earliest_entry_date: Optional[date] = None
+    # entry_valid_for_days: how long the order can remain pending before expiry
+    entry_valid_for_days: int = 7
 
     def to_dict(self) -> dict:
         return {
@@ -78,6 +80,7 @@ class Recommendation:
             "entry_price": round(float(self.entry_price), 2),
             "signal_week_end": self.signal_week_end.isoformat() if self.signal_week_end else None,
             "earliest_entry_date": self.earliest_entry_date.isoformat() if self.earliest_entry_date else None,
+            "entry_valid_for_days": int(self.entry_valid_for_days),
         }
 
 
@@ -88,10 +91,16 @@ class WeeklyPlan:
     strategy_version: str
     allocation_targets: dict[str, float]
     recommendations: list[Recommendation]
+    max_new_positions: Optional[int] = None
+    allow_symbol_add_ons: bool = False
+    max_open_trades_per_symbol: int = 1
+    force_defensive_exits: bool = False
+    clear_pending_entries: bool = False
     notes: list[str] = field(default_factory=list)
     ai_analysis: Optional[dict] = None  # Cache AI analysis results
     news_analysis: Optional[dict] = None  # Cache news-based buy potential analysis
     market_regime: Optional[str] = None  # Current market regime (bull/bear/sideways)
+    router_state: Optional[str] = None  # Fine-grained router state for richer backtests/debugging
 
     def to_dict(self) -> dict:
         return {
@@ -100,10 +109,16 @@ class WeeklyPlan:
             "strategy_version": self.strategy_version,
             "allocation_targets": self.allocation_targets,
             "recommendations": [r.to_dict() for r in self.recommendations],
+            "max_new_positions": self.max_new_positions,
+            "allow_symbol_add_ons": self.allow_symbol_add_ons,
+            "max_open_trades_per_symbol": self.max_open_trades_per_symbol,
+            "force_defensive_exits": self.force_defensive_exits,
+            "clear_pending_entries": self.clear_pending_entries,
             "notes": self.notes,
             "ai_analysis": self.ai_analysis,  # Include cached AI analysis
             "news_analysis": self.news_analysis,  # Include news-based buy potential analysis
             "market_regime": self.market_regime,
+            "router_state": self.router_state,
         }
 
     @classmethod
@@ -123,10 +138,16 @@ class WeeklyPlan:
             strategy_version=d["strategy_version"],
             allocation_targets=d.get("allocation_targets", {}),
             recommendations=recs,
+            max_new_positions=d.get("max_new_positions"),
+            allow_symbol_add_ons=d.get("allow_symbol_add_ons", False),
+            max_open_trades_per_symbol=d.get("max_open_trades_per_symbol", 1),
+            force_defensive_exits=d.get("force_defensive_exits", False),
+            clear_pending_entries=d.get("clear_pending_entries", False),
             notes=d.get("notes", []),
             ai_analysis=d.get("ai_analysis"),  # Load cached AI analysis
             news_analysis=d.get("news_analysis"),  # Load cached news analysis
             market_regime=d.get("market_regime"),
+            router_state=d.get("router_state"),
         )
 
 

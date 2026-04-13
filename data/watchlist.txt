@@ -1,6 +1,9 @@
 # Vietnamese stock watchlist — one symbol per line
 # Add/remove symbols as needed. No code changes required.
 # Symbols must be uppercase alphanumeric (e.g., HPG, VNM)
+# Optional point-in-time format for backtests:
+# HPG from=2020-01-01
+# VNM from=2023-01-01 to=2025-12-31
 HPG
 VNM
 FPT

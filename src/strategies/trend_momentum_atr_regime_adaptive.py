@@ -565,9 +565,15 @@ class TrendMomentumATRRegimeAdaptive(Strategy):
                 earliest_entry_date=earliest_entry_date,
             ))
 
-        # Sort: BUY first, then HOLD, then REDUCE/SELL
+        # Stable sort prevents recommendation order from drifting across runs.
         action_order = {"BUY": 0, "HOLD": 1, "REDUCE": 2, "SELL": 3}
-        recommendations.sort(key=lambda r: action_order.get(r.action, 99))
+        recommendations.sort(
+            key=lambda r: (
+                action_order.get(r.action, 99),
+                -r.position_target_pct,
+                r.symbol,
+            )
+        )
 
         return WeeklyPlan(
             generated_at=datetime.utcnow().isoformat(),

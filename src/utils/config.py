@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 import os
 from pathlib import Path
+from datetime import date
 
 import yaml
 
@@ -108,6 +109,7 @@ def get_strategy(config_path: str = "config/strategy.yml"):
     from src.strategies.trend_momentum_atr_regime_adaptive import TrendMomentumATRRegimeAdaptive
     from src.strategies.institutional_intraweek_enhanced import InstitutionalIntraweekEnhanced
     from src.strategies.dual_stream_combined import DualStreamCombined
+    from src.strategies.regime_router_foundation import RegimeRouterFoundation
 
     cfg = load_yaml(config_path)
     active = cfg.get("active", "trend_momentum_atr")
@@ -118,6 +120,7 @@ def get_strategy(config_path: str = "config/strategy.yml"):
         "trend_momentum_atr_regime_adaptive": lambda: TrendMomentumATRRegimeAdaptive(params=params),
         "institutional_intraweek_enhanced": lambda: InstitutionalIntraweekEnhanced(params=params),
         "dual_stream_combined": lambda: DualStreamCombined(params=params),
+        "regime_router_foundation": lambda: RegimeRouterFoundation(params=params),
         "rebalance_50_50": lambda: Rebalance5050Strategy(params=params),
     }
 
@@ -129,26 +132,76 @@ def get_strategy(config_path: str = "config/strategy.yml"):
     return factory()
 
 
-def load_watchlist(path: str = "data/watchlist.txt") -> list[str]:
+def _parse_watchlist_lines(path: str) -> list[tuple[str, date | None, date | None]]:
+    """Load watchlist entries with optional point-in-time date bounds.
+
+    Supported formats:
+      HPG
+      HPG from=2020-01-01
+      HPG from=2020-01-01 to=2025-12-31
+
+    Anything after a "#" comment marker is ignored.
+    """
+    resolved = _resolve(path)
+    entries: list[tuple[str, date | None, date | None]] = []
+
+    try:
+        with open(resolved) as f:
+            for raw_line in f:
+                line = raw_line.split("#", 1)[0].strip()
+                if not line:
+                    continue
+
+                parts = line.split()
+                symbol = parts[0].strip().upper()
+                if not symbol:
+                    continue
+
+                from_date = None
+                to_date = None
+
+                for token in parts[1:]:
+                    if "=" not in token:
+                        continue
+                    key, value = token.split("=", 1)
+                    key = key.strip().lower()
+                    value = value.strip()
+
+                    if not value:
+                        continue
+
+                    if key == "from":
+                        from_date = date.fromisoformat(value)
+                    elif key == "to":
+                        to_date = date.fromisoformat(value)
+
+                entries.append((symbol, from_date, to_date))
+    except FileNotFoundError:
+        logger.warning("Watchlist not found at %s", resolved)
+
+    return entries
+
+
+def load_watchlist(path: str = "data/watchlist.txt", as_of: date | None = None) -> list[str]:
     """Load symbol universe from watchlist file.
 
+    When ``as_of`` is provided, only symbols active on that date are returned.
     Falls back to a small built-in sample if the file is empty.
     """
     DEFAULT_SYMBOLS = ["HPG", "VNM", "FPT", "MWG", "VCB"]  # TODO: expand as needed
 
-    resolved = _resolve(path)
     symbols = []
-    try:
-        with open(resolved) as f:
-            for line in f:
-                s = line.strip().upper()
-                if s and not s.startswith("#"):
-                    symbols.append(s)
-    except FileNotFoundError:
-        logger.warning("Watchlist not found at %s, using defaults", resolved)
+    for symbol, start, end in _parse_watchlist_lines(path):
+        if as_of is not None:
+            if start is not None and as_of < start:
+                continue
+            if end is not None and as_of > end:
+                continue
+        symbols.append(symbol)
 
     if not symbols:
         logger.warning("Watchlist is empty, using default sample: %s", DEFAULT_SYMBOLS)
         symbols = DEFAULT_SYMBOLS
 
-    return symbols
+    # Preserve file order while dropping duplicates.
+    return list(dict.fromkeys(symbols))

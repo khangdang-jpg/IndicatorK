@@ -1,4 +1,4 @@
-"""Weekly plan generation helpers for the backtest.
+"""Plan generation helpers for the backtest.
 
 Two modes:
   plan     — load an existing weekly_plan.json once, reuse for all weeks.
@@ -40,6 +40,32 @@ def get_week_starts(from_date: date, to_date: date) -> list[date]:
         weeks.append(current)
         current += timedelta(weeks=1)
     return weeks
+
+
+def get_signal_dates(from_date: date, to_date: date, signal_weekdays: list[int]) -> list[date]:
+    """Return every signal date covering [from_date, to_date].
+
+    Starts from the most recent matching weekday on or before *from_date* so the
+    active plan for a partial first window is still included.
+    """
+    if from_date > to_date:
+        return []
+
+    normalized_weekdays = sorted(set(signal_weekdays))
+    if not normalized_weekdays:
+        raise ValueError("signal_weekdays must not be empty")
+
+    first_signal = from_date
+    while first_signal.weekday() not in normalized_weekdays:
+        first_signal -= timedelta(days=1)
+
+    signal_dates: list[date] = []
+    current = first_signal
+    while current <= to_date:
+        if current.weekday() in normalized_weekdays:
+            signal_dates.append(current)
+        current += timedelta(days=1)
+    return signal_dates
 
 
 def get_week_trading_days(week_start: date, week_end_inclusive: date) -> list[date]:
