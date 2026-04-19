@@ -2,314 +2,305 @@
   "symbol_news": {
     "HPG": [
       {
-        "id": "d1d4094a53e91ee6",
-        "title": "LPBank c\u00f9ng S\u1edf C\u00f4ng Th\u01b0\u01a1ng C\u1ea7n Th\u01a1 h\u1ed7 tr\u1ee3 doanh nghi\u1ec7p ti\u1ebfp c\u1eadn v\u1ed1n",
+        "id": "022ae067aac4fe86",
+        "title": "T\u1ef7 ph\u00fa Tr\u1ea7n \u0110\u00ecnh Long x\u00e2y th\u00eam nh\u00e0 m\u00e1y th\u00e9p h\u01a1n 2.000 t\u1ef7 \u0111\u1ed3ng",
         "source": "VnExpress",
-        "snippet": "LPBank tri\u1ec3n khai ch\u01b0\u01a1ng tr\u00ecnh k\u1ebft n\u1ed1i t\u1ea1i C\u1ea7n Th\u01a1, th\u00fac \u0111\u1ea9y \u0111\u1ed1i tho\u1ea1i, t\u01b0 v\u1ea5n gi\u1ea3i ph\u00e1p v\u1ed1n, k\u00fd k\u1ebft h\u1ee3p t\u00e1c v\u00e0 m\u1edf r\u1ed9ng li\u00ean k\u1ebft gi\u1eefa doanh nghi\u1ec7p, ch\u00ednh quy\u1ec1n v\u00e0 c\u01a1 s\u1edf \u0111\u00e0o t\u1ea1o.",
-        "published_at": "2026-04-13T09:52:56.213292",
-        "url": "https://vnexpress.net/lpbank-cung-so-cong-thuong-can-tho-ho-tro-doanh-nghiep-tiep-can-von-5061243.html",
+        "snippet": "Nh\u00e0 m\u00e1y m\u1edbi c\u1ee7a H\u00f2a Ph\u00e1t c\u00f3 v\u1ed1n 2.000 t\u1ef7 \u0111\u1ed3ng, chuy\u00ean s\u1ea3n xu\u1ea5t \u1ed1ng th\u00e9p x\u00e2y d\u1ef1ng cho d\u1ef1 \u00e1n d\u00e2n d\u1ee5ng, c\u00f4ng tr\u00ecnh tr\u1ecdng \u0111i\u1ec3m, trong \u0111\u00f3 c\u00f3 s\u00e2n bay Long Th\u00e0nh.",
+        "published_at": "2026-04-19T05:33:04.585231",
+        "url": "https://vnexpress.net/ty-phu-tran-dinh-long-xay-them-nha-may-thep-hon-2-000-ty-dong-5064122.html",
+        "scope": "symbol"
+      },
+      {
+        "id": "78053011b2180c49",
+        "title": "C\u1ed5 phi\u1ebfu Th\u1ebf Gi\u1edbi Di \u0110\u1ed9ng t\u0103ng tr\u1ea7n",
+        "source": "VnExpress",
+        "snippet": "Trong phi\u00ean ch\u1ee9ng kho\u00e1n gi\u1ea3m g\u1ea7n 3 \u0111i\u1ec3m ch\u1ee7 y\u1ebfu do \u1ea3nh h\u01b0\u1edfng c\u1ee7a nh\u00f3m tr\u1ee5, c\u1ed5 phi\u1ebfu Th\u1ebf Gi\u1edbi Di \u0110\u1ed9ng ng\u01b0\u1ee3c d\u00f2ng khi t\u0103ng tr\u1ea7n \"c\u1ee9ng\" t\u1eeb s\u00e1ng.",
+        "published_at": "2026-04-19T05:33:04.585449",
+        "url": "https://vnexpress.net/co-phieu-the-gioi-di-dong-tang-tran-5063723.html",
         "scope": "market"
       },
       {
-        "id": "f56ac188456bee19",
-        "title": "GG Power gi\u1edbi thi\u1ec7u nh\u00e0 m\u00e1y s\u1ea3n xu\u1ea5t pin l\u01b0u tr\u1eef n\u0103ng l\u01b0\u1ee3ng",
+        "id": "64348cdd850baaf6",
+        "title": "\u0110\u1ea1i gia Th\u00e1i nh\u1eadn h\u01a1n 3.200 t\u1ef7 \u0111\u1ed3ng c\u1ed5 t\u1ee9c sau 14 n\u0103m th\u00e2u t\u00f3m Nh\u1ef1a B\u00ecnh Minh",
         "source": "VnExpress",
-        "snippet": "T\u1ed5 h\u1ee3p Battery Energy Storage System (BESS) t\u1ecda l\u1ea1c t\u1ea1i khu c\u00f4ng nghi\u1ec7p s\u1ed1 5, Xu\u00e2n Tr\u00fac, \u0111\u00e1nh d\u1ea5u c\u1ed9t m\u1ed1c ph\u00e1t tri\u1ec3n n\u0103ng l\u01b0\u1ee3ng s\u1ea1ch c\u1ee7a GG Power.",
-        "published_at": "2026-04-13T09:52:56.213279",
-        "url": "https://vnexpress.net/gg-power-gioi-thieu-nha-may-san-xuat-pin-luu-tru-nang-luong-5061297.html",
+        "snippet": "Nawaplastic thu\u1ed9c T\u1eadp \u0111o\u00e0n SCG nh\u1eadn v\u1ec1 tr\u00ean 3.200 t\u1ef7 \u0111\u1ed3ng ti\u1ec1n c\u1ed5 t\u1ee9c, cao h\u01a1n 18,5% so v\u1edbi v\u1ed1n \u0111\u1ea7u t\u01b0 ban \u0111\u1ea7u sau 14 n\u0103m th\u00e2u t\u00f3m Nh\u1ef1a B\u00ecnh Minh.",
+        "published_at": "2026-04-19T05:33:04.585439",
+        "url": "https://vnexpress.net/dai-gia-thai-nhan-hon-3-200-ty-dong-co-tuc-sau-14-nam-thau-tom-nhua-binh-minh-5063681.html",
         "scope": "market"
       },
       {
-        "id": "4371a2b30ce58c78",
-        "title": "Nh\u00e0 s\u1ea3n xu\u1ea5t 'Anh trai say hi' l\u00e3i 380 t\u1ef7 \u0111\u1ed3ng",
+        "id": "0ba1461f54a1635c",
+        "title": "H\u1ed9 c\u00f3 doanh thu d\u01b0\u1edbi 500 tri\u1ec7u \u0111\u1ed3ng v\u1eabn \u0111\u01b0\u1ee3c xu\u1ea5t h\u00f3a \u0111\u01a1n \u0111i\u1ec7n t\u1eed",
         "source": "VnExpress",
-        "snippet": "DatVietVAC - nh\u00e0 s\u1ea3n xu\u1ea5t ch\u01b0\u01a1ng tr\u00ecnh \"Anh trai say hi\", \"2 ng\u00e0y 1 \u0111\u00eam Vietnam\" - n\u0103m ngo\u00e1i l\u00e3i r\u00f2ng 380 t\u1ef7 \u0111\u1ed3ng v\u00e0 d\u1ef1 t\u00ednh n\u0103m nay t\u0103ng l\u00ean 420 t\u1ef7 \u0111\u1ed3ng.",
-        "published_at": "2026-04-13T09:52:56.213268",
-        "url": "https://vnexpress.net/nha-san-xuat-anh-trai-say-hi-lai-380-ty-dong-5061069.html",
+        "snippet": "C\u1ee5c Thu\u1ebf kh\u1eb3ng \u0111\u1ecbnh c\u00e1c h\u1ed9 kinh doanh c\u00f3 doanh thu d\u01b0\u1edbi ng\u01b0\u1ee1ng 500 tri\u1ec7u \u0111\u1ed3ng m\u1ed9t n\u0103m v\u1eabn \u0111\u01b0\u1ee3c s\u1eed d\u1ee5ng h\u00f3a \u0111\u01a1n \u0111i\u1ec7n t\u1eed.",
+        "published_at": "2026-04-19T05:33:04.585429",
+        "url": "https://vnexpress.net/ho-co-doanh-thu-duoi-500-trieu-dong-van-duoc-xuat-hoa-don-dien-tu-5063805.html",
         "scope": "market"
       }
     ],
     "VNM": [
       {
-        "id": "d1d4094a53e91ee6",
-        "title": "LPBank c\u00f9ng S\u1edf C\u00f4ng Th\u01b0\u01a1ng C\u1ea7n Th\u01a1 h\u1ed7 tr\u1ee3 doanh nghi\u1ec7p ti\u1ebfp c\u1eadn v\u1ed1n",
+        "id": "78053011b2180c49",
+        "title": "C\u1ed5 phi\u1ebfu Th\u1ebf Gi\u1edbi Di \u0110\u1ed9ng t\u0103ng tr\u1ea7n",
         "source": "VnExpress",
-        "snippet": "LPBank tri\u1ec3n khai ch\u01b0\u01a1ng tr\u00ecnh k\u1ebft n\u1ed1i t\u1ea1i C\u1ea7n Th\u01a1, th\u00fac \u0111\u1ea9y \u0111\u1ed1i tho\u1ea1i, t\u01b0 v\u1ea5n gi\u1ea3i ph\u00e1p v\u1ed1n, k\u00fd k\u1ebft h\u1ee3p t\u00e1c v\u00e0 m\u1edf r\u1ed9ng li\u00ean k\u1ebft gi\u1eefa doanh nghi\u1ec7p, ch\u00ednh quy\u1ec1n v\u00e0 c\u01a1 s\u1edf \u0111\u00e0o t\u1ea1o.",
-        "published_at": "2026-04-13T09:52:56.213292",
-        "url": "https://vnexpress.net/lpbank-cung-so-cong-thuong-can-tho-ho-tro-doanh-nghiep-tiep-can-von-5061243.html",
+        "snippet": "Trong phi\u00ean ch\u1ee9ng kho\u00e1n gi\u1ea3m g\u1ea7n 3 \u0111i\u1ec3m ch\u1ee7 y\u1ebfu do \u1ea3nh h\u01b0\u1edfng c\u1ee7a nh\u00f3m tr\u1ee5, c\u1ed5 phi\u1ebfu Th\u1ebf Gi\u1edbi Di \u0110\u1ed9ng ng\u01b0\u1ee3c d\u00f2ng khi t\u0103ng tr\u1ea7n \"c\u1ee9ng\" t\u1eeb s\u00e1ng.",
+        "published_at": "2026-04-19T05:33:04.585449",
+        "url": "https://vnexpress.net/co-phieu-the-gioi-di-dong-tang-tran-5063723.html",
         "scope": "market"
       },
       {
-        "id": "f56ac188456bee19",
-        "title": "GG Power gi\u1edbi thi\u1ec7u nh\u00e0 m\u00e1y s\u1ea3n xu\u1ea5t pin l\u01b0u tr\u1eef n\u0103ng l\u01b0\u1ee3ng",
+        "id": "64348cdd850baaf6",
+        "title": "\u0110\u1ea1i gia Th\u00e1i nh\u1eadn h\u01a1n 3.200 t\u1ef7 \u0111\u1ed3ng c\u1ed5 t\u1ee9c sau 14 n\u0103m th\u00e2u t\u00f3m Nh\u1ef1a B\u00ecnh Minh",
         "source": "VnExpress",
-        "snippet": "T\u1ed5 h\u1ee3p Battery Energy Storage System (BESS) t\u1ecda l\u1ea1c t\u1ea1i khu c\u00f4ng nghi\u1ec7p s\u1ed1 5, Xu\u00e2n Tr\u00fac, \u0111\u00e1nh d\u1ea5u c\u1ed9t m\u1ed1c ph\u00e1t tri\u1ec3n n\u0103ng l\u01b0\u1ee3ng s\u1ea1ch c\u1ee7a GG Power.",
-        "published_at": "2026-04-13T09:52:56.213279",
-        "url": "https://vnexpress.net/gg-power-gioi-thieu-nha-may-san-xuat-pin-luu-tru-nang-luong-5061297.html",
+        "snippet": "Nawaplastic thu\u1ed9c T\u1eadp \u0111o\u00e0n SCG nh\u1eadn v\u1ec1 tr\u00ean 3.200 t\u1ef7 \u0111\u1ed3ng ti\u1ec1n c\u1ed5 t\u1ee9c, cao h\u01a1n 18,5% so v\u1edbi v\u1ed1n \u0111\u1ea7u t\u01b0 ban \u0111\u1ea7u sau 14 n\u0103m th\u00e2u t\u00f3m Nh\u1ef1a B\u00ecnh Minh.",
+        "published_at": "2026-04-19T05:33:04.585439",
+        "url": "https://vnexpress.net/dai-gia-thai-nhan-hon-3-200-ty-dong-co-tuc-sau-14-nam-thau-tom-nhua-binh-minh-5063681.html",
         "scope": "market"
       },
       {
-        "id": "4371a2b30ce58c78",
-        "title": "Nh\u00e0 s\u1ea3n xu\u1ea5t 'Anh trai say hi' l\u00e3i 380 t\u1ef7 \u0111\u1ed3ng",
+        "id": "0ba1461f54a1635c",
+        "title": "H\u1ed9 c\u00f3 doanh thu d\u01b0\u1edbi 500 tri\u1ec7u \u0111\u1ed3ng v\u1eabn \u0111\u01b0\u1ee3c xu\u1ea5t h\u00f3a \u0111\u01a1n \u0111i\u1ec7n t\u1eed",
         "source": "VnExpress",
-        "snippet": "DatVietVAC - nh\u00e0 s\u1ea3n xu\u1ea5t ch\u01b0\u01a1ng tr\u00ecnh \"Anh trai say hi\", \"2 ng\u00e0y 1 \u0111\u00eam Vietnam\" - n\u0103m ngo\u00e1i l\u00e3i r\u00f2ng 380 t\u1ef7 \u0111\u1ed3ng v\u00e0 d\u1ef1 t\u00ednh n\u0103m nay t\u0103ng l\u00ean 420 t\u1ef7 \u0111\u1ed3ng.",
-        "published_at": "2026-04-13T09:52:56.213268",
-        "url": "https://vnexpress.net/nha-san-xuat-anh-trai-say-hi-lai-380-ty-dong-5061069.html",
+        "snippet": "C\u1ee5c Thu\u1ebf kh\u1eb3ng \u0111\u1ecbnh c\u00e1c h\u1ed9 kinh doanh c\u00f3 doanh thu d\u01b0\u1edbi ng\u01b0\u1ee1ng 500 tri\u1ec7u \u0111\u1ed3ng m\u1ed9t n\u0103m v\u1eabn \u0111\u01b0\u1ee3c s\u1eed d\u1ee5ng h\u00f3a \u0111\u01a1n \u0111i\u1ec7n t\u1eed.",
+        "published_at": "2026-04-19T05:33:04.585429",
+        "url": "https://vnexpress.net/ho-co-doanh-thu-duoi-500-trieu-dong-van-duoc-xuat-hoa-don-dien-tu-5063805.html",
         "scope": "market"
       }
     ],
     "FPT": [
       {
-        "id": "d1d4094a53e91ee6",
-        "title": "LPBank c\u00f9ng S\u1edf C\u00f4ng Th\u01b0\u01a1ng C\u1ea7n Th\u01a1 h\u1ed7 tr\u1ee3 doanh nghi\u1ec7p ti\u1ebfp c\u1eadn v\u1ed1n",
+        "id": "78053011b2180c49",
+        "title": "C\u1ed5 phi\u1ebfu Th\u1ebf Gi\u1edbi Di \u0110\u1ed9ng t\u0103ng tr\u1ea7n",
         "source": "VnExpress",
-        "snippet": "LPBank tri\u1ec3n khai ch\u01b0\u01a1ng tr\u00ecnh k\u1ebft n\u1ed1i t\u1ea1i C\u1ea7n Th\u01a1, th\u00fac \u0111\u1ea9y \u0111\u1ed1i tho\u1ea1i, t\u01b0 v\u1ea5n gi\u1ea3i ph\u00e1p v\u1ed1n, k\u00fd k\u1ebft h\u1ee3p t\u00e1c v\u00e0 m\u1edf r\u1ed9ng li\u00ean k\u1ebft gi\u1eefa doanh nghi\u1ec7p, ch\u00ednh quy\u1ec1n v\u00e0 c\u01a1 s\u1edf \u0111\u00e0o t\u1ea1o.",
-        "published_at": "2026-04-13T09:52:56.213292",
-        "url": "https://vnexpress.net/lpbank-cung-so-cong-thuong-can-tho-ho-tro-doanh-nghiep-tiep-can-von-5061243.html",
+        "snippet": "Trong phi\u00ean ch\u1ee9ng kho\u00e1n gi\u1ea3m g\u1ea7n 3 \u0111i\u1ec3m ch\u1ee7 y\u1ebfu do \u1ea3nh h\u01b0\u1edfng c\u1ee7a nh\u00f3m tr\u1ee5, c\u1ed5 phi\u1ebfu Th\u1ebf Gi\u1edbi Di \u0110\u1ed9ng ng\u01b0\u1ee3c d\u00f2ng khi t\u0103ng tr\u1ea7n \"c\u1ee9ng\" t\u1eeb s\u00e1ng.",
+        "published_at": "2026-04-19T05:33:04.585449",
+        "url": "https://vnexpress.net/co-phieu-the-gioi-di-dong-tang-tran-5063723.html",
         "scope": "market"
       },
       {
-        "id": "f56ac188456bee19",
-        "title": "GG Power gi\u1edbi thi\u1ec7u nh\u00e0 m\u00e1y s\u1ea3n xu\u1ea5t pin l\u01b0u tr\u1eef n\u0103ng l\u01b0\u1ee3ng",
+        "id": "64348cdd850baaf6",
+        "title": "\u0110\u1ea1i gia Th\u00e1i nh\u1eadn h\u01a1n 3.200 t\u1ef7 \u0111\u1ed3ng c\u1ed5 t\u1ee9c sau 14 n\u0103m th\u00e2u t\u00f3m Nh\u1ef1a B\u00ecnh Minh",
         "source": "VnExpress",
-        "snippet": "T\u1ed5 h\u1ee3p Battery Energy Storage System (BESS) t\u1ecda l\u1ea1c t\u1ea1i khu c\u00f4ng nghi\u1ec7p s\u1ed1 5, Xu\u00e2n Tr\u00fac, \u0111\u00e1nh d\u1ea5u c\u1ed9t m\u1ed1c ph\u00e1t tri\u1ec3n n\u0103ng l\u01b0\u1ee3ng s\u1ea1ch c\u1ee7a GG Power.",
-        "published_at": "2026-04-13T09:52:56.213279",
-        "url": "https://vnexpress.net/gg-power-gioi-thieu-nha-may-san-xuat-pin-luu-tru-nang-luong-5061297.html",
+        "snippet": "Nawaplastic thu\u1ed9c T\u1eadp \u0111o\u00e0n SCG nh\u1eadn v\u1ec1 tr\u00ean 3.200 t\u1ef7 \u0111\u1ed3ng ti\u1ec1n c\u1ed5 t\u1ee9c, cao h\u01a1n 18,5% so v\u1edbi v\u1ed1n \u0111\u1ea7u t\u01b0 ban \u0111\u1ea7u sau 14 n\u0103m th\u00e2u t\u00f3m Nh\u1ef1a B\u00ecnh Minh.",
+        "published_at": "2026-04-19T05:33:04.585439",
+        "url": "https://vnexpress.net/dai-gia-thai-nhan-hon-3-200-ty-dong-co-tuc-sau-14-nam-thau-tom-nhua-binh-minh-5063681.html",
         "scope": "market"
       },
       {
-        "id": "4371a2b30ce58c78",
-        "title": "Nh\u00e0 s\u1ea3n xu\u1ea5t 'Anh trai say hi' l\u00e3i 380 t\u1ef7 \u0111\u1ed3ng",
+        "id": "0ba1461f54a1635c",
+        "title": "H\u1ed9 c\u00f3 doanh thu d\u01b0\u1edbi 500 tri\u1ec7u \u0111\u1ed3ng v\u1eabn \u0111\u01b0\u1ee3c xu\u1ea5t h\u00f3a \u0111\u01a1n \u0111i\u1ec7n t\u1eed",
         "source": "VnExpress",
-        "snippet": "DatVietVAC - nh\u00e0 s\u1ea3n xu\u1ea5t ch\u01b0\u01a1ng tr\u00ecnh \"Anh trai say hi\", \"2 ng\u00e0y 1 \u0111\u00eam Vietnam\" - n\u0103m ngo\u00e1i l\u00e3i r\u00f2ng 380 t\u1ef7 \u0111\u1ed3ng v\u00e0 d\u1ef1 t\u00ednh n\u0103m nay t\u0103ng l\u00ean 420 t\u1ef7 \u0111\u1ed3ng.",
-        "published_at": "2026-04-13T09:52:56.213268",
-        "url": "https://vnexpress.net/nha-san-xuat-anh-trai-say-hi-lai-380-ty-dong-5061069.html",
+        "snippet": "C\u1ee5c Thu\u1ebf kh\u1eb3ng \u0111\u1ecbnh c\u00e1c h\u1ed9 kinh doanh c\u00f3 doanh thu d\u01b0\u1edbi ng\u01b0\u1ee1ng 500 tri\u1ec7u \u0111\u1ed3ng m\u1ed9t n\u0103m v\u1eabn \u0111\u01b0\u1ee3c s\u1eed d\u1ee5ng h\u00f3a \u0111\u01a1n \u0111i\u1ec7n t\u1eed.",
+        "published_at": "2026-04-19T05:33:04.585429",
+        "url": "https://vnexpress.net/ho-co-doanh-thu-duoi-500-trieu-dong-van-duoc-xuat-hoa-don-dien-tu-5063805.html",
         "scope": "market"
       }
     ],
     "MWG": [
       {
-        "id": "d1d4094a53e91ee6",
-        "title": "LPBank c\u00f9ng S\u1edf C\u00f4ng Th\u01b0\u01a1ng C\u1ea7n Th\u01a1 h\u1ed7 tr\u1ee3 doanh nghi\u1ec7p ti\u1ebfp c\u1eadn v\u1ed1n",
+        "id": "78053011b2180c49",
+        "title": "C\u1ed5 phi\u1ebfu Th\u1ebf Gi\u1edbi Di \u0110\u1ed9ng t\u0103ng tr\u1ea7n",
         "source": "VnExpress",
-        "snippet": "LPBank tri\u1ec3n khai ch\u01b0\u01a1ng tr\u00ecnh k\u1ebft n\u1ed1i t\u1ea1i C\u1ea7n Th\u01a1, th\u00fac \u0111\u1ea9y \u0111\u1ed1i tho\u1ea1i, t\u01b0 v\u1ea5n gi\u1ea3i ph\u00e1p v\u1ed1n, k\u00fd k\u1ebft h\u1ee3p t\u00e1c v\u00e0 m\u1edf r\u1ed9ng li\u00ean k\u1ebft gi\u1eefa doanh nghi\u1ec7p, ch\u00ednh quy\u1ec1n v\u00e0 c\u01a1 s\u1edf \u0111\u00e0o t\u1ea1o.",
-        "published_at": "2026-04-13T09:52:56.213292",
-        "url": "https://vnexpress.net/lpbank-cung-so-cong-thuong-can-tho-ho-tro-doanh-nghiep-tiep-can-von-5061243.html",
-        "scope": "market"
+        "snippet": "Trong phi\u00ean ch\u1ee9ng kho\u00e1n gi\u1ea3m g\u1ea7n 3 \u0111i\u1ec3m ch\u1ee7 y\u1ebfu do \u1ea3nh h\u01b0\u1edfng c\u1ee7a nh\u00f3m tr\u1ee5, c\u1ed5 phi\u1ebfu Th\u1ebf Gi\u1edbi Di \u0110\u1ed9ng ng\u01b0\u1ee3c d\u00f2ng khi t\u0103ng tr\u1ea7n \"c\u1ee9ng\" t\u1eeb s\u00e1ng.",
+        "published_at": "2026-04-19T05:33:04.585449",
+        "url": "https://vnexpress.net/co-phieu-the-gioi-di-dong-tang-tran-5063723.html",
+        "scope": "symbol"
       },
       {
-        "id": "f56ac188456bee19",
-        "title": "GG Power gi\u1edbi thi\u1ec7u nh\u00e0 m\u00e1y s\u1ea3n xu\u1ea5t pin l\u01b0u tr\u1eef n\u0103ng l\u01b0\u1ee3ng",
+        "id": "b4835435c1b86d1d",
+        "title": "S\u1ebfp FPT Shop n\u00f3i v\u1ec1 cu\u1ed9c \u0111ua v\u1edbi 'ng\u01b0\u1eddi kh\u1ed5ng l\u1ed3' \u0110i\u1ec7n M\u00e1y Xanh",
         "source": "VnExpress",
-        "snippet": "T\u1ed5 h\u1ee3p Battery Energy Storage System (BESS) t\u1ecda l\u1ea1c t\u1ea1i khu c\u00f4ng nghi\u1ec7p s\u1ed1 5, Xu\u00e2n Tr\u00fac, \u0111\u00e1nh d\u1ea5u c\u1ed9t m\u1ed1c ph\u00e1t tri\u1ec3n n\u0103ng l\u01b0\u1ee3ng s\u1ea1ch c\u1ee7a GG Power.",
-        "published_at": "2026-04-13T09:52:56.213279",
-        "url": "https://vnexpress.net/gg-power-gioi-thieu-nha-may-san-xuat-pin-luu-tru-nang-luong-5061297.html",
-        "scope": "market"
-      },
-      {
-        "id": "4371a2b30ce58c78",
-        "title": "Nh\u00e0 s\u1ea3n xu\u1ea5t 'Anh trai say hi' l\u00e3i 380 t\u1ef7 \u0111\u1ed3ng",
-        "source": "VnExpress",
-        "snippet": "DatVietVAC - nh\u00e0 s\u1ea3n xu\u1ea5t ch\u01b0\u01a1ng tr\u00ecnh \"Anh trai say hi\", \"2 ng\u00e0y 1 \u0111\u00eam Vietnam\" - n\u0103m ngo\u00e1i l\u00e3i r\u00f2ng 380 t\u1ef7 \u0111\u1ed3ng v\u00e0 d\u1ef1 t\u00ednh n\u0103m nay t\u0103ng l\u00ean 420 t\u1ef7 \u0111\u1ed3ng.",
-        "published_at": "2026-04-13T09:52:56.213268",
-        "url": "https://vnexpress.net/nha-san-xuat-anh-trai-say-hi-lai-380-ty-dong-5061069.html",
-        "scope": "market"
+        "snippet": "L\u00e3nh \u0111\u1ea1o FPT Shop t\u1ef1 nh\u1eadn l\u00e0 \"ng\u01b0\u1eddi \u0111\u1ebfn sau\" trong m\u1ea3ng \u0111i\u1ec7n m\u00e1y n\u00ean doanh thu k\u00e9m xa \u0111\u01a1n v\u1ecb \u0111\u1ee9ng \u0111\u1ea7u, nh\u01b0ng c\u00f3 l\u1ee3i th\u1ebf v\u00e0 c\u00e1ch l\u00e0m ri\u00eang \u0111\u1ec3 d\u1ea7n thu h\u1eb9p kho\u1ea3ng c\u00e1ch.",
+        "published_at": "2026-04-19T05:33:04.585370",
+        "url": "https://vnexpress.net/sep-fpt-shop-noi-ve-cuoc-dua-voi-nguoi-khong-lo-dien-may-xanh-5063843.html",
+        "scope": "symbol"
       }
     ],
     "VCB": [
       {
-        "id": "d1d4094a53e91ee6",
-        "title": "LPBank c\u00f9ng S\u1edf C\u00f4ng Th\u01b0\u01a1ng C\u1ea7n Th\u01a1 h\u1ed7 tr\u1ee3 doanh nghi\u1ec7p ti\u1ebfp c\u1eadn v\u1ed1n",
+        "id": "78053011b2180c49",
+        "title": "C\u1ed5 phi\u1ebfu Th\u1ebf Gi\u1edbi Di \u0110\u1ed9ng t\u0103ng tr\u1ea7n",
         "source": "VnExpress",
-        "snippet": "LPBank tri\u1ec3n khai ch\u01b0\u01a1ng tr\u00ecnh k\u1ebft n\u1ed1i t\u1ea1i C\u1ea7n Th\u01a1, th\u00fac \u0111\u1ea9y \u0111\u1ed1i tho\u1ea1i, t\u01b0 v\u1ea5n gi\u1ea3i ph\u00e1p v\u1ed1n, k\u00fd k\u1ebft h\u1ee3p t\u00e1c v\u00e0 m\u1edf r\u1ed9ng li\u00ean k\u1ebft gi\u1eefa doanh nghi\u1ec7p, ch\u00ednh quy\u1ec1n v\u00e0 c\u01a1 s\u1edf \u0111\u00e0o t\u1ea1o.",
-        "published_at": "2026-04-13T09:52:56.213292",
-        "url": "https://vnexpress.net/lpbank-cung-so-cong-thuong-can-tho-ho-tro-doanh-nghiep-tiep-can-von-5061243.html",
+        "snippet": "Trong phi\u00ean ch\u1ee9ng kho\u00e1n gi\u1ea3m g\u1ea7n 3 \u0111i\u1ec3m ch\u1ee7 y\u1ebfu do \u1ea3nh h\u01b0\u1edfng c\u1ee7a nh\u00f3m tr\u1ee5, c\u1ed5 phi\u1ebfu Th\u1ebf Gi\u1edbi Di \u0110\u1ed9ng ng\u01b0\u1ee3c d\u00f2ng khi t\u0103ng tr\u1ea7n \"c\u1ee9ng\" t\u1eeb s\u00e1ng.",
+        "published_at": "2026-04-19T05:33:04.585449",
+        "url": "https://vnexpress.net/co-phieu-the-gioi-di-dong-tang-tran-5063723.html",
         "scope": "market"
       },
       {
-        "id": "f56ac188456bee19",
-        "title": "GG Power gi\u1edbi thi\u1ec7u nh\u00e0 m\u00e1y s\u1ea3n xu\u1ea5t pin l\u01b0u tr\u1eef n\u0103ng l\u01b0\u1ee3ng",
+        "id": "64348cdd850baaf6",
+        "title": "\u0110\u1ea1i gia Th\u00e1i nh\u1eadn h\u01a1n 3.200 t\u1ef7 \u0111\u1ed3ng c\u1ed5 t\u1ee9c sau 14 n\u0103m th\u00e2u t\u00f3m Nh\u1ef1a B\u00ecnh Minh",
         "source": "VnExpress",
-        "snippet": "T\u1ed5 h\u1ee3p Battery Energy Storage System (BESS) t\u1ecda l\u1ea1c t\u1ea1i khu c\u00f4ng nghi\u1ec7p s\u1ed1 5, Xu\u00e2n Tr\u00fac, \u0111\u00e1nh d\u1ea5u c\u1ed9t m\u1ed1c ph\u00e1t tri\u1ec3n n\u0103ng l\u01b0\u1ee3ng s\u1ea1ch c\u1ee7a GG Power.",
-        "published_at": "2026-04-13T09:52:56.213279",
-        "url": "https://vnexpress.net/gg-power-gioi-thieu-nha-may-san-xuat-pin-luu-tru-nang-luong-5061297.html",
+        "snippet": "Nawaplastic thu\u1ed9c T\u1eadp \u0111o\u00e0n SCG nh\u1eadn v\u1ec1 tr\u00ean 3.200 t\u1ef7 \u0111\u1ed3ng ti\u1ec1n c\u1ed5 t\u1ee9c, cao h\u01a1n 18,5% so v\u1edbi v\u1ed1n \u0111\u1ea7u t\u01b0 ban \u0111\u1ea7u sau 14 n\u0103m th\u00e2u t\u00f3m Nh\u1ef1a B\u00ecnh Minh.",
+        "published_at": "2026-04-19T05:33:04.585439",
+        "url": "https://vnexpress.net/dai-gia-thai-nhan-hon-3-200-ty-dong-co-tuc-sau-14-nam-thau-tom-nhua-binh-minh-5063681.html",
         "scope": "market"
       },
       {
-        "id": "4371a2b30ce58c78",
-        "title": "Nh\u00e0 s\u1ea3n xu\u1ea5t 'Anh trai say hi' l\u00e3i 380 t\u1ef7 \u0111\u1ed3ng",
+        "id": "0ba1461f54a1635c",
+        "title": "H\u1ed9 c\u00f3 doanh thu d\u01b0\u1edbi 500 tri\u1ec7u \u0111\u1ed3ng v\u1eabn \u0111\u01b0\u1ee3c xu\u1ea5t h\u00f3a \u0111\u01a1n \u0111i\u1ec7n t\u1eed",
         "source": "VnExpress",
-        "snippet": "DatVietVAC - nh\u00e0 s\u1ea3n xu\u1ea5t ch\u01b0\u01a1ng tr\u00ecnh \"Anh trai say hi\", \"2 ng\u00e0y 1 \u0111\u00eam Vietnam\" - n\u0103m ngo\u00e1i l\u00e3i r\u00f2ng 380 t\u1ef7 \u0111\u1ed3ng v\u00e0 d\u1ef1 t\u00ednh n\u0103m nay t\u0103ng l\u00ean 420 t\u1ef7 \u0111\u1ed3ng.",
-        "published_at": "2026-04-13T09:52:56.213268",
-        "url": "https://vnexpress.net/nha-san-xuat-anh-trai-say-hi-lai-380-ty-dong-5061069.html",
+        "snippet": "C\u1ee5c Thu\u1ebf kh\u1eb3ng \u0111\u1ecbnh c\u00e1c h\u1ed9 kinh doanh c\u00f3 doanh thu d\u01b0\u1edbi ng\u01b0\u1ee1ng 500 tri\u1ec7u \u0111\u1ed3ng m\u1ed9t n\u0103m v\u1eabn \u0111\u01b0\u1ee3c s\u1eed d\u1ee5ng h\u00f3a \u0111\u01a1n \u0111i\u1ec7n t\u1eed.",
+        "published_at": "2026-04-19T05:33:04.585429",
+        "url": "https://vnexpress.net/ho-co-doanh-thu-duoi-500-trieu-dong-van-duoc-xuat-hoa-don-dien-tu-5063805.html",
         "scope": "market"
       }
     ],
     "TCB": [
       {
-        "id": "d1d4094a53e91ee6",
-        "title": "LPBank c\u00f9ng S\u1edf C\u00f4ng Th\u01b0\u01a1ng C\u1ea7n Th\u01a1 h\u1ed7 tr\u1ee3 doanh nghi\u1ec7p ti\u1ebfp c\u1eadn v\u1ed1n",
+        "id": "78053011b2180c49",
+        "title": "C\u1ed5 phi\u1ebfu Th\u1ebf Gi\u1edbi Di \u0110\u1ed9ng t\u0103ng tr\u1ea7n",
         "source": "VnExpress",
-        "snippet": "LPBank tri\u1ec3n khai ch\u01b0\u01a1ng tr\u00ecnh k\u1ebft n\u1ed1i t\u1ea1i C\u1ea7n Th\u01a1, th\u00fac \u0111\u1ea9y \u0111\u1ed1i tho\u1ea1i, t\u01b0 v\u1ea5n gi\u1ea3i ph\u00e1p v\u1ed1n, k\u00fd k\u1ebft h\u1ee3p t\u00e1c v\u00e0 m\u1edf r\u1ed9ng li\u00ean k\u1ebft gi\u1eefa doanh nghi\u1ec7p, ch\u00ednh quy\u1ec1n v\u00e0 c\u01a1 s\u1edf \u0111\u00e0o t\u1ea1o.",
-        "published_at": "2026-04-13T09:52:56.213292",
-        "url": "https://vnexpress.net/lpbank-cung-so-cong-thuong-can-tho-ho-tro-doanh-nghiep-tiep-can-von-5061243.html",
+        "snippet": "Trong phi\u00ean ch\u1ee9ng kho\u00e1n gi\u1ea3m g\u1ea7n 3 \u0111i\u1ec3m ch\u1ee7 y\u1ebfu do \u1ea3nh h\u01b0\u1edfng c\u1ee7a nh\u00f3m tr\u1ee5, c\u1ed5 phi\u1ebfu Th\u1ebf Gi\u1edbi Di \u0110\u1ed9ng ng\u01b0\u1ee3c d\u00f2ng khi t\u0103ng tr\u1ea7n \"c\u1ee9ng\" t\u1eeb s\u00e1ng.",
+        "published_at": "2026-04-19T05:33:04.585449",
+        "url": "https://vnexpress.net/co-phieu-the-gioi-di-dong-tang-tran-5063723.html",
         "scope": "market"
       },
       {
-        "id": "f56ac188456bee19",
-        "title": "GG Power gi\u1edbi thi\u1ec7u nh\u00e0 m\u00e1y s\u1ea3n xu\u1ea5t pin l\u01b0u tr\u1eef n\u0103ng l\u01b0\u1ee3ng",
+        "id": "64348cdd850baaf6",
+        "title": "\u0110\u1ea1i gia Th\u00e1i nh\u1eadn h\u01a1n 3.200 t\u1ef7 \u0111\u1ed3ng c\u1ed5 t\u1ee9c sau 14 n\u0103m th\u00e2u t\u00f3m Nh\u1ef1a B\u00ecnh Minh",
         "source": "VnExpress",
-        "snippet": "T\u1ed5 h\u1ee3p Battery Energy Storage System (BESS) t\u1ecda l\u1ea1c t\u1ea1i khu c\u00f4ng nghi\u1ec7p s\u1ed1 5, Xu\u00e2n Tr\u00fac, \u0111\u00e1nh d\u1ea5u c\u1ed9t m\u1ed1c ph\u00e1t tri\u1ec3n n\u0103ng l\u01b0\u1ee3ng s\u1ea1ch c\u1ee7a GG Power.",
-        "published_at": "2026-04-13T09:52:56.213279",
-        "url": "https://vnexpress.net/gg-power-gioi-thieu-nha-may-san-xuat-pin-luu-tru-nang-luong-5061297.html",
+        "snippet": "Nawaplastic thu\u1ed9c T\u1eadp \u0111o\u00e0n SCG nh\u1eadn v\u1ec1 tr\u00ean 3.200 t\u1ef7 \u0111\u1ed3ng ti\u1ec1n c\u1ed5 t\u1ee9c, cao h\u01a1n 18,5% so v\u1edbi v\u1ed1n \u0111\u1ea7u t\u01b0 ban \u0111\u1ea7u sau 14 n\u0103m th\u00e2u t\u00f3m Nh\u1ef1a B\u00ecnh Minh.",
+        "published_at": "2026-04-19T05:33:04.585439",
+        "url": "https://vnexpress.net/dai-gia-thai-nhan-hon-3-200-ty-dong-co-tuc-sau-14-nam-thau-tom-nhua-binh-minh-5063681.html",
         "scope": "market"
       },
       {
-        "id": "4371a2b30ce58c78",
-        "title": "Nh\u00e0 s\u1ea3n xu\u1ea5t 'Anh trai say hi' l\u00e3i 380 t\u1ef7 \u0111\u1ed3ng",
+        "id": "0ba1461f54a1635c",
+        "title": "H\u1ed9 c\u00f3 doanh thu d\u01b0\u1edbi 500 tri\u1ec7u \u0111\u1ed3ng v\u1eabn \u0111\u01b0\u1ee3c xu\u1ea5t h\u00f3a \u0111\u01a1n \u0111i\u1ec7n t\u1eed",
         "source": "VnExpress",
-        "snippet": "DatVietVAC - nh\u00e0 s\u1ea3n xu\u1ea5t ch\u01b0\u01a1ng tr\u00ecnh \"Anh trai say hi\", \"2 ng\u00e0y 1 \u0111\u00eam Vietnam\" - n\u0103m ngo\u00e1i l\u00e3i r\u00f2ng 380 t\u1ef7 \u0111\u1ed3ng v\u00e0 d\u1ef1 t\u00ednh n\u0103m nay t\u0103ng l\u00ean 420 t\u1ef7 \u0111\u1ed3ng.",
-        "published_at": "2026-04-13T09:52:56.213268",
-        "url": "https://vnexpress.net/nha-san-xuat-anh-trai-say-hi-lai-380-ty-dong-5061069.html",
+        "snippet": "C\u1ee5c Thu\u1ebf kh\u1eb3ng \u0111\u1ecbnh c\u00e1c h\u1ed9 kinh doanh c\u00f3 doanh thu d\u01b0\u1edbi ng\u01b0\u1ee1ng 500 tri\u1ec7u \u0111\u1ed3ng m\u1ed9t n\u0103m v\u1eabn \u0111\u01b0\u1ee3c s\u1eed d\u1ee5ng h\u00f3a \u0111\u01a1n \u0111i\u1ec7n t\u1eed.",
+        "published_at": "2026-04-19T05:33:04.585429",
+        "url": "https://vnexpress.net/ho-co-doanh-thu-duoi-500-trieu-dong-van-duoc-xuat-hoa-don-dien-tu-5063805.html",
         "scope": "market"
       }
     ],
     "MBB": [
       {
-        "id": "d1d4094a53e91ee6",
-        "title": "LPBank c\u00f9ng S\u1edf C\u00f4ng Th\u01b0\u01a1ng C\u1ea7n Th\u01a1 h\u1ed7 tr\u1ee3 doanh nghi\u1ec7p ti\u1ebfp c\u1eadn v\u1ed1n",
+        "id": "78053011b2180c49",
+        "title": "C\u1ed5 phi\u1ebfu Th\u1ebf Gi\u1edbi Di \u0110\u1ed9ng t\u0103ng tr\u1ea7n",
         "source": "VnExpress",
-        "snippet": "LPBank tri\u1ec3n khai ch\u01b0\u01a1ng tr\u00ecnh k\u1ebft n\u1ed1i t\u1ea1i C\u1ea7n Th\u01a1, th\u00fac \u0111\u1ea9y \u0111\u1ed1i tho\u1ea1i, t\u01b0 v\u1ea5n gi\u1ea3i ph\u00e1p v\u1ed1n, k\u00fd k\u1ebft h\u1ee3p t\u00e1c v\u00e0 m\u1edf r\u1ed9ng li\u00ean k\u1ebft gi\u1eefa doanh nghi\u1ec7p, ch\u00ednh quy\u1ec1n v\u00e0 c\u01a1 s\u1edf \u0111\u00e0o t\u1ea1o.",
-        "published_at": "2026-04-13T09:52:56.213292",
-        "url": "https://vnexpress.net/lpbank-cung-so-cong-thuong-can-tho-ho-tro-doanh-nghiep-tiep-can-von-5061243.html",
+        "snippet": "Trong phi\u00ean ch\u1ee9ng kho\u00e1n gi\u1ea3m g\u1ea7n 3 \u0111i\u1ec3m ch\u1ee7 y\u1ebfu do \u1ea3nh h\u01b0\u1edfng c\u1ee7a nh\u00f3m tr\u1ee5, c\u1ed5 phi\u1ebfu Th\u1ebf Gi\u1edbi Di \u0110\u1ed9ng ng\u01b0\u1ee3c d\u00f2ng khi t\u0103ng tr\u1ea7n \"c\u1ee9ng\" t\u1eeb s\u00e1ng.",
+        "published_at": "2026-04-19T05:33:04.585449",
+        "url": "https://vnexpress.net/co-phieu-the-gioi-di-dong-tang-tran-5063723.html",
         "scope": "market"
       },
       {
-        "id": "f56ac188456bee19",
-        "title": "GG Power gi\u1edbi thi\u1ec7u nh\u00e0 m\u00e1y s\u1ea3n xu\u1ea5t pin l\u01b0u tr\u1eef n\u0103ng l\u01b0\u1ee3ng",
+        "id": "64348cdd850baaf6",
+        "title": "\u0110\u1ea1i gia Th\u00e1i nh\u1eadn h\u01a1n 3.200 t\u1ef7 \u0111\u1ed3ng c\u1ed5 t\u1ee9c sau 14 n\u0103m th\u00e2u t\u00f3m Nh\u1ef1a B\u00ecnh Minh",
         "source": "VnExpress",
-        "snippet": "T\u1ed5 h\u1ee3p Battery Energy Storage System (BESS) t\u1ecda l\u1ea1c t\u1ea1i khu c\u00f4ng nghi\u1ec7p s\u1ed1 5, Xu\u00e2n Tr\u00fac, \u0111\u00e1nh d\u1ea5u c\u1ed9t m\u1ed1c ph\u00e1t tri\u1ec3n n\u0103ng l\u01b0\u1ee3ng s\u1ea1ch c\u1ee7a GG Power.",
-        "published_at": "2026-04-13T09:52:56.213279",
-        "url": "https://vnexpress.net/gg-power-gioi-thieu-nha-may-san-xuat-pin-luu-tru-nang-luong-5061297.html",
+        "snippet": "Nawaplastic thu\u1ed9c T\u1eadp \u0111o\u00e0n SCG nh\u1eadn v\u1ec1 tr\u00ean 3.200 t\u1ef7 \u0111\u1ed3ng ti\u1ec1n c\u1ed5 t\u1ee9c, cao h\u01a1n 18,5% so v\u1edbi v\u1ed1n \u0111\u1ea7u t\u01b0 ban \u0111\u1ea7u sau 14 n\u0103m th\u00e2u t\u00f3m Nh\u1ef1a B\u00ecnh Minh.",
+        "published_at": "2026-04-19T05:33:04.585439",
+        "url": "https://vnexpress.net/dai-gia-thai-nhan-hon-3-200-ty-dong-co-tuc-sau-14-nam-thau-tom-nhua-binh-minh-5063681.html",
         "scope": "market"
       },
       {
-        "id": "4371a2b30ce58c78",
-        "title": "Nh\u00e0 s\u1ea3n xu\u1ea5t 'Anh trai say hi' l\u00e3i 380 t\u1ef7 \u0111\u1ed3ng",
+        "id": "0ba1461f54a1635c",
+        "title": "H\u1ed9 c\u00f3 doanh thu d\u01b0\u1edbi 500 tri\u1ec7u \u0111\u1ed3ng v\u1eabn \u0111\u01b0\u1ee3c xu\u1ea5t h\u00f3a \u0111\u01a1n \u0111i\u1ec7n t\u1eed",
         "source": "VnExpress",
-        "snippet": "DatVietVAC - nh\u00e0 s\u1ea3n xu\u1ea5t ch\u01b0\u01a1ng tr\u00ecnh \"Anh trai say hi\", \"2 ng\u00e0y 1 \u0111\u00eam Vietnam\" - n\u0103m ngo\u00e1i l\u00e3i r\u00f2ng 380 t\u1ef7 \u0111\u1ed3ng v\u00e0 d\u1ef1 t\u00ednh n\u0103m nay t\u0103ng l\u00ean 420 t\u1ef7 \u0111\u1ed3ng.",
-        "published_at": "2026-04-13T09:52:56.213268",
-        "url": "https://vnexpress.net/nha-san-xuat-anh-trai-say-hi-lai-380-ty-dong-5061069.html",
+        "snippet": "C\u1ee5c Thu\u1ebf kh\u1eb3ng \u0111\u1ecbnh c\u00e1c h\u1ed9 kinh doanh c\u00f3 doanh thu d\u01b0\u1edbi ng\u01b0\u1ee1ng 500 tri\u1ec7u \u0111\u1ed3ng m\u1ed9t n\u0103m v\u1eabn \u0111\u01b0\u1ee3c s\u1eed d\u1ee5ng h\u00f3a \u0111\u01a1n \u0111i\u1ec7n t\u1eed.",
+        "published_at": "2026-04-19T05:33:04.585429",
+        "url": "https://vnexpress.net/ho-co-doanh-thu-duoi-500-trieu-dong-van-duoc-xuat-hoa-don-dien-tu-5063805.html",
         "scope": "market"
       }
     ],
     "ACB": [
       {
-        "id": "e699f3d328c839ee",
-        "title": "Chuy\u1ec7n g\u00ec x\u1ea3y ra khi Tr\u00e1i \u0110\u1ea5t \u0111\u00f3n si\u00eau El Nino m\u1ea1nh nh\u1ea5t l\u1ecbch s\u1eed?",
+        "id": "5c7147ab54d57d96",
+        "title": "Xung \u0111\u1ed9t Trung \u0110\u00f4ng th\u00fac \u0111\u1ea9y c\u00e1c n\u01b0\u1edbc \u0111\u1ea7u t\u01b0 \u0111i\u1ec7n h\u1ea1t nh\u00e2n",
         "source": "VnExpress",
-        "snippet": "C\u01a1 quan kh\u00ed t\u01b0\u1ee3ng B\u1eafc M\u1ef9 v\u00e0 ch\u00e2u \u00c2u c\u1ea3nh b\u00e1o nguy c\u01a1 di\u1ec5n ra hi\u1ec7n t\u01b0\u1ee3ng si\u00eau El Nino m\u1ea1nh nh\u1ea5t l\u1ecbch s\u1eed, v\u1ebd l\u1ea1i b\u1ea3n \u0111\u1ed3 th\u1eddi ti\u1ebft to\u00e0n c\u1ea7u v\u00e0 \u0111\u1ea9y Tr\u00e1i \u0110\u1ea5t n\u00f3ng k\u1ef7 l\u1ee5c.",
-        "published_at": "2026-04-13T09:52:56.213181",
-        "url": "https://vnexpress.net/chuyen-gi-xay-ra-khi-trai-dat-don-sieu-el-nino-manh-nhat-lich-su-5061278.html",
+        "snippet": "C\u00fa s\u1ed1c n\u0103ng l\u01b0\u1ee3ng t\u1eeb xung \u0111\u1ed9t Trung \u0110\u00f4ng khi\u1ebfn m\u1ed9t s\u1ed1 n\u01b0\u1edbc ch\u00e2u \u00c1 v\u00e0 ch\u00e2u Phi kh\u1edfi \u0111\u1ed9ng l\u1ea1i ho\u1eb7c x\u00e2y m\u1edbi nh\u00e0 m\u00e1y \u0111i\u1ec7n h\u1ea1t nh\u00e2n.",
+        "published_at": "2026-04-19T05:33:04.585166",
+        "url": "https://vnexpress.net/xung-dot-trung-dong-thuc-day-cac-nuoc-dau-tu-dien-hat-nhan-5064135.html",
         "scope": "symbol"
       },
       {
-        "id": "d1d4094a53e91ee6",
-        "title": "LPBank c\u00f9ng S\u1edf C\u00f4ng Th\u01b0\u01a1ng C\u1ea7n Th\u01a1 h\u1ed7 tr\u1ee3 doanh nghi\u1ec7p ti\u1ebfp c\u1eadn v\u1ed1n",
+        "id": "78053011b2180c49",
+        "title": "C\u1ed5 phi\u1ebfu Th\u1ebf Gi\u1edbi Di \u0110\u1ed9ng t\u0103ng tr\u1ea7n",
         "source": "VnExpress",
-        "snippet": "LPBank tri\u1ec3n khai ch\u01b0\u01a1ng tr\u00ecnh k\u1ebft n\u1ed1i t\u1ea1i C\u1ea7n Th\u01a1, th\u00fac \u0111\u1ea9y \u0111\u1ed1i tho\u1ea1i, t\u01b0 v\u1ea5n gi\u1ea3i ph\u00e1p v\u1ed1n, k\u00fd k\u1ebft h\u1ee3p t\u00e1c v\u00e0 m\u1edf r\u1ed9ng li\u00ean k\u1ebft gi\u1eefa doanh nghi\u1ec7p, ch\u00ednh quy\u1ec1n v\u00e0 c\u01a1 s\u1edf \u0111\u00e0o t\u1ea1o.",
-        "published_at": "2026-04-13T09:52:56.213292",
-        "url": "https://vnexpress.net/lpbank-cung-so-cong-thuong-can-tho-ho-tro-doanh-nghiep-tiep-can-von-5061243.html",
+        "snippet": "Trong phi\u00ean ch\u1ee9ng kho\u00e1n gi\u1ea3m g\u1ea7n 3 \u0111i\u1ec3m ch\u1ee7 y\u1ebfu do \u1ea3nh h\u01b0\u1edfng c\u1ee7a nh\u00f3m tr\u1ee5, c\u1ed5 phi\u1ebfu Th\u1ebf Gi\u1edbi Di \u0110\u1ed9ng ng\u01b0\u1ee3c d\u00f2ng khi t\u0103ng tr\u1ea7n \"c\u1ee9ng\" t\u1eeb s\u00e1ng.",
+        "published_at": "2026-04-19T05:33:04.585449",
+        "url": "https://vnexpress.net/co-phieu-the-gioi-di-dong-tang-tran-5063723.html",
         "scope": "market"
       },
       {
-        "id": "f56ac188456bee19",
-        "title": "GG Power gi\u1edbi thi\u1ec7u nh\u00e0 m\u00e1y s\u1ea3n xu\u1ea5t pin l\u01b0u tr\u1eef n\u0103ng l\u01b0\u1ee3ng",
+        "id": "64348cdd850baaf6",
+        "title": "\u0110\u1ea1i gia Th\u00e1i nh\u1eadn h\u01a1n 3.200 t\u1ef7 \u0111\u1ed3ng c\u1ed5 t\u1ee9c sau 14 n\u0103m th\u00e2u t\u00f3m Nh\u1ef1a B\u00ecnh Minh",
         "source": "VnExpress",
-        "snippet": "T\u1ed5 h\u1ee3p Battery Energy Storage System (BESS) t\u1ecda l\u1ea1c t\u1ea1i khu c\u00f4ng nghi\u1ec7p s\u1ed1 5, Xu\u00e2n Tr\u00fac, \u0111\u00e1nh d\u1ea5u c\u1ed9t m\u1ed1c ph\u00e1t tri\u1ec3n n\u0103ng l\u01b0\u1ee3ng s\u1ea1ch c\u1ee7a GG Power.",
-        "published_at": "2026-04-13T09:52:56.213279",
-        "url": "https://vnexpress.net/gg-power-gioi-thieu-nha-may-san-xuat-pin-luu-tru-nang-luong-5061297.html",
+        "snippet": "Nawaplastic thu\u1ed9c T\u1eadp \u0111o\u00e0n SCG nh\u1eadn v\u1ec1 tr\u00ean 3.200 t\u1ef7 \u0111\u1ed3ng ti\u1ec1n c\u1ed5 t\u1ee9c, cao h\u01a1n 18,5% so v\u1edbi v\u1ed1n \u0111\u1ea7u t\u01b0 ban \u0111\u1ea7u sau 14 n\u0103m th\u00e2u t\u00f3m Nh\u1ef1a B\u00ecnh Minh.",
+        "published_at": "2026-04-19T05:33:04.585439",
+        "url": "https://vnexpress.net/dai-gia-thai-nhan-hon-3-200-ty-dong-co-tuc-sau-14-nam-thau-tom-nhua-binh-minh-5063681.html",
         "scope": "market"
       },
       {
-        "id": "4371a2b30ce58c78",
-        "title": "Nh\u00e0 s\u1ea3n xu\u1ea5t 'Anh trai say hi' l\u00e3i 380 t\u1ef7 \u0111\u1ed3ng",
+        "id": "0ba1461f54a1635c",
+        "title": "H\u1ed9 c\u00f3 doanh thu d\u01b0\u1edbi 500 tri\u1ec7u \u0111\u1ed3ng v\u1eabn \u0111\u01b0\u1ee3c xu\u1ea5t h\u00f3a \u0111\u01a1n \u0111i\u1ec7n t\u1eed",
         "source": "VnExpress",
-        "snippet": "DatVietVAC - nh\u00e0 s\u1ea3n xu\u1ea5t ch\u01b0\u01a1ng tr\u00ecnh \"Anh trai say hi\", \"2 ng\u00e0y 1 \u0111\u00eam Vietnam\" - n\u0103m ngo\u00e1i l\u00e3i r\u00f2ng 380 t\u1ef7 \u0111\u1ed3ng v\u00e0 d\u1ef1 t\u00ednh n\u0103m nay t\u0103ng l\u00ean 420 t\u1ef7 \u0111\u1ed3ng.",
-        "published_at": "2026-04-13T09:52:56.213268",
-        "url": "https://vnexpress.net/nha-san-xuat-anh-trai-say-hi-lai-380-ty-dong-5061069.html",
+        "snippet": "C\u1ee5c Thu\u1ebf kh\u1eb3ng \u0111\u1ecbnh c\u00e1c h\u1ed9 kinh doanh c\u00f3 doanh thu d\u01b0\u1edbi ng\u01b0\u1ee1ng 500 tri\u1ec7u \u0111\u1ed3ng m\u1ed9t n\u0103m v\u1eabn \u0111\u01b0\u1ee3c s\u1eed d\u1ee5ng h\u00f3a \u0111\u01a1n \u0111i\u1ec7n t\u1eed.",
+        "published_at": "2026-04-19T05:33:04.585429",
+        "url": "https://vnexpress.net/ho-co-doanh-thu-duoi-500-trieu-dong-van-duoc-xuat-hoa-don-dien-tu-5063805.html",
         "scope": "market"
       }
     ],
     "BID": [
       {
-        "id": "d1d4094a53e91ee6",
-        "title": "LPBank c\u00f9ng S\u1edf C\u00f4ng Th\u01b0\u01a1ng C\u1ea7n Th\u01a1 h\u1ed7 tr\u1ee3 doanh nghi\u1ec7p ti\u1ebfp c\u1eadn v\u1ed1n",
+        "id": "78053011b2180c49",
+        "title": "C\u1ed5 phi\u1ebfu Th\u1ebf Gi\u1edbi Di \u0110\u1ed9ng t\u0103ng tr\u1ea7n",
         "source": "VnExpress",
-        "snippet": "LPBank tri\u1ec3n khai ch\u01b0\u01a1ng tr\u00ecnh k\u1ebft n\u1ed1i t\u1ea1i C\u1ea7n Th\u01a1, th\u00fac \u0111\u1ea9y \u0111\u1ed1i tho\u1ea1i, t\u01b0 v\u1ea5n gi\u1ea3i ph\u00e1p v\u1ed1n, k\u00fd k\u1ebft h\u1ee3p t\u00e1c v\u00e0 m\u1edf r\u1ed9ng li\u00ean k\u1ebft gi\u1eefa doanh nghi\u1ec7p, ch\u00ednh quy\u1ec1n v\u00e0 c\u01a1 s\u1edf \u0111\u00e0o t\u1ea1o.",
-        "published_at": "2026-04-13T09:52:56.213292",
-        "url": "https://vnexpress.net/lpbank-cung-so-cong-thuong-can-tho-ho-tro-doanh-nghiep-tiep-can-von-5061243.html",
+        "snippet": "Trong phi\u00ean ch\u1ee9ng kho\u00e1n gi\u1ea3m g\u1ea7n 3 \u0111i\u1ec3m ch\u1ee7 y\u1ebfu do \u1ea3nh h\u01b0\u1edfng c\u1ee7a nh\u00f3m tr\u1ee5, c\u1ed5 phi\u1ebfu Th\u1ebf Gi\u1edbi Di \u0110\u1ed9ng ng\u01b0\u1ee3c d\u00f2ng khi t\u0103ng tr\u1ea7n \"c\u1ee9ng\" t\u1eeb s\u00e1ng.",
+        "published_at": "2026-04-19T05:33:04.585449",
+        "url": "https://vnexpress.net/co-phieu-the-gioi-di-dong-tang-tran-5063723.html",
         "scope": "market"
       },
       {
-        "id": "f56ac188456bee19",
-        "title": "GG Power gi\u1edbi thi\u1ec7u nh\u00e0 m\u00e1y s\u1ea3n xu\u1ea5t pin l\u01b0u tr\u1eef n\u0103ng l\u01b0\u1ee3ng",
+        "id": "64348cdd850baaf6",
+        "title": "\u0110\u1ea1i gia Th\u00e1i nh\u1eadn h\u01a1n 3.200 t\u1ef7 \u0111\u1ed3ng c\u1ed5 t\u1ee9c sau 14 n\u0103m th\u00e2u t\u00f3m Nh\u1ef1a B\u00ecnh Minh",
         "source": "VnExpress",
-        "snippet": "T\u1ed5 h\u1ee3p Battery Energy Storage System (BESS) t\u1ecda l\u1ea1c t\u1ea1i khu c\u00f4ng nghi\u1ec7p s\u1ed1 5, Xu\u00e2n Tr\u00fac, \u0111\u00e1nh d\u1ea5u c\u1ed9t m\u1ed1c ph\u00e1t tri\u1ec3n n\u0103ng l\u01b0\u1ee3ng s\u1ea1ch c\u1ee7a GG Power.",
-        "published_at": "2026-04-13T09:52:56.213279",
-        "url": "https://vnexpress.net/gg-power-gioi-thieu-nha-may-san-xuat-pin-luu-tru-nang-luong-5061297.html",
+        "snippet": "Nawaplastic thu\u1ed9c T\u1eadp \u0111o\u00e0n SCG nh\u1eadn v\u1ec1 tr\u00ean 3.200 t\u1ef7 \u0111\u1ed3ng ti\u1ec1n c\u1ed5 t\u1ee9c, cao h\u01a1n 18,5% so v\u1edbi v\u1ed1n \u0111\u1ea7u t\u01b0 ban \u0111\u1ea7u sau 14 n\u0103m th\u00e2u t\u00f3m Nh\u1ef1a B\u00ecnh Minh.",
+        "published_at": "2026-04-19T05:33:04.585439",
+        "url": "https://vnexpress.net/dai-gia-thai-nhan-hon-3-200-ty-dong-co-tuc-sau-14-nam-thau-tom-nhua-binh-minh-5063681.html",
         "scope": "market"
       },
       {
-        "id": "4371a2b30ce58c78",
-        "title": "Nh\u00e0 s\u1ea3n xu\u1ea5t 'Anh trai say hi' l\u00e3i 380 t\u1ef7 \u0111\u1ed3ng",
+        "id": "0ba1461f54a1635c",
+        "title": "H\u1ed9 c\u00f3 doanh thu d\u01b0\u1edbi 500 tri\u1ec7u \u0111\u1ed3ng v\u1eabn \u0111\u01b0\u1ee3c xu\u1ea5t h\u00f3a \u0111\u01a1n \u0111i\u1ec7n t\u1eed",
         "source": "VnExpress",
-        "snippet": "DatVietVAC - nh\u00e0 s\u1ea3n xu\u1ea5t ch\u01b0\u01a1ng tr\u00ecnh \"Anh trai say hi\", \"2 ng\u00e0y 1 \u0111\u00eam Vietnam\" - n\u0103m ngo\u00e1i l\u00e3i r\u00f2ng 380 t\u1ef7 \u0111\u1ed3ng v\u00e0 d\u1ef1 t\u00ednh n\u0103m nay t\u0103ng l\u00ean 420 t\u1ef7 \u0111\u1ed3ng.",
-        "published_at": "2026-04-13T09:52:56.213268",
-        "url": "https://vnexpress.net/nha-san-xuat-anh-trai-say-hi-lai-380-ty-dong-5061069.html",
+        "snippet": "C\u1ee5c Thu\u1ebf kh\u1eb3ng \u0111\u1ecbnh c\u00e1c h\u1ed9 kinh doanh c\u00f3 doanh thu d\u01b0\u1edbi ng\u01b0\u1ee1ng 500 tri\u1ec7u \u0111\u1ed3ng m\u1ed9t n\u0103m v\u1eabn \u0111\u01b0\u1ee3c s\u1eed d\u1ee5ng h\u00f3a \u0111\u01a1n \u0111i\u1ec7n t\u1eed.",
+        "published_at": "2026-04-19T05:33:04.585429",
+        "url": "https://vnexpress.net/ho-co-doanh-thu-duoi-500-trieu-dong-van-duoc-xuat-hoa-don-dien-tu-5063805.html",
         "scope": "market"
       }
     ],
     "CTG": [
       {
-        "id": "d1d4094a53e91ee6",
-        "title": "LPBank c\u00f9ng S\u1edf C\u00f4ng Th\u01b0\u01a1ng C\u1ea7n Th\u01a1 h\u1ed7 tr\u1ee3 doanh nghi\u1ec7p ti\u1ebfp c\u1eadn v\u1ed1n",
+        "id": "78053011b2180c49",
+        "title": "C\u1ed5 phi\u1ebfu Th\u1ebf Gi\u1edbi Di \u0110\u1ed9ng t\u0103ng tr\u1ea7n",
         "source": "VnExpress",
-        "snippet": "LPBank tri\u1ec3n khai ch\u01b0\u01a1ng tr\u00ecnh k\u1ebft n\u1ed1i t\u1ea1i C\u1ea7n Th\u01a1, th\u00fac \u0111\u1ea9y \u0111\u1ed1i tho\u1ea1i, t\u01b0 v\u1ea5n gi\u1ea3i ph\u00e1p v\u1ed1n, k\u00fd k\u1ebft h\u1ee3p t\u00e1c v\u00e0 m\u1edf r\u1ed9ng li\u00ean k\u1ebft gi\u1eefa doanh nghi\u1ec7p, ch\u00ednh quy\u1ec1n v\u00e0 c\u01a1 s\u1edf \u0111\u00e0o t\u1ea1o.",
-        "published_at": "2026-04-13T09:52:56.213292",
-        "url": "https://vnexpress.net/lpbank-cung-so-cong-thuong-can-tho-ho-tro-doanh-nghiep-tiep-can-von-5061243.html",
-        "scope": "symbol"
-      },
-      {
-        "id": "f56ac188456bee19",
-        "title": "GG Power gi\u1edbi thi\u1ec7u nh\u00e0 m\u00e1y s\u1ea3n xu\u1ea5t pin l\u01b0u tr\u1eef n\u0103ng l\u01b0\u1ee3ng",
-        "source": "VnExpress",
-        "snippet": "T\u1ed5 h\u1ee3p Battery Energy Storage System (BESS) t\u1ecda l\u1ea1c t\u1ea1i khu c\u00f4ng nghi\u1ec7p s\u1ed1 5, Xu\u00e2n Tr\u00fac, \u0111\u00e1nh d\u1ea5u c\u1ed9t m\u1ed1c ph\u00e1t tri\u1ec3n n\u0103ng l\u01b0\u1ee3ng s\u1ea1ch c\u1ee7a GG Power.",
-        "published_at": "2026-04-13T09:52:56.213279",
-        "url": "https://vnexpress.net/gg-power-gioi-thieu-nha-may-san-xuat-pin-luu-tru-nang-luong-5061297.html",
+        "snippet": "Trong phi\u00ean ch\u1ee9ng kho\u00e1n gi\u1ea3m g\u1ea7n 3 \u0111i\u1ec3m ch\u1ee7 y\u1ebfu do \u1ea3nh h\u01b0\u1edfng c\u1ee7a nh\u00f3m tr\u1ee5, c\u1ed5 phi\u1ebfu Th\u1ebf Gi\u1edbi Di \u0110\u1ed9ng ng\u01b0\u1ee3c d\u00f2ng khi t\u0103ng tr\u1ea7n \"c\u1ee9ng\" t\u1eeb s\u00e1ng.",
+        "published_at": "2026-04-19T05:33:04.585449",
+        "url": "https://vnexpress.net/co-phieu-the-gioi-di-dong-tang-tran-5063723.html",
         "scope": "market"
       },
       {
-        "id": "4371a2b30ce58c78",
-        "title": "Nh\u00e0 s\u1ea3n xu\u1ea5t 'Anh trai say hi' l\u00e3i 380 t\u1ef7 \u0111\u1ed3ng",
+        "id": "64348cdd850baaf6",
+        "title": "\u0110\u1ea1i gia Th\u00e1i nh\u1eadn h\u01a1n 3.200 t\u1ef7 \u0111\u1ed3ng c\u1ed5 t\u1ee9c sau 14 n\u0103m th\u00e2u t\u00f3m Nh\u1ef1a B\u00ecnh Minh",
         "source": "VnExpress",
-        "snippet": "DatVietVAC - nh\u00e0 s\u1ea3n xu\u1ea5t ch\u01b0\u01a1ng tr\u00ecnh \"Anh trai say hi\", \"2 ng\u00e0y 1 \u0111\u00eam Vietnam\" - n\u0103m ngo\u00e1i l\u00e3i r\u00f2ng 380 t\u1ef7 \u0111\u1ed3ng v\u00e0 d\u1ef1 t\u00ednh n\u0103m nay t\u0103ng l\u00ean 420 t\u1ef7 \u0111\u1ed3ng.",
-        "published_at": "2026-04-13T09:52:56.213268",
-        "url": "https://vnexpress.net/nha-san-xuat-anh-trai-say-hi-lai-380-ty-dong-5061069.html",
+        "snippet": "Nawaplastic thu\u1ed9c T\u1eadp \u0111o\u00e0n SCG nh\u1eadn v\u1ec1 tr\u00ean 3.200 t\u1ef7 \u0111\u1ed3ng ti\u1ec1n c\u1ed5 t\u1ee9c, cao h\u01a1n 18,5% so v\u1edbi v\u1ed1n \u0111\u1ea7u t\u01b0 ban \u0111\u1ea7u sau 14 n\u0103m th\u00e2u t\u00f3m Nh\u1ef1a B\u00ecnh Minh.",
+        "published_at": "2026-04-19T05:33:04.585439",
+        "url": "https://vnexpress.net/dai-gia-thai-nhan-hon-3-200-ty-dong-co-tuc-sau-14-nam-thau-tom-nhua-binh-minh-5063681.html",
         "scope": "market"
       },
       {
-        "id": "b3e85141a3007796",
-        "title": "Ch\u1ee9ng kho\u00e1n Thi\u00ean Vi\u1ec7t mu\u1ed1n b\u1ea7u c\u1ef1u CEO ACB L\u00fd Xu\u00e2n H\u1ea3i v\u00e0o h\u1ed9i \u0111\u1ed3ng qu\u1ea3n tr\u1ecb",
+        "id": "0ba1461f54a1635c",
+        "title": "H\u1ed9 c\u00f3 doanh thu d\u01b0\u1edbi 500 tri\u1ec7u \u0111\u1ed3ng v\u1eabn \u0111\u01b0\u1ee3c xu\u1ea5t h\u00f3a \u0111\u01a1n \u0111i\u1ec7n t\u1eed",
         "source": "VnExpress",
-        "snippet": "Ch\u1ee9ng kho\u00e1n Thi\u00ean Vi\u1ec7t mu\u1ed1n tr\u00ecnh c\u1ed5 \u0111\u00f4ng b\u1ea7u \u00f4ng L\u00fd Xu\u00e2n H\u1ea3i, c\u1ef1u T\u1ed5ng gi\u00e1m \u0111\u1ed1c ACB, l\u00e0m th\u00e0nh vi\u00ean H\u1ed9i \u0111\u1ed3ng qu\u1ea3n tr\u1ecb.",
-        "published_at": "2026-04-13T09:52:56.213257",
-        "url": "https://vnexpress.net/chung-khoan-thien-viet-muon-bau-cuu-ceo-acb-ly-xuan-hai-vao-hoi-dong-quan-tri-5061118.html",
+        "snippet": "C\u1ee5c Thu\u1ebf kh\u1eb3ng \u0111\u1ecbnh c\u00e1c h\u1ed9 kinh doanh c\u00f3 doanh thu d\u01b0\u1edbi ng\u01b0\u1ee1ng 500 tri\u1ec7u \u0111\u1ed3ng m\u1ed9t n\u0103m v\u1eabn \u0111\u01b0\u1ee3c s\u1eed d\u1ee5ng h\u00f3a \u0111\u01a1n \u0111i\u1ec7n t\u1eed.",
+        "published_at": "2026-04-19T05:33:04.585429",
+        "url": "https://vnexpress.net/ho-co-doanh-thu-duoi-500-trieu-dong-van-duoc-xuat-hoa-don-dien-tu-5063805.html",
         "scope": "market"
       }
     ]
   },
-  "fetched_at": "2026-04-13T09:52:57.224233",
+  "fetched_at": "2026-04-19T05:33:05.474196",
   "symbols": [
     "HPG",
     "VNM",
@@ -323,21 +314,20 @@
     "CTG"
   ],
   "days_back": 7,
-  "MWG_f3b3a5c84df4": {
+  "MWG_6ec1614a7b36": {
     "symbol_scores": [
       {
         "symbol": "MWG",
-        "buy_potential_score": 20,
-        "risk_score": 30,
+        "buy_potential_score": 80,
+        "risk_score": 20,
         "confidence": 0.4,
         "horizon": "1-4w",
         "key_bull_points": [
-          "Strong quarterly earnings",
-          "Increasing market demand"
+          "Increasing market share",
+          "Growing sales trend"
         ],
         "key_risks": [
-          "Intense competition",
-          "Regulatory challenges"
+          "Dependence on market conditions"
         ],
         "evidence": [
           {
@@ -346,10 +336,6 @@
           },
           {
             "id": "news2",
-            "supports": "risk"
-          },
-          {
-            "id": "news3",
             "supports": "bull"
           }
         ]

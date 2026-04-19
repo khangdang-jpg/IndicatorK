@@ -1,20 +1,21 @@
 {
-  "generated_at": "2026-04-13T09:52:58.045255",
+  "generated_at": "2026-04-19T05:33:06.303527",
   "provider_health": {
     "name": "vnstock->http->cache",
-    "error_rate": 0.0,
+    "error_rate": 2.0,
     "missing_rate": 0.0,
-    "last_success_at": "2026-04-13T09:52:52.021479",
+    "last_success_at": null,
     "total_requests": 23,
-    "total_errors": 0
+    "total_errors": 46
   },
   "strategy_health": {
-    "rolling_cagr": 0.0,
+    "rolling_cagr": -0.0,
     "drawdown": 0.1295,
     "turnover": 0.0,
-    "weeks_tracked": 65
+    "weeks_tracked": 66
   },
   "recommendations": [
-    "SWITCH_STRATEGY: rolling 12w return 0.00% below 1.00% threshold (current: regime_router_foundation)"
+    "SWITCH_PROVIDER: error rate 200% exceeds threshold 30%",
+    "SWITCH_STRATEGY: rolling 12w return -0.00% below 1.00% threshold (current: regime_router_foundation)"
   ]
 }

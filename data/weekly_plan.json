@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-13T09:52:52.023453",
+  "generated_at": "2026-04-19T05:33:00.289660",
   "strategy_id": "regime_router_foundation",
   "strategy_version": "1.0.0",
   "allocation_targets": {
@@ -37,15 +37,15 @@
   ],
   "ai_analysis": {
     "generated": true,
-    "market_context": "Portfolio is heavily in cash with a small position and a significant unrealized loss, suggesting a cautious market environment.",
-    "analysis_date": "2026-04-13",
+    "market_context": "The portfolio is heavily in cash with a total value of 9,999,879 VND, indicating a cautious market approach.",
+    "analysis_date": "2026-04-19",
     "data_sources": "Weekly technical analysis using Groq AI",
     "scores": {
       "MWG": {
         "symbol": "MWG",
-        "score": 6,
-        "rationale": "Bear regime: preserve capital and move to cash.",
-        "risk_note": ""
+        "score": 5,
+        "rationale": "Bear regime indicates a potential downtrend, supporting the SELL recommendation.",
+        "risk_note": "No specific risk noted, but a pullback entry type may result in missed opportunities if the market reverses direction quickly."
       }
     }
   },
@@ -53,17 +53,16 @@
     "symbol_scores": [
       {
         "symbol": "MWG",
-        "buy_potential_score": 20,
-        "risk_score": 30,
+        "buy_potential_score": 80,
+        "risk_score": 20,
         "confidence": 0.40,
         "horizon": "1-4w",
         "key_bull_points": [
-          "Strong quarterly earnings",
-          "Increasing market demand"
+          "Increasing market share",
+          "Growing sales trend"
         ],
         "key_risks": [
-          "Intense competition",
-          "Regulatory challenges"
+          "Dependence on market conditions"
         ],
         "evidence": [
           {
@@ -72,10 +71,6 @@
           },
           {
             "id": "news2",
-            "supports": "risk"
-          },
-          {
-            "id": "news3",
             "supports": "bull"
           }
         ]
@@ -83,7 +78,7 @@
     ],
     "status": "SUCCESS",
     "analyzed_symbols": 1,
-    "total_news": 32
+    "total_news": 31
   },
   "market_regime": "bear",
   "router_state": null
