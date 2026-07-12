@@ -1,35 +1,88 @@
 {
-  "generated_at": "2026-07-05T06:43:23.554002",
+  "generated_at": "2026-07-12T06:06:32.256207",
   "strategy_id": "regime_router_foundation",
   "strategy_version": "1.0.0",
   "allocation_targets": {
-    "stock": 0.60,
-    "bond_fund": 0.40
+    "stock": 0.00,
+    "bond_fund": 1.00
   },
-  "recommendations": [],
-  "max_new_positions": 6,
+  "recommendations": [
+    {
+      "symbol": "MWG",
+      "asset_class": "stock",
+      "action": "SELL",
+      "buy_zone_low": 0.00,
+      "buy_zone_high": 0.00,
+      "stop_loss": 0.00,
+      "take_profit": 0.00,
+      "position_target_pct": 0.00,
+      "rationale_bullets": [
+        "Bear regime: preserve capital and move to cash."
+      ],
+      "entry_type": "pullback",
+      "breakout_level": 0.00,
+      "entry_price": 0.00,
+      "signal_week_end": null,
+      "earliest_entry_date": null,
+      "entry_valid_for_days": 7
+    }
+  ],
+  "max_new_positions": 0,
   "allow_symbol_add_ons": false,
   "max_open_trades_per_symbol": 1,
-  "force_defensive_exits": false,
+  "force_defensive_exits": true,
   "clear_pending_entries": false,
   "notes": [
-    "Regime router selected SIDEWAY mode.",
-    "\ud83c\udfdb\ufe0f INSTITUTIONAL Enhanced System | Active: MEAN_REVERSION",
-    "\ud83d\udcca Market Regime: SIDEWAYS_QUIET",
-    "\u26a1 Strategy Focus: Conservative mean reversion | RSI signals | Balanced sizing",
-    "\ud83c\udfaf Risk Management: Enhanced Kelly Criterion with conviction multipliers",
-    "\ud83d\udd2c Market Efficiency: Medium (0.50)",
-    "\ud83c\udfc6 Targets: CAGR 15-20%, Sharpe >2.5, MaxDD <5%, WinRate >70%",
-    "\ud83d\udcc8 Enhancements: Sector rotation, Statistical arbitrage, Order flow analysis"
+    "Regime router selected BEAR mode: capital preservation first."
   ],
   "ai_analysis": {
     "generated": true,
-    "market_context": "No recommendations to analyze.",
-    "analysis_date": "2026-07-05",
+    "market_context": "The portfolio is heavily in cash with a total value of 9,999,795 VND and only one position, indicating a cautious market approach.",
+    "analysis_date": "2026-07-12",
     "data_sources": "Weekly technical analysis using Groq AI",
-    "scores": {}
+    "scores": {
+      "MWG": {
+        "symbol": "MWG",
+        "score": 4,
+        "rationale": "Bear regime indicates a potential downtrend, but lack of specific entry point and target price makes it hard to evaluate.",
+        "risk_note": "No stop loss and take profit set, which increases potential losses."
+      }
+    }
   },
-  "news_analysis": null,
-  "market_regime": "sideway",
+  "news_analysis": {
+    "symbol_scores": [
+      {
+        "symbol": "MWG",
+        "buy_potential_score": 70,
+        "risk_score": 30,
+        "confidence": 0.60,
+        "horizon": "1-4w",
+        "key_bull_points": [
+          "Strong sales growth due to effective marketing strategies"
+        ],
+        "key_risks": [
+          "Increasing competition from online retailers may negatively impact sales"
+        ],
+        "evidence": [
+          {
+            "id": "news1",
+            "supports": "bull"
+          },
+          {
+            "id": "news2",
+            "supports": "risk"
+          },
+          {
+            "id": "news3",
+            "supports": "bull"
+          }
+        ]
+      }
+    ],
+    "status": "SUCCESS",
+    "analyzed_symbols": 1,
+    "total_news": 31
+  },
+  "market_regime": "bear",
   "router_state": null
 }
