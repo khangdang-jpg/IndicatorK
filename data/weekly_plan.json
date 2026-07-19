@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-12T06:06:32.256207",
+  "generated_at": "2026-07-19T05:55:56.273044",
   "strategy_id": "regime_router_foundation",
   "strategy_version": "1.0.0",
   "allocation_targets": {
@@ -37,15 +37,15 @@
   ],
   "ai_analysis": {
     "generated": true,
-    "market_context": "The portfolio is heavily in cash with a total value of 9,999,795 VND and only one position, indicating a cautious market approach.",
-    "analysis_date": "2026-07-12",
+    "market_context": "The portfolio is heavily cashed out, with a total of 9,998,416 VND in cash and only one position.",
+    "analysis_date": "2026-07-19",
     "data_sources": "Weekly technical analysis using Groq AI",
     "scores": {
       "MWG": {
         "symbol": "MWG",
-        "score": 4,
-        "rationale": "Bear regime indicates a potential downtrend, but lack of specific entry point and target price makes it hard to evaluate.",
-        "risk_note": "No stop loss and take profit set, which increases potential losses."
+        "score": 3,
+        "rationale": "Bear regime: preserve capital and move to cash.",
+        "risk_note": "No specific risk noted, but selling in a bear regime inherently carries risk."
       }
     }
   },
@@ -53,16 +53,14 @@
     "symbol_scores": [
       {
         "symbol": "MWG",
-        "buy_potential_score": 70,
-        "risk_score": 30,
-        "confidence": 0.60,
+        "buy_potential_score": 40,
+        "risk_score": 0,
+        "confidence": 0.20,
         "horizon": "1-4w",
         "key_bull_points": [
-          "Strong sales growth due to effective marketing strategies"
+          "VinCons, a subsidiary of MWG, attracts contractors and construction teams with stable jobs and good welfare"
         ],
-        "key_risks": [
-          "Increasing competition from online retailers may negatively impact sales"
-        ],
+        "key_risks": [],
         "evidence": [
           {
             "id": "news1",
@@ -70,18 +68,18 @@
           },
           {
             "id": "news2",
-            "supports": "risk"
+            "supports": "neutral"
           },
           {
             "id": "news3",
-            "supports": "bull"
+            "supports": "neutral"
           }
         ]
       }
     ],
     "status": "SUCCESS",
     "analyzed_symbols": 1,
-    "total_news": 31
+    "total_news": 30
   },
   "market_regime": "bear",
   "router_state": null

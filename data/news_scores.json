@@ -2,16 +2,14 @@
   "symbol_scores": [
     {
       "symbol": "MWG",
-      "buy_potential_score": 70,
-      "risk_score": 30,
-      "confidence": 0.6,
+      "buy_potential_score": 40,
+      "risk_score": 0,
+      "confidence": 0.2,
       "horizon": "1-4w",
       "key_bull_points": [
-        "Strong sales growth due to effective marketing strategies"
+        "VinCons, a subsidiary of MWG, attracts contractors and construction teams with stable jobs and good welfare"
       ],
-      "key_risks": [
-        "Increasing competition from online retailers may negatively impact sales"
-      ],
+      "key_risks": [],
       "evidence": [
         {
           "id": "news1",
@@ -19,16 +17,16 @@
         },
         {
           "id": "news2",
-          "supports": "risk"
+          "supports": "neutral"
         },
         {
           "id": "news3",
-          "supports": "bull"
+          "supports": "neutral"
         }
       ]
     }
   ],
   "status": "SUCCESS",
   "analyzed_symbols": 1,
-  "total_news": 31
+  "total_news": 30
 }
