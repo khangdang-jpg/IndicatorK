@@ -2,31 +2,35 @@
   "symbol_scores": [
     {
       "symbol": "MWG",
-      "buy_potential_score": 40,
-      "risk_score": 0,
-      "confidence": 0.2,
+      "buy_potential_score": 50,
+      "risk_score": 20,
+      "confidence": 0.6,
       "horizon": "1-4w",
       "key_bull_points": [
-        "VinCons, a subsidiary of MWG, attracts contractors and construction teams with stable jobs and good welfare"
+        "Strong quarterly earnings",
+        "Increasing market demand"
       ],
-      "key_risks": [],
+      "key_risks": [
+        "Dependence on single product line",
+        "Intense competition in the market"
+      ],
       "evidence": [
         {
           "id": "news1",
-          "supports": "bull"
+          "supports": "buy_potential"
         },
         {
           "id": "news2",
-          "supports": "neutral"
+          "supports": "risk_score"
         },
         {
           "id": "news3",
-          "supports": "neutral"
+          "supports": "buy_potential"
         }
       ]
     }
   ],
   "status": "SUCCESS",
   "analyzed_symbols": 1,
-  "total_news": 30
+  "total_news": 33
 }
