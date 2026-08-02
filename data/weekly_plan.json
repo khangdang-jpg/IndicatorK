@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-26T06:08:33.766219",
+  "generated_at": "2026-08-02T06:01:48.361574",
   "strategy_id": "regime_router_foundation",
   "strategy_version": "1.0.0",
   "allocation_targets": {
@@ -37,15 +37,15 @@
   ],
   "ai_analysis": {
     "generated": true,
-    "market_context": "The portfolio is heavily in cash, indicating a cautious market sentiment and a potential wait-and-see approach.",
-    "analysis_date": "2026-07-26",
+    "market_context": "The portfolio is heavily cashed out, indicating a cautious market sentiment with a focus on preserving capital.",
+    "analysis_date": "2026-08-02",
     "data_sources": "Weekly technical analysis using Groq AI",
     "scores": {
       "MWG": {
         "symbol": "MWG",
-        "score": 3,
-        "rationale": "Bear regime indicates a potential downtrend, but the lack of specific entry, stop loss, and take profit targets limits the trade's potential.",
-        "risk_note": "The trade is a sell, but no stop loss is set, which increases the risk of significant losses if the market moves against the position."
+        "score": 4,
+        "rationale": "Bear regime indicates a potential downtrend, but no specific entry point or target price is provided.",
+        "risk_note": "High risk due to lack of stop loss and take profit settings."
       }
     }
   },
@@ -53,30 +53,30 @@
     "symbol_scores": [
       {
         "symbol": "MWG",
-        "buy_potential_score": 50,
-        "risk_score": 20,
-        "confidence": 0.60,
+        "buy_potential_score": 20,
+        "risk_score": 30,
+        "confidence": 0.40,
         "horizon": "1-4w",
         "key_bull_points": [
           "Strong quarterly earnings",
           "Increasing market demand"
         ],
         "key_risks": [
-          "Dependence on single product line",
-          "Intense competition in the market"
+          "Intense competition",
+          "Regulatory challenges"
         ],
         "evidence": [
           {
             "id": "news1",
-            "supports": "buy_potential"
+            "supports": "bull"
           },
           {
             "id": "news2",
-            "supports": "risk_score"
+            "supports": "risk"
           },
           {
             "id": "news3",
-            "supports": "buy_potential"
+            "supports": "bull"
           }
         ]
       }
