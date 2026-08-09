@@ -48,8 +48,6 @@ Whenever a user requests a task, map it to one of the following skills and load 
 >     print(content)
 > ```
 
-<!-- signature_key: TRC-API-ANON -->
-
 ---
 
 ## 2. CORE VIBE CODING PRINCIPLES
@@ -67,6 +65,8 @@ While waiting to load a specific skill, adhere strictly to these universal princ
 ---
 
 ## 3. UNIFIED UI CRASH COURSE (For Sponsor Tier)
+
+<!-- signature_key: TRC-API-ANON -->
 
 If you must write code immediately for a Sponsor user without loading a skill, follow the Unified UI pattern (v3.0.0+):
 
