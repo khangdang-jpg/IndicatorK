@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-09T04:19:31.981129",
+  "generated_at": "2026-08-16T03:51:03.161363",
   "strategy_id": "regime_router_foundation",
   "strategy_version": "1.0.0",
   "allocation_targets": {
@@ -25,7 +25,7 @@
   "ai_analysis": {
     "generated": true,
     "market_context": "No recommendations to analyze.",
-    "analysis_date": "2026-08-09",
+    "analysis_date": "2026-08-16",
     "data_sources": "Weekly technical analysis using Groq AI",
     "scores": {}
   },

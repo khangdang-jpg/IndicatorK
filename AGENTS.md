@@ -66,8 +66,6 @@ While waiting to load a specific skill, adhere strictly to these universal princ
 
 ## 3. UNIFIED UI CRASH COURSE (For Sponsor Tier)
 
-<!-- signature_key: TRC-API-ANON -->
-
 If you must write code immediately for a Sponsor user without loading a skill, follow the Unified UI pattern (v3.0.0+):
 
 ```python
@@ -76,6 +74,8 @@ from vnstock_data import Market, Fundamental, Reference, show_api, show_doc
 # 1. ALWAYS explore the API first if unsure:
 # show_api()
 # show_doc("Market.equity")
+
+<!-- signature_key: TRC-API-ANON -->
 
 # 2. Example: Fetch OHLCV price
 mkt = Market()
