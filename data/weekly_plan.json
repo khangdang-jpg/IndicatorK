@@ -1,13 +1,86 @@
 {
-  "generated_at": "2026-08-16T03:51:03.161363",
+  "generated_at": "2026-08-23T03:52:07.805536",
   "strategy_id": "regime_router_foundation",
   "strategy_version": "1.0.0",
   "allocation_targets": {
-    "stock": 0.60,
-    "bond_fund": 0.40
+    "stock": 0.9940084198484858,
+    "bond_fund": 0.005991580151514242
   },
-  "recommendations": [],
-  "max_new_positions": 5,
+  "recommendations": [
+    {
+      "symbol": "VNM",
+      "asset_class": "stock",
+      "action": "BUY",
+      "buy_zone_low": 63.40,
+      "buy_zone_high": 63.40,
+      "stop_loss": 58.90,
+      "take_profit": 72.10,
+      "position_target_pct": 0.3313,
+      "rationale_bullets": [
+        "\ud83d\ude80 MOMENTUM BREAKOUT | Regime: TRENDING_BULL",
+        "\ud83d\udcca Technical: RSI 77 (>46), Price > MA8 > MA25",
+        "\ud83d\udd25 Conviction: 0.90/1.2 (HIGH)",
+        "\ud83d\udcc8 Targets: SL 59 (-7.1%), TP 72 (+13.7%)",
+        "Enhanced Kelly: 39.6% (WR: 82.0%, R/R: 4.2:1, Conv: 0.90)",
+        "Deployment scaled in bull regime: 25.0% -> 33.1% as unused cash remained high."
+      ],
+      "entry_type": "pullback",
+      "breakout_level": 0.00,
+      "entry_price": 0.00,
+      "signal_week_end": null,
+      "earliest_entry_date": null,
+      "entry_valid_for_days": 7
+    },
+    {
+      "symbol": "HCM",
+      "asset_class": "stock",
+      "action": "BUY",
+      "buy_zone_low": 25.60,
+      "buy_zone_high": 25.60,
+      "stop_loss": 23.55,
+      "take_profit": 30.65,
+      "position_target_pct": 0.3313,
+      "rationale_bullets": [
+        "\ud83d\ude80 MOMENTUM BREAKOUT | Regime: TRENDING_BULL",
+        "\ud83d\udcca Technical: RSI 64 (>46), Price > MA8 > MA25",
+        "\ud83d\udd25 Conviction: 0.75/1.2 (MODERATE)",
+        "\ud83d\udcc8 Targets: SL 24 (-8.0%), TP 31 (+19.7%)",
+        "Enhanced Kelly: 39.6% (WR: 82.0%, R/R: 4.2:1, Conv: 0.75)",
+        "Deployment scaled in bull regime: 25.0% -> 33.1% as unused cash remained high."
+      ],
+      "entry_type": "pullback",
+      "breakout_level": 0.00,
+      "entry_price": 0.00,
+      "signal_week_end": null,
+      "earliest_entry_date": null,
+      "entry_valid_for_days": 7
+    },
+    {
+      "symbol": "STB",
+      "asset_class": "stock",
+      "action": "BUY",
+      "buy_zone_low": 74.80,
+      "buy_zone_high": 74.80,
+      "stop_loss": 68.80,
+      "take_profit": 86.10,
+      "position_target_pct": 0.3313,
+      "rationale_bullets": [
+        "\ud83d\ude80 MOMENTUM BREAKOUT | Regime: TRENDING_BULL",
+        "\ud83d\udcca Technical: RSI 71 (>46), Price > MA8 > MA25",
+        "\ud83d\udd25 Conviction: 0.72/1.2 (MODERATE)",
+        "\ud83d\udcc8 Targets: SL 69 (-8.0%), TP 86 (+15.1%)",
+        "Enhanced Kelly: 39.6% (WR: 82.0%, R/R: 4.2:1, Conv: 0.72)",
+        "Deployment scaled in bull regime: 25.0% -> 33.1% as unused cash remained high."
+      ],
+      "entry_type": "pullback",
+      "breakout_level": 0.00,
+      "entry_price": 0.00,
+      "signal_week_end": null,
+      "earliest_entry_date": null,
+      "entry_valid_for_days": 7
+    }
+  ],
+  "max_new_positions": 4,
   "allow_symbol_add_ons": false,
   "max_open_trades_per_symbol": 1,
   "force_defensive_exits": false,
@@ -20,16 +93,37 @@
     "\ud83c\udfaf Risk Management: Enhanced Kelly Criterion with conviction multipliers",
     "\ud83d\udd2c Market Efficiency: Medium (0.50)",
     "\ud83c\udfc6 Targets: CAGR 15-20%, Sharpe >2.5, MaxDD <5%, WinRate >70%",
-    "\ud83d\udcc8 Enhancements: Sector rotation, Statistical arbitrage, Order flow analysis"
+    "\ud83d\udcc8 Enhancements: Sector rotation, Statistical arbitrage, Order flow analysis",
+    "Vol-targeted deployment: stock target 99% with avg daily vol 2.07%."
   ],
-  "ai_analysis": {
-    "generated": true,
-    "market_context": "No recommendations to analyze.",
-    "analysis_date": "2026-08-16",
-    "data_sources": "Weekly technical analysis using Groq AI",
-    "scores": {}
+  "ai_analysis": null,
+  "news_analysis": {
+    "symbol_scores": [
+      {
+        "symbol": "HCM",
+        "buy_potential_score": 50,
+        "risk_score": 50,
+        "confidence": 0.10,
+        "horizon": "1-4w",
+        "key_bull_points": [],
+        "key_risks": [],
+        "evidence": []
+      },
+      {
+        "symbol": "STB",
+        "buy_potential_score": 50,
+        "risk_score": 50,
+        "confidence": 0.10,
+        "horizon": "1-4w",
+        "key_bull_points": [],
+        "key_risks": [],
+        "evidence": []
+      }
+    ],
+    "status": "SUCCESS",
+    "analyzed_symbols": 2,
+    "total_news": 30
   },
-  "news_analysis": null,
   "market_regime": "bull",
   "router_state": null
 }

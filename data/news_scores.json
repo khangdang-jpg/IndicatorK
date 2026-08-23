@@ -1,36 +1,27 @@
 {
   "symbol_scores": [
     {
-      "symbol": "MWG",
-      "buy_potential_score": 20,
-      "risk_score": 30,
-      "confidence": 0.4,
+      "symbol": "HCM",
+      "buy_potential_score": 50,
+      "risk_score": 50,
+      "confidence": 0.1,
       "horizon": "1-4w",
-      "key_bull_points": [
-        "Strong quarterly earnings",
-        "Increasing market demand"
-      ],
-      "key_risks": [
-        "Intense competition",
-        "Regulatory challenges"
-      ],
-      "evidence": [
-        {
-          "id": "news1",
-          "supports": "bull"
-        },
-        {
-          "id": "news2",
-          "supports": "risk"
-        },
-        {
-          "id": "news3",
-          "supports": "bull"
-        }
-      ]
+      "key_bull_points": [],
+      "key_risks": [],
+      "evidence": []
+    },
+    {
+      "symbol": "STB",
+      "buy_potential_score": 50,
+      "risk_score": 50,
+      "confidence": 0.1,
+      "horizon": "1-4w",
+      "key_bull_points": [],
+      "key_risks": [],
+      "evidence": []
     }
   ],
   "status": "SUCCESS",
-  "analyzed_symbols": 1,
-  "total_news": 33
+  "analyzed_symbols": 2,
+  "total_news": 30
 }
