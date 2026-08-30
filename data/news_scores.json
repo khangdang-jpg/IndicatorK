@@ -1,7 +1,7 @@
 {
   "symbol_scores": [
     {
-      "symbol": "HCM",
+      "symbol": "VIC",
       "buy_potential_score": 50,
       "risk_score": 50,
       "confidence": 0.1,
@@ -19,9 +19,19 @@
       "key_bull_points": [],
       "key_risks": [],
       "evidence": []
+    },
+    {
+      "symbol": "HCM",
+      "buy_potential_score": 50,
+      "risk_score": 50,
+      "confidence": 0.1,
+      "horizon": "1-4w",
+      "key_bull_points": [],
+      "key_risks": [],
+      "evidence": []
     }
   ],
   "status": "SUCCESS",
-  "analyzed_symbols": 2,
-  "total_news": 30
+  "analyzed_symbols": 3,
+  "total_news": 31
 }
