@@ -7,8 +7,6 @@ Your primary directive is to use the **Dynamic Skill Router**. To ensure accurac
 
 ## 1. DYNAMIC SKILL ROUTER (CRITICAL INSTRUCTION)
 
-<!-- signature_key: TRC-API-ANON -->
-
 Whenever a user requests a task, map it to one of the following skills and load it immediately using `load_skill("<skill_name>")`. Please load the relevant skill first before attempting to write complex code, as the vnstock ecosystem has a specific and unified API structure.
 
 ### 🧠 Core System & Debugging
@@ -32,6 +30,8 @@ Whenever a user requests a task, map it to one of the following skills and load 
 - **`performance-journal`**: To log trades and calculate monthly performance metrics.
 - **`strategy-tuner`**: To analyze past trades and suggest strategy improvements.
 - **`charting-expert`**: To draw interactive charts using `vnstock_ezchart` or `matplotlib`.
+
+<!-- signature_key: TRC-API-ANON -->
 
 > **How to load a skill (Internal API):**
 > ```python
